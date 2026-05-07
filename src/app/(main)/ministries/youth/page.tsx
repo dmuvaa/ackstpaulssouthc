@@ -20,35 +20,45 @@ const departments = [
 export default function YouthPage() {
   return (
     <div className="flex flex-col">
-      {/* Hero Section */}
-      <section className="relative h-[70vh] min-h-[600px] w-full overflow-hidden bg-primary">
-        <Image
-          src="/images/youth.jpg"
-          alt="SPYCE Youth Ministry"
-          fill
-          className="object-cover brightness-[0.35]"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-primary via-transparent to-transparent" />
-        <div className="container relative z-10 mx-auto flex h-full flex-col items-center justify-center px-4 text-center text-white">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="space-y-6"
+      {/* Image Banner Section */}
+      <section className="bg-slate-50 pt-12">
+        <div className="container mx-auto px-4">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="relative w-full aspect-video md:aspect-[21/9] rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white"
           >
-            <Badge className="bg-accent text-primary px-4 py-1.5 text-sm uppercase tracking-widest font-black">
-              1 Peter 2:9 — Chosen & Set Apart
-            </Badge>
-            <h1 className="text-6xl font-black tracking-tighter sm:text-8xl">
-              SPYCE <span className="text-secondary">Youth</span>
-            </h1>
-            <p className="mx-auto max-w-3xl text-xl text-slate-200 sm:text-2xl font-medium">
-              St Paul’s Youth Church Enrichment: Raising a Christ-centered generation chosen for light and purpose.
-            </p>
-            <div className="flex justify-center gap-4 pt-4">
-              <Button size="lg" variant="gold" className="h-14 px-10 text-lg font-bold">Join the Movement</Button>
-            </div>
+            <Image
+              src="/images/spyce-images/bf9d2af2-ed7e-4221-af85-e37498ceff5a.jpg"
+              alt="SPYCE Youth Ministry"
+              fill
+              className="object-cover object-center"
+              priority
+            />
           </motion.div>
+        </div>
+      </section>
+
+      {/* Header Content Section */}
+      <section className="bg-slate-50 pb-20 pt-12">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="space-y-6"
+            >
+              <Badge className="bg-accent text-primary px-4 py-1.5 text-sm uppercase tracking-widest font-black">
+                1 Peter 2:9 — Chosen & Set Apart
+              </Badge>
+              <h1 className="text-4xl md:text-7xl font-black text-primary tracking-tight">
+                SPYCE <span className="text-secondary">Youth</span>
+              </h1>
+              <p className="text-lg md:text-2xl text-muted-foreground font-medium leading-relaxed max-w-3xl mx-auto">
+                Raising a Christ-centered generation chosen for light and purpose through spiritual enrichment and community impact.
+              </p>
+            </motion.div>
+          </div>
         </div>
       </section>
 
@@ -137,7 +147,7 @@ export default function YouthPage() {
                 </div>
               </div>
               <div className="relative h-[400px] lg:h-auto">
-                <Image src="/images/congregation.jpg" alt="Outreach" fill className="object-cover" />
+                <Image src="/images/spyce-images/nairobi-west-prison.jpg" alt="Nairobi West Men's Prison Outreach" fill className="object-cover" />
               </div>
             </div>
           </div>

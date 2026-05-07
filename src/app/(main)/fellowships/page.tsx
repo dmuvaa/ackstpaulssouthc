@@ -27,32 +27,44 @@ const features = [
 export default function FellowshipsPage() {
   return (
     <div className="flex flex-col">
-      {/* Hero Section */}
-      <section className="relative h-[50vh] min-h-[400px] w-full overflow-hidden">
-        <Image
-          src="/images/communion.jpg"
-          alt="Home Fellowships"
-          fill
-          className="object-cover brightness-50"
-          priority
-        />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="container mx-auto px-4 text-center text-white">
-            <motion.h1 
+      {/* Image Banner Section */}
+      <section className="bg-slate-50 pt-12">
+        <div className="container mx-auto px-4">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="relative w-full aspect-video rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white"
+          >
+            <Image
+              src="/images/home-fellowship.jpg"
+              alt="Home Fellowships"
+              fill
+              className="object-cover object-top"
+              priority
+            />
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Header Content Section */}
+      <section className="bg-slate-50 pb-20 pt-12">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mb-4 text-4xl font-black sm:text-6xl"
+              className="space-y-6"
             >
-              Home <span className="text-accent">Fellowships</span>
-            </motion.h1>
-            <motion.p 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="text-lg text-slate-200 opacity-90 sm:text-xl max-w-2xl mx-auto"
-            >
-              Strengthening Faith and Community through intimate connection.
-            </motion.p>
+              <Badge className="bg-secondary/10 text-secondary border-none px-4 py-1.5 text-sm uppercase tracking-widest font-bold">
+                Fellowship Life
+              </Badge>
+              <h1 className="text-4xl md:text-7xl font-black text-primary tracking-tight">
+                Home <span className="text-secondary">Fellowships</span>
+              </h1>
+              <p className="text-lg md:text-2xl text-muted-foreground font-medium leading-relaxed max-w-3xl mx-auto">
+                Strengthening Faith and Community through intimate connection and shared Christian journey.
+              </p>
+            </motion.div>
           </div>
         </div>
       </section>

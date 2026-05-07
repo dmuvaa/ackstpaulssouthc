@@ -69,32 +69,44 @@ const commissions = [
 export default function MenMinistryPage() {
   return (
     <div className="flex flex-col">
-      {/* Hero Section */}
-      <section className="relative h-[60vh] min-h-[400px] w-full overflow-hidden">
-        <Image
-          src="/images/vicar.jpg"
-          alt="Men's Ministry - KAMA"
-          fill
-          className="object-cover brightness-50 object-top"
-          priority
-        />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="container mx-auto px-4 text-center text-white">
-            <motion.h1 
+      {/* Image Banner Section */}
+      <section className="bg-slate-50 pt-12">
+        <div className="container mx-auto px-4">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="relative w-full aspect-video rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white"
+          >
+            <Image
+              src="/images/kama-men.jpg"
+              alt="Men's Ministry - KAMA"
+              fill
+              className="object-cover object-top"
+              priority
+            />
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Header Content Section */}
+      <section className="bg-slate-50 pb-20 pt-12">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mb-6 text-4xl font-extrabold tracking-tight sm:text-6xl"
+              className="space-y-6"
             >
-              Kenya Anglican Men <span className="text-accent">Association (KAMA)</span>
-            </motion.h1>
-            <motion.p 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="mx-auto max-w-2xl text-lg text-slate-200 sm:text-xl"
-            >
-              Growing in Faith, Serving in Love.
-            </motion.p>
+              <Badge className="bg-secondary/10 text-secondary border-none px-4 py-1.5 text-sm uppercase tracking-widest font-bold">
+                Men's Ministry
+              </Badge>
+              <h1 className="text-4xl md:text-7xl font-black text-primary tracking-tight leading-tight">
+                Anglican Men <span className="text-secondary">Association (KAMA)</span>
+              </h1>
+              <p className="text-lg md:text-2xl text-muted-foreground font-medium leading-relaxed max-w-3xl mx-auto">
+                Growing in Faith, Serving in Love. A vibrant fellowship dedicated to spiritual growth, leadership, and impactful service.
+              </p>
+            </motion.div>
           </div>
         </div>
       </section>

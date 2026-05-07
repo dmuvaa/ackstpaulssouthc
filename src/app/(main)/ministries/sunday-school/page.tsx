@@ -41,32 +41,45 @@ import { Globe } from "lucide-react";
 export default function SundaySchoolPage() {
   return (
     <div className="flex flex-col">
-      {/* Hero Section */}
-      <section className="relative h-[60vh] min-h-[500px] w-full overflow-hidden bg-primary">
-        <Image
-          src="/images/children 3.jpeg"
-          alt="Sunday School Ministry"
-          fill
-          className="object-cover brightness-[0.4]"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-primary via-transparent to-transparent" />
-        <div className="container relative z-10 mx-auto flex h-full flex-col items-center justify-center px-4 text-center text-white">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="space-y-6"
+      {/* Image Banner Section */}
+      <section className="bg-slate-50 pt-12">
+        <div className="container mx-auto px-4">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="relative w-full aspect-video md:aspect-[21/9] rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white"
           >
-            <Badge className="bg-secondary text-white px-4 py-1.5 text-sm uppercase tracking-widest font-bold">
-              Building a Strong Foundation
-            </Badge>
-            <h1 className="text-5xl font-black tracking-tight sm:text-7xl">
-              Sunday <span className="text-accent">School</span>
-            </h1>
-            <p className="mx-auto max-w-2xl text-lg text-slate-200 sm:text-xl font-medium">
-              Raising children in faith through a structured, engaging, and spiritually enriching environment.
-            </p>
+            <Image
+              src="/images/SundaySchool/sunday-school2.jpg"
+              alt="Sunday School Ministry"
+              fill
+              className="object-cover object-center"
+              priority
+            />
           </motion.div>
+        </div>
+      </section>
+
+      {/* Header Content Section */}
+      <section className="bg-slate-50 pb-20 pt-12">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="space-y-6"
+            >
+              <Badge className="bg-secondary/10 text-secondary border-none px-4 py-1.5 text-sm uppercase tracking-widest font-bold">
+                Building a Strong Foundation
+              </Badge>
+              <h1 className="text-4xl md:text-7xl font-black text-primary tracking-tight">
+                Sunday <span className="text-secondary">School</span>
+              </h1>
+              <p className="text-lg md:text-2xl text-muted-foreground font-medium leading-relaxed max-w-3xl mx-auto">
+                Raising children in faith through a structured, engaging, and spiritually enriching environment.
+              </p>
+            </motion.div>
+          </div>
         </div>
       </section>
 

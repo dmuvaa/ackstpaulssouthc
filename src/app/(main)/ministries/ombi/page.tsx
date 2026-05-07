@@ -22,32 +22,45 @@ const expectations = [
 export default function OmbiPage() {
   return (
     <div className="flex flex-col">
-      {/* Hero Section */}
-      <section className="relative h-[60vh] min-h-[500px] w-full overflow-hidden bg-primary">
-        <Image
-          src="/images/communion.jpg"
-          alt="OMBI Prayer Journey"
-          fill
-          className="object-cover brightness-[0.3]"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-primary via-transparent to-transparent" />
-        <div className="container relative z-10 mx-auto flex h-full flex-col items-center justify-center px-4 text-center text-white">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="space-y-6"
+      {/* Image Banner Section */}
+      <section className="bg-slate-50 pt-12">
+        <div className="container mx-auto px-4">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="relative w-full aspect-[3/2] md:aspect-[16/7] rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white"
           >
-            <Badge className="bg-secondary text-white px-4 py-1.5 text-sm uppercase tracking-widest font-bold">
-              10-Week Prayer Adventure
-            </Badge>
-            <h1 className="text-5xl font-black tracking-tight sm:text-7xl">
-              OMBI <span className="text-accent">Prayer</span>
-            </h1>
-            <p className="mx-auto max-w-2xl text-lg text-slate-200 sm:text-xl font-medium">
-              “Call to me and I will answer you and tell you great and unsearchable things you do not know” — Jeremiah 33:3
-            </p>
+            <Image
+              src="/images/ombi-new.jpg"
+              alt="OMBI Prayer Journey"
+              fill
+              className="object-cover object-top"
+              priority
+            />
           </motion.div>
+        </div>
+      </section>
+
+      {/* Header Content Section */}
+      <section className="bg-slate-50 pb-20 pt-12">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="space-y-6"
+            >
+              <Badge className="bg-secondary/10 text-secondary border-none px-4 py-1.5 text-sm uppercase tracking-widest font-bold">
+                10-Week Prayer Adventure
+              </Badge>
+              <h1 className="text-4xl md:text-7xl font-black text-primary tracking-tight">
+                OMBI <span className="text-secondary">Prayer</span>
+              </h1>
+              <p className="text-lg md:text-2xl text-muted-foreground font-medium leading-relaxed max-w-3xl mx-auto italic">
+                “Call to me and I will answer you and tell you great and unsearchable things you do not know” — Jeremiah 33:3
+              </p>
+            </motion.div>
+          </div>
         </div>
       </section>
 
