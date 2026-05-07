@@ -13,6 +13,7 @@ import {
   LogOut,
   Target
 } from "lucide-react";
+import { MobileNav } from "@/components/admin/mobile-nav";
 
 export default async function AdminLayout({
   children,
@@ -27,23 +28,25 @@ export default async function AdminLayout({
     redirect("/admin/login");
   }
 
+  const navItems = [
+    { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
+    { name: "Donations", href: "/admin/donations", icon: Heart },
+    { name: "Donation Causes", href: "/admin/donations/causes", icon: Target },
+    { name: "Orders", href: "/admin/orders", icon: ShoppingBag },
+    { name: "Magazines", href: "/admin/magazines", icon: FileText },
+    { name: "Events", href: "/admin/events", icon: CalendarIcon },
+    { name: "Blog Posts", href: "/admin/blog", icon: FileText },
+  ];
+
   return (
     <div className="flex min-h-screen bg-muted/20">
-      {/* Sidebar */}
-      <aside className="w-64 border-r bg-white hidden md:flex flex-col">
+      {/* Sidebar (Desktop Only) */}
+      <aside className="w-64 border-r bg-white hidden md:flex flex-col fixed inset-y-0 left-0">
         <div className="p-6 border-b">
           <h2 className="text-xl font-bold text-primary">Admin Panel</h2>
         </div>
-        <nav className="flex-1 p-4 space-y-1">
-          {[
-            { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
-            { name: "Donations", href: "/admin/donations", icon: Heart },
-            { name: "Donation Causes", href: "/admin/donations/causes", icon: Target },
-            { name: "Orders", href: "/admin/orders", icon: ShoppingBag },
-            { name: "Magazines", href: "/admin/magazines", icon: FileText },
-            { name: "Events", href: "/admin/events", icon: CalendarIcon },
-            { name: "Blog Posts", href: "/admin/blog", icon: FileText },
-          ].map((item) => (
+        <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
+          {navItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
@@ -65,20 +68,23 @@ export default async function AdminLayout({
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 overflow-y-auto">
-        <header className="h-16 border-b bg-white flex items-center justify-between px-8">
-          <h1 className="text-lg font-semibold">Church Management System</h1>
+      <main className="flex-1 md:ml-64 min-w-0">
+        <header className="h-16 border-b bg-white flex items-center justify-between px-4 md:px-8 sticky top-0 z-40">
           <div className="flex items-center gap-4">
-            <div className="flex flex-col items-end mr-2">
-              <span className="text-sm font-medium">{user?.email}</span>
+            <MobileNav userEmail={user.email} />
+            <h1 className="text-sm md:text-lg font-semibold truncate">Church Management System</h1>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="hidden sm:flex flex-col items-end mr-2 text-right">
+              <span className="text-sm font-medium">{user.email}</span>
               <span className="text-[10px] text-muted-foreground uppercase tracking-wider font-bold">Administrator</span>
             </div>
             <div className="h-8 w-8 rounded-full bg-secondary text-white flex items-center justify-center font-bold">
-              {user?.email?.[0].toUpperCase() || "A"}
+              {user.email?.[0].toUpperCase() || "A"}
             </div>
           </div>
         </header>
-        <div className="p-8">
+        <div className="p-4 md:p-8">
           {children}
         </div>
       </main>

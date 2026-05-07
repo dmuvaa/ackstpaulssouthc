@@ -120,18 +120,18 @@ export default function DonatePage() {
         </div>
       </section>
 
-      <section className="container mx-auto px-4 py-16">
-        <div className="grid gap-16 lg:grid-cols-2 items-start max-w-7xl mx-auto">
+      <section className="container mx-auto px-4 py-8 md:py-16">
+        <div className="grid gap-8 lg:grid-cols-2 items-start max-w-7xl mx-auto">
           {/* Inspiration Section */}
-          <div className="space-y-16">
+          <div className="space-y-12 md:space-y-16">
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
-              className="space-y-8"
+              className="space-y-6 md:space-y-8"
             >
-              <div className="space-y-4">
-                <h2 className="text-4xl font-bold text-primary">Your Gift Makes <br/><span className="text-secondary text-5xl">An Eternal Impact</span></h2>
-                <p className="text-xl text-muted-foreground leading-relaxed">
+              <div className="space-y-4 text-center lg:text-left">
+                <h2 className="text-3xl md:text-4xl font-bold text-primary leading-tight">Your Gift Makes <br/><span className="text-secondary text-4xl md:text-5xl">An Eternal Impact</span></h2>
+                <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
                   When you give to ACK St. Paul's South C, you're not just donating to a church—you're investing in lives transformed by the Gospel.
                 </p>
               </div>
@@ -182,15 +182,15 @@ export default function DonatePage() {
                   causes.map((item) => {
                     const percentage = Math.min(Math.round((item.current_amount / item.target_amount) * 100), 100);
                     return (
-                      <div key={item.id} className="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm space-y-4">
+                      <div key={item.id} className="bg-white p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] border border-slate-100 shadow-sm space-y-4">
                         <div className="flex justify-between items-end">
                           <div>
-                            <h4 className="text-xl font-black text-primary mb-1">{item.title}</h4>
-                            <p className="text-sm text-muted-foreground line-clamp-1">{item.description || "Support this divine cause"}</p>
+                            <h4 className="text-lg md:text-xl font-black text-primary mb-1">{item.title}</h4>
+                            <p className="text-xs md:text-sm text-muted-foreground line-clamp-1">{item.description || "Support this divine cause"}</p>
                           </div>
                           <div className="text-right">
-                            <span className="text-2xl font-black text-secondary">{percentage}%</span>
-                            <p className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Complete</p>
+                            <span className="text-xl md:text-2xl font-black text-secondary">{percentage}%</span>
+                            <p className="text-[9px] md:text-[10px] uppercase font-bold text-slate-400 tracking-wider">Complete</p>
                           </div>
                         </div>
                         <div className="h-4 w-full bg-slate-100 rounded-full overflow-hidden">
