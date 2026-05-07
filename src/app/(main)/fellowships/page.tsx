@@ -122,32 +122,30 @@ export default function FellowshipsPage() {
 
       {/* Why Join */}
       <section className="container mx-auto px-4 py-24">
-        <div className="grid gap-16 lg:grid-cols-2 items-center">
-          <div className="space-y-8">
-            <h2 className="text-3xl font-bold text-primary">Why Join a Fellowship?</h2>
-            <div className="space-y-6">
-              {[
-                "Stay connected and accountable in our faith.",
-                "Grow spiritually through shared learning and encouragement.",
-                "Experience deeper relationships within the church community.",
-                "Find a safe and supportive space for development."
-              ].map((reason, i) => (
-                <div key={i} className="flex gap-4 items-start">
-                  <div className="h-6 w-6 rounded-full bg-secondary flex items-center justify-center shrink-0 mt-1">
-                    <div className="h-2 w-2 bg-white rounded-full" />
-                  </div>
-                  <p className="text-lg text-muted-foreground">{reason}</p>
-                </div>
-              ))}
-            </div>
+        <div className="max-w-4xl mx-auto text-center space-y-12">
+          <div className="space-y-6">
+            <h2 className="text-3xl font-bold text-primary sm:text-4xl">Life in Fellowship</h2>
+            <p className="text-lg text-muted-foreground leading-relaxed">
+              Our home fellowships are not just meetings; they are vibrant expressions of church life where every member is known, loved, and supported.
+            </p>
           </div>
-          <div className="relative h-[500px] rounded-[3rem] overflow-hidden shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-500">
-            <Image
-              src="/images/congregation.jpg"
-              alt="Community Life"
-              fill
-              className="object-cover"
-            />
+          <div className="grid gap-6 md:grid-cols-2 text-left">
+            {[
+              { title: "Intercessory Prayer", desc: "A dedicated time to lift up one another and our nation." },
+              { title: "Scripture Study", desc: "Diving deeper into God's word in a conversational setting." },
+              { title: "Mutual Support", desc: "Standing with one another during life's triumphs and trials." },
+              { title: "Mission Focus", desc: "Planning local outreach and community service projects." }
+            ].map((item, i) => (
+              <div key={i} className="flex gap-4 p-6 rounded-2xl bg-slate-50 border border-slate-100">
+                <div className="h-10 w-10 rounded-full bg-secondary/10 text-secondary flex-shrink-0 flex items-center justify-center font-bold">
+                  {i + 1}
+                </div>
+                <div>
+                  <h4 className="font-bold text-primary mb-1">{item.title}</h4>
+                  <p className="text-sm text-muted-foreground">{item.desc}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>

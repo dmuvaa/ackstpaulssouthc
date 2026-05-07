@@ -183,34 +183,26 @@ export default function MenMinistryPage() {
       <section className="bg-primary py-24 text-white overflow-hidden relative">
         <div className="absolute top-0 left-0 w-96 h-96 bg-white/5 rounded-full -translate-y-1/2 -translate-x-1/2 blur-3xl" />
         <div className="container mx-auto px-4 relative z-10">
-          <div className="grid gap-16 lg:grid-cols-2 items-center">
-            <div className="space-y-8">
-              <h2 className="text-4xl font-bold">KAMA 2025: <span className="text-accent">Ministry Highlights</span></h2>
-              <div className="space-y-6">
-                <div className="bg-white/10 p-6 rounded-xl border border-white/10">
-                  <h4 className="font-bold text-xl text-accent mb-2">Ministry Focus</h4>
-                  <ul className="space-y-2 text-slate-200">
-                    <li className="flex items-center gap-2"><span>•</span> Transition from fellowship to active outreach</li>
-                    <li className="flex items-center gap-2"><span>•</span> Men positioned as servants, mentors, and leaders</li>
+          <div className="max-w-4xl mx-auto">
+            <div className="space-y-8 text-center">
+              <h2 className="text-3xl font-bold text-white">Impact Areas</h2>
+              <div className="grid gap-6 md:grid-cols-2">
+                <div className="bg-white/10 p-8 rounded-2xl border border-white/10">
+                  <h4 className="font-bold text-2xl text-accent mb-4 text-left">Ministry Focus</h4>
+                  <ul className="space-y-3 text-left text-slate-200">
+                    <li className="flex items-center gap-3"><span>•</span> Transition from fellowship to active outreach</li>
+                    <li className="flex items-center gap-3"><span>•</span> Men positioned as servants, mentors, and leaders</li>
                   </ul>
                 </div>
-                <div className="bg-white/10 p-6 rounded-xl border border-white/10">
-                  <h4 className="font-bold text-xl text-accent mb-2">Key Impact Areas</h4>
-                  <ul className="space-y-2 text-slate-200">
-                    <li className="flex items-center gap-2"><span>•</span> Support for children and youth programmes</li>
-                    <li className="flex items-center gap-2"><span>•</span> Active participation in church-wide events</li>
-                    <li className="flex items-center gap-2"><span>•</span> Strengthened collaboration across ministries</li>
+                <div className="bg-white/10 p-8 rounded-2xl border border-white/10">
+                  <h4 className="font-bold text-2xl text-accent mb-4 text-left">Key Impact Areas</h4>
+                  <ul className="space-y-3 text-left text-slate-200">
+                    <li className="flex items-center gap-3"><span>•</span> Support for children and youth programmes</li>
+                    <li className="flex items-center gap-3"><span>•</span> Active participation in church-wide events</li>
+                    <li className="flex items-center gap-3"><span>•</span> Strengthened collaboration across ministries</li>
                   </ul>
                 </div>
               </div>
-            </div>
-            <div className="relative h-[400px] rounded-3xl overflow-hidden border-8 border-white/10 shadow-2xl">
-              <Image
-                src="/images/congregation.jpg"
-                alt="Impact Areas"
-                fill
-                className="object-cover"
-              />
             </div>
           </div>
         </div>

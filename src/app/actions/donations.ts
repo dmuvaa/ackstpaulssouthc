@@ -1,7 +1,6 @@
 "use server";
 
-import { createClient } from "@/utils/supabase/server";
-import { cookies } from "next/headers";
+import { createAdminClient } from "@/utils/supabase/admin";
 import { revalidatePath } from "next/cache";
 
 import { initiateStkPush } from "@/lib/mpesa";
@@ -13,8 +12,7 @@ export async function logDonation(formData: {
   phone_number?: string;
 }) {
   try {
-    const cookieStore = await cookies();
-    const supabase = createClient(cookieStore);
+    const supabase = createAdminClient();
 
     // 1. Log the donation record
     const { data: donation, error } = await supabase

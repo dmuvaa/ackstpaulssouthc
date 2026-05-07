@@ -54,12 +54,12 @@ export default function AboutPage() {
                 </p>
               </div>
             </div>
-            <div className="relative h-[500px] overflow-hidden rounded-[3rem] shadow-2xl">
+            <div className="relative h-[600px] rounded-[3rem] overflow-hidden shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-500">
               <Image
-                src="/images/congregation.jpg"
-                alt="Church Community"
+                src="/images/brigade-sunday school.jpg"
+                alt="ACK St Paul's Community"
                 fill
-                className="object-cover"
+                className="object-cover object-top"
               />
               <div className="absolute bottom-8 left-8 right-8 bg-white/90 backdrop-blur-md p-8 rounded-2xl border-l-4 border-secondary">
                 <p className="text-xl font-bold text-primary italic">

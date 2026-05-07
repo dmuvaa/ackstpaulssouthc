@@ -34,32 +34,45 @@ const waysToJoin = [
 export default function MissionsPage() {
   return (
     <div className="flex flex-col">
-      {/* Hero Section */}
-      <section className="relative h-[60vh] min-h-[500px] w-full overflow-hidden bg-primary">
-        <Image
-          src="/images/missions.jpeg"
-          alt="Missions Ministry"
-          fill
-          className="object-cover brightness-[0.3]"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-primary via-transparent to-transparent" />
-        <div className="container relative z-10 mx-auto flex h-full flex-col items-center justify-center px-4 text-center text-white">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="space-y-6"
+      {/* Image Banner Section */}
+      <section className="bg-slate-50 pt-12">
+        <div className="container mx-auto px-4">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="relative w-full aspect-video rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white"
           >
-            <Badge className="bg-secondary text-white px-4 py-1.5 text-sm uppercase tracking-widest font-bold">
-              The Great Commission
-            </Badge>
-            <h1 className="text-5xl font-black tracking-tight sm:text-7xl">
-              Missions <span className="text-accent">Department</span>
-            </h1>
-            <p className="mx-auto max-w-2xl text-lg text-slate-200 sm:text-xl font-medium">
-              “Go therefore and make disciples of all nations…” — Matthew 28:19
-            </p>
+            <Image
+              src="/images/missions.jpeg"
+              alt="Missions Ministry"
+              fill
+              className="object-cover object-top"
+              priority
+            />
           </motion.div>
+        </div>
+      </section>
+
+      {/* Header Content Section */}
+      <section className="bg-slate-50 pb-20 pt-12">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="space-y-6"
+            >
+              <Badge className="bg-secondary/10 text-secondary border-none px-4 py-1.5 text-sm uppercase tracking-widest font-bold">
+                The Great Commission
+              </Badge>
+              <h1 className="text-4xl md:text-7xl font-black text-primary tracking-tight">
+                Missions <span className="text-secondary">Department</span>
+              </h1>
+              <p className="text-lg md:text-2xl text-muted-foreground font-medium leading-relaxed max-w-3xl mx-auto">
+                “Go therefore and make disciples of all nations…” — Matthew 28:19
+              </p>
+            </motion.div>
+          </div>
         </div>
       </section>
 
@@ -118,32 +131,24 @@ export default function MissionsPage() {
       {/* Call to Action Section */}
       <section className="py-24 overflow-hidden">
         <div className="container mx-auto px-4">
-          <div className="bg-primary rounded-[4rem] text-white overflow-hidden relative">
-            <div className="grid lg:grid-cols-2">
-              <div className="p-12 lg:p-20 space-y-8 relative z-10">
-                <h2 className="text-4xl font-bold">Be Part of the Mission</h2>
-                <p className="text-xl text-slate-300">
-                  The mission field is vast, and there’s a place for everyone. Join us in fulfilling this divine calling.
-                </p>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  {waysToJoin.map((way, i) => (
-                    <div key={i} className="flex items-center gap-3">
-                      <CheckCircle2 className="h-5 w-5 text-accent" />
-                      <span className="font-medium text-slate-200">{way}</span>
-                    </div>
-                  ))}
-                </div>
-                <Button size="lg" variant="outline" className="h-14 px-10 text-lg font-bold bg-white text-primary hover:bg-white/90 border-none shadow-lg">
+          <div className="bg-primary rounded-[4rem] text-white overflow-hidden relative p-12 lg:p-20 text-center max-w-5xl mx-auto">
+            <div className="space-y-8 relative z-10">
+              <h2 className="text-4xl md:text-5xl font-bold">Be Part of the Mission</h2>
+              <p className="text-xl text-slate-300 max-w-2xl mx-auto">
+                The mission field is vast, and there’s a place for everyone. Join us in fulfilling this divine calling.
+              </p>
+              <div className="flex flex-wrap justify-center gap-6">
+                {waysToJoin.map((way, i) => (
+                  <div key={i} className="flex items-center gap-3 bg-white/5 px-6 py-3 rounded-full border border-white/10">
+                    <CheckCircle2 className="h-5 w-5 text-accent" />
+                    <span className="font-medium text-slate-200">{way}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="pt-6">
+                <Button size="lg" variant="gold" className="h-16 px-12 text-xl font-bold shadow-2xl">
                   Get Involved Now
                 </Button>
-              </div>
-              <div className="relative h-[400px] lg:h-full">
-                <Image
-                  src="/images/congregation.jpg"
-                  alt="Missions in Action"
-                  fill
-                  className="object-cover"
-                />
               </div>
             </div>
           </div>

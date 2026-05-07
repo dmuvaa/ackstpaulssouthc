@@ -10,6 +10,16 @@ export interface Donation {
   created_at: string;
 }
 
+export interface DonationCause {
+  id: string;
+  title: string;
+  description?: string;
+  target_amount: number;
+  current_amount: number;
+  is_active: boolean;
+  created_at: string;
+}
+
 export interface Product {
   id: string;
   title: string;

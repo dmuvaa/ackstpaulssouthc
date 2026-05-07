@@ -10,7 +10,8 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Download, Search } from "lucide-react";
+import Link from "next/link";
+import { Download, Search, Target } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Donation } from "@/types";
 
@@ -30,10 +31,18 @@ export default async function AdminDonationsPage() {
           <h2 className="text-2xl font-bold tracking-tight text-primary">Donations</h2>
           <p className="text-muted-foreground">Manage and track all church donations.</p>
         </div>
-        <Button variant="outline" className="gap-2">
-          <Download className="h-4 w-4" />
-          Export CSV
-        </Button>
+        <div className="flex gap-2">
+          <Button asChild variant="outline" className="gap-2">
+            <Link href="/admin/donations/causes">
+              <Target className="h-4 w-4" />
+              Manage Causes
+            </Link>
+          </Button>
+          <Button variant="outline" className="gap-2">
+            <Download className="h-4 w-4" />
+            Export CSV
+          </Button>
+        </div>
       </div>
 
       <div className="flex items-center gap-4">

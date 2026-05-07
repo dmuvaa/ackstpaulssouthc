@@ -10,7 +10,8 @@ import {
   ShoppingBag, 
   FileText, 
   Calendar as CalendarIcon, 
-  LogOut
+  LogOut,
+  Target
 } from "lucide-react";
 
 export default async function AdminLayout({
@@ -37,6 +38,7 @@ export default async function AdminLayout({
           {[
             { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
             { name: "Donations", href: "/admin/donations", icon: Heart },
+            { name: "Donation Causes", href: "/admin/donations/causes", icon: Target },
             { name: "Orders", href: "/admin/orders", icon: ShoppingBag },
             { name: "Magazines", href: "/admin/magazines", icon: FileText },
             { name: "Events", href: "/admin/events", icon: CalendarIcon },

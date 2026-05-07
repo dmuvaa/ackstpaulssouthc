@@ -16,7 +16,7 @@ const posts = [
     date: "April 15, 2026",
     author: "The Parish Council",
     category: "News",
-    image: "/images/congregation.jpg"
+    image: "/images/ushers.jpg"
   },
   {
     id: "2",
