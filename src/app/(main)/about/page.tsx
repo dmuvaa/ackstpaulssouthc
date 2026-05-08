@@ -137,25 +137,25 @@ export default function AboutPage() {
                 { 
                   name: "Ven. Canon Charles Chege Kariuki", 
                   role: "Archdeacon / Vicar", 
-                  bio: "A devoted servant who has served since 2000. He is well-grounded in theology and leadership, passionate about mentoring clergy and lay leaders with humility and vision.",
+                  bio: "A devoted servant of God who has faithfully served in the Anglican Church since 2000. He is well-grounded in theology and leadership, with a strong commitment to church growth and nurturing believers. Passionate about mentoring, he leads the parish with humility and a vision for spiritual transformation.",
                   img: "/images/leadership/ven-canon-charles.jpg" 
                 },
                 { 
                   name: "Rev. Moses Agwet", 
                   role: "Curate", 
-                  bio: "Guided by a deep passion for mission, Rev. Moses joined the parish in 2025. He was ordained in 2022 and has served faithfully in various evangelical and pastoral roles.",
+                  bio: "Guided by a deep passion for mission and ministry, Rev. Moses joined ACK St. Paul’s in 2025. His journey includes serving as a diocesan evangelist before being ordained as a priest in 2022. He brings a rich experience from various pastoral roles and is committed to fostering a vibrant, faith-filled community.",
                   img: "/images/leadership/moses-agwet.jpg" 
                 },
                 { 
                   name: "Ben Okuku", 
                   role: "Lay Reader", 
-                  bio: "Serving since 2004, Ben is a lecturer and devoted family man who finds great joy in guiding others in their walk of faith and mentoring the church community.",
+                  bio: "Answering God's call in 2004, Ben is a lecturer by profession and a devoted family man who finds great joy in guiding others in their walk of faith. He balances his career and ministry with grace, serving as a spiritual mentor. He encourages others to embrace God’s call with trust and confidence.",
                   img: "/images/leadership/ben-okuku.png" 
                 },
                 { 
                   name: "Edith Murimi", 
                   role: "Lay Reader", 
-                  bio: "A devoted minister since 2018 with a deep love for sharing God's Word. She balances her career and family life with a passionate commitment to spiritual transformation.",
+                  bio: "A devoted minister since 2018 with a deep love for sharing God's Word. She balances her career and family life with a commitment to witnessing lives transformed through Christ. Her journey is defined by building meaningful relationships and serving the Kingdom with joy and excellence.",
                   img: "/images/leadership/edith-murimi.png" 
                 },
               ].map((leader, i) => (
@@ -176,25 +176,25 @@ export default function AboutPage() {
                 { 
                   name: "David Irungu Gachui", 
                   role: "Vicar’s Warden", 
-                  bio: "An accomplished financial executive with over 15 years of experience. He brings strategic leadership and sound governance to support the church's mission and stewardship.",
+                  bio: "An accomplished executive with over 15 years of experience in the financial sector, David brings strategic leadership and sound governance to the church. Currently serving as a General Manager at KDIC, he uses his expertise in accountability to support the parish's vision and mission.",
                   img: "/images/leadership/david-irungu.jpg" 
                 },
                 { 
                   name: "Peter Lawi Ojuka", 
                   role: "People’s Warden", 
-                  bio: "A faithful member since 2000, Peter serves with humility and responsibility. He is a logistics professional who seeking to make a God-honoring impact in the community.",
+                  bio: "Serving the parish since 2000, Peter carries his role as People's Warden with humility and a deep sense of responsibility toward the congregation. A logistics professional and director, he balances his career with a commitment to growing in God's Word and making a God-honoring impact.",
                   img: "/images/leadership/lawi-ojuka.jpg" 
                 },
                 { 
                   name: "Jidraff Kamau Githendu", 
                   role: "PCC Secretary", 
-                  bio: "A seasoned Health Systems Management Specialist and youth mentor. He approaches leadership with the conviction that all work is service to God.",
+                  bio: "A Health Systems Management Specialist, Jidraff brings extensive organizational expertise to his role as PCC Secretary. Guided by Colossians 3:23, he approaches every responsibility as service to God, focusing on mentorship and community leadership to raise purposeful individuals.",
                   img: "/images/leadership/jidraff.jpg" 
                 },
                 { 
                   name: "Martin Muchere", 
                   role: "Parish Treasurer", 
-                  bio: "With over 15 years in property valuation and tax consultancy, Martin ensures transparency and effective financial management through accuracy and ethical standards.",
+                  bio: "With 15 years of experience in property valuation and tax consultancy, Martin ensures transparency and effective financial management within the parish. He is dedicated to high ethical standards and sound stewardship, using his professional gifts to serve the Church with excellence and accountability.",
                   img: "/images/leadership/martin-muchere.jpg" 
                 },
               ].map((leader, i) => (
@@ -215,43 +215,43 @@ export default function AboutPage() {
                 { 
                   name: "Elijah Mwangi", 
                   role: "Chairman, KAMA", 
-                  bio: "A seasoned Advocate with 25 years of experience. He uses his legal expertise to serve the church through advocacy, reform, and leadership in KAMA.",
+                  bio: "A seasoned Advocate with over 25 years of experience, Elijah integrates legal professionalism with a strong sense of faith. He has served in various leadership capacities, including as a Legal Advisor at parish and diocesan levels, and currently chairs KAMA while serving in the Diocesan Synod.",
                   img: "/images/leadership/elijah-mwangi.png" 
                 },
                 { 
                   name: "Jane Mutungi", 
                   role: "Chairlady, Mothers’ Union", 
-                  bio: "Jane blends professional project management expertise with spiritual devotion to foster a culture of integrity, accountability, and mentorship within the MU.",
+                  bio: "Blending professional project management expertise with spiritual devotion, Jane provides structured leadership to the Mothers' Union. She is passionate about strengthening organizational processes, mentoring others, and fostering a culture grounded in integrity, accountability, and purposeful service.",
                   img: "/images/leadership/jane-mutungi.jpg" 
                 },
                 { 
                   name: "Roselyne Daughty Owino", 
                   role: "Chair, SPYCE", 
-                  bio: "A biotechnology researcher passionate about nurturing a vibrant youth ministry firmly rooted in faith and committed to serving God and community.",
+                  bio: "A Microbiology researcher by profession, Roselyne leads the youth ministry with a deep sense of calling. She is passionate about building a vibrant youth church and nurturing the next generation to be firmly rooted in faith, prayer, and community service.",
                   img: "/images/leadership/roselyne-daughty.jpg" 
                 },
                 { 
                   name: "Tr. Ann Dada", 
                   role: "Chairperson, Sunday School", 
-                  bio: "Nurturing children's spiritual growth for over a decade. She guides the next generation with patience, love, and a deep sense of Christian values.",
+                  bio: "With over a decade of dedicated service, Ann nurtures the spiritual growth of children with patience, love, and a deep sense of purpose. An avid adventurer and scout, she brings a holistic approach to mentorship, instilling strong Christian values in the next generation.",
                   img: "/images/leadership/ann-dada.jpg" 
                 },
                 { 
                   name: "Dr. Leah Oyake-Ombis", 
                   role: "Chairperson, Development", 
-                  bio: "An expert in environmental governance and urban development. She leads with a focus on sustainability, stewardship, and community transformation.",
+                  bio: "With over 20 years of experience in environmental governance, Dr. Leah brings strategic vision to the church's development projects. A director and technical advisor, she is passionate about sustainability and community transformation, using her expertise to contribute to the growth of the parish.",
                   img: "/images/leadership/oyake-ombis.jpg" 
                 },
                 { 
                   name: "Evans Shivembe", 
                   role: "Chairperson, Church Choir", 
-                  bio: "A choir member since 2000, Evans believes music is a calling. He mentors talent and upholds musical excellence for wholehearted worship.",
+                  bio: "A choir member since 2000, Evans leads the choir with humility and a firm belief that music is a divine calling. A supply chain professional, he brings structure to his leadership while fostering unity and musical excellence for wholehearted worship.",
                   img: "/images/leadership/evans-chivembe.jpg" 
                 },
                 { 
                   name: "Victoria Wambugu", 
                   role: "Chair, Media & Marketing", 
-                  bio: "A PR professional and entrepreneur who supports the church's outreach and communication, sharing God's message in clear and engaging ways.",
+                  bio: "A PR professional and entrepreneur, Victoria supports the church’s communication and outreach efforts with strategic expertise. She is committed to sharing the church’s message in a clear and engaging way, bridging faith and modern media to make a meaningful impact.",
                   img: "/images/leadership/victoria-wambugu.jpg" 
                 },
               ].map((leader, i) => (
@@ -285,25 +285,23 @@ function LeaderCard({ leader }: { leader: { name: string; role: string; bio: str
   return (
     <motion.div 
       whileHover={{ y: -5 }}
-      className="group flex flex-col bg-slate-50/50 rounded-[2rem] overflow-hidden border border-slate-100 transition-all hover:bg-white hover:shadow-2xl"
+      className="group flex flex-col bg-white rounded-[2rem] overflow-hidden border border-slate-100 transition-all hover:shadow-2xl h-full"
     >
-      <div className="relative aspect-[4/5] w-full overflow-hidden">
+      <div className="relative aspect-square w-full overflow-hidden">
         <Image
           src={leader.img}
           alt={leader.name}
           fill
-          className="object-cover object-[center_20%] transition-transform duration-700 group-hover:scale-110"
+          className="object-cover object-[center_20%] transition-transform duration-700 group-hover:scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-6">
-          <p className="text-white text-xs leading-relaxed line-clamp-4">
-            {leader.bio}
-          </p>
-        </div>
+        <div className="absolute inset-0 bg-gradient-to-t from-primary/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
       </div>
-      <div className="p-6 text-center lg:text-left">
-        <h4 className="text-xl font-black text-primary leading-tight group-hover:text-secondary transition-colors">{leader.name}</h4>
-        <p className="text-secondary font-bold text-xs uppercase tracking-widest mt-2">{leader.role}</p>
-        <p className="text-muted-foreground text-sm mt-4 line-clamp-3 group-hover:hidden transition-all">
+      <div className="p-6 flex flex-col flex-1">
+        <div className="mb-3">
+          <h4 className="text-lg md:text-xl font-black text-primary leading-tight group-hover:text-secondary transition-colors">{leader.name}</h4>
+          <p className="text-secondary font-bold text-[10px] uppercase tracking-[0.15em] mt-1">{leader.role}</p>
+        </div>
+        <p className="text-muted-foreground text-xs md:text-sm leading-relaxed">
           {leader.bio}
         </p>
       </div>
