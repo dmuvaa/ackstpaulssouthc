@@ -72,6 +72,7 @@ export function Footer() {
                 { label: "Support via M-Pesa", href: "/donate" },
                 { label: "Magazine Store", href: "/shop" },
                 { label: "Gallery & Photos", href: "/gallery" },
+                { label: "Blog & News", href: "/blog" },
                 { label: "Upcoming Events", href: "/events" },
                 { label: "Sermons & Word", href: "/sermons" },
                 { label: "Contact Us", href: "/contact" },

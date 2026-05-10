@@ -14,108 +14,54 @@ const stats = [
 export default function AboutPage() {
   return (
     <div className="flex flex-col">
-      {/* Header */}
-      <section className="bg-primary py-20 text-white">
-        <div className="container mx-auto px-4 text-center">
-          <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-4xl font-bold sm:text-5xl"
-          >
-            About ACK St Paul's South C
-          </motion.h1>
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="mt-4 text-lg text-slate-300"
-          >
-            Discover our journey, our values, and the people who lead us.
-          </motion.p>
-        </div>
-      </section>
-
-      {/* Profile Section */}
-      <section className="py-24">
+      {/* Top Section - About Us */}
+      <section className="py-16 bg-slate-50">
         <div className="container mx-auto px-4">
-          <div className="grid gap-12 lg:grid-cols-2 items-center">
-            <div className="space-y-6">
-              <div className="flex items-center gap-2 text-secondary">
-                <ShieldCheck className="h-6 w-6" />
-                <span className="font-bold uppercase tracking-widest text-sm">Who We Are</span>
-              </div>
-              <h2 className="text-4xl font-black text-primary">Anglican Church of Kenya <br/>St. Paul’s South C</h2>
-              <div className="space-y-4 text-lg text-muted-foreground leading-relaxed">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            {/* Who We Are */}
+            <div className="space-y-4 bg-white p-8 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+              <span className="font-bold uppercase tracking-widest text-sm text-secondary">Who We Are</span>
+              <h1 className="text-3xl font-black text-primary">Anglican Church of Kenya St. Paul’s South C</h1>
+              <div className="space-y-4 text-base text-muted-foreground leading-relaxed">
                 <p>
-                  We are a faith-based organization deeply rooted in the Christian tradition and part of the global Anglican Communion. Our foundation is firmly established in the teachings and values of Jesus Christ as revealed in the Holy Scriptures.
+                  The Anglican Church of Christ is a faith-based organization deeply rooted in the Christian tradition. We are part of the Anglican Communion, a global fellowship of churches that traces its heritage back to the Church of England. Our foundation is firmly established in the teachings and values of Jesus Christ as revealed in the Holy Scriptures. We believe that Jesus Christ is the source of salvation and the cornerstone of our faith.
                 </p>
                 <p>
-                  We believe that Jesus Christ is the source of salvation and the cornerstone of our faith. Our liturgical and sacramental traditions guide our worship and daily lives, fostering a spirit of unity among our members.
+                  We are committed to fostering a spirit of unity among our members, while upholding the rich liturgical and sacramental traditions of the Anglican Church. Our faith is expressed not only in worship but also in our daily lives, as we seek to live out the teachings of Christ in our relationships, work, and service to others.
                 </p>
               </div>
             </div>
-            <div className="relative h-[600px] rounded-[3rem] overflow-hidden shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-500">
-              <Image
-                src="/images/brigade-sunday school.jpg"
-                alt="ACK St Paul's Community"
-                fill
-                className="object-cover object-top"
-              />
-              <div className="absolute bottom-8 left-8 right-8 bg-white/90 backdrop-blur-md p-8 rounded-2xl border-l-4 border-secondary">
-                <p className="text-xl font-bold text-primary italic">
-                  "God’s work done God’s way shall never lack God’s resources."
-                </p>
-                <p className="mt-2 text-sm font-bold uppercase tracking-widest text-secondary">— Our Clarion Call</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      {/* Mission, Vision & Values */}
-      <section className="bg-muted/30 py-24">
-        <div className="container mx-auto px-4">
-          <div className="grid gap-8 lg:grid-cols-3 mb-16">
-            <motion.div 
-              whileHover={{ y: -5 }}
-              className="bg-white p-10 rounded-3xl shadow-sm border"
-            >
-              <Target className="h-10 w-10 text-primary mb-6" />
-              <h3 className="text-2xl font-bold mb-4">Our Vision</h3>
-              <p className="text-muted-foreground text-lg">
-                To be an Empowered Church Transforming Humanity.
+            {/* Our Vision */}
+            <div className="space-y-4 bg-white p-8 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+              <span className="font-bold uppercase tracking-widest text-sm text-secondary">Our Vision</span>
+              <h2 className="text-2xl font-bold text-primary">To be an Empowered Church Transforming Humanity.</h2>
+              <p className="text-base text-muted-foreground leading-relaxed">
+                We strive to empower individuals for holistic service, inspired by God’s will. Our core values of unity, faith and practice, integrity, accountability, and service guide our actions and shape our identity as a community of believers.
               </p>
-            </motion.div>
-            <motion.div 
-              whileHover={{ y: -5 }}
-              className="bg-white p-10 rounded-3xl shadow-sm border"
-            >
-              <Users className="h-10 w-10 text-secondary mb-6" />
-              <h3 className="text-2xl font-bold mb-4">Our Mission</h3>
-              <p className="text-muted-foreground text-lg">
-                To Empower Humanity for Holistic Service inspired by God’s will.
+            </div>
+
+            {/* Our Commitment */}
+            <div className="space-y-4 bg-white p-8 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+              <div className="space-y-4">
+                <span className="font-bold uppercase tracking-widest text-sm text-secondary">Our Commitment</span>
+                <h2 className="text-2xl font-bold text-primary">Integrity and Transparency</h2>
+                <p className="text-base text-muted-foreground leading-relaxed">
+                  We strive to be transparent in our mission and accountable to God and to one another. Ultimately, we are called to serve our communities and the world, reflecting the love and compassion of Christ in all that we do.
+                </p>
+              </div>
+              <p className="text-base text-muted-foreground leading-relaxed font-bold italic border-t pt-4 border-slate-100 mt-auto">
+                "God’s work done God’s way shall never lack God’s resources." <br/>— Our Clarion Call
               </p>
-            </motion.div>
-            <motion.div 
-              whileHover={{ y: -5 }}
-              className="bg-white p-10 rounded-3xl shadow-sm border"
-            >
-              <ShieldCheck className="h-10 w-10 text-accent mb-6" />
-              <h3 className="text-2xl font-bold mb-4">Our Core Values</h3>
-              <ul className="space-y-2 text-muted-foreground text-lg">
-                <li className="flex items-center gap-2 font-medium">• Unity</li>
-                <li className="flex items-center gap-2 font-medium">• Faith and Practice</li>
-                <li className="flex items-center gap-2 font-medium">• Integrity</li>
-                <li className="flex items-center gap-2 font-medium">• Accountability & Transparency</li>
-                <li className="flex items-center gap-2 font-medium">• Service</li>
-              </ul>
-            </motion.div>
+            </div>
+
           </div>
         </div>
       </section>
 
       {/* Leadership Section */}
-      <section className="py-24 bg-white">
+      <section id="leadership" className="py-24 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-4xl font-black text-primary mb-6">Our Leadership</h2>
@@ -144,7 +90,7 @@ export default function AboutPage() {
                   name: "Rev. Moses Agwet", 
                   role: "Curate", 
                   bio: "Guided by a deep passion for mission and ministry, Rev. Moses joined ACK St. Paul’s in 2025. His journey includes serving as a diocesan evangelist before being ordained as a priest in 2022. He brings a rich experience from various pastoral roles and is committed to fostering a vibrant, faith-filled community.",
-                  img: "/images/leadership/moses-agwet.jpg" 
+                  img: "/images/leadership/moses-agwet.png" 
                 },
                 { 
                   name: "Ben Okuku", 
@@ -287,7 +233,7 @@ function LeaderCard({ leader }: { leader: { name: string; role: string; bio: str
       whileHover={{ y: -5 }}
       className="group flex flex-col bg-white rounded-[2rem] overflow-hidden border border-slate-100 transition-all hover:shadow-2xl h-full"
     >
-      <div className="relative aspect-square w-full overflow-hidden">
+      <div className="relative aspect-square w-32 mx-auto mt-6 overflow-hidden rounded-full">
         <Image
           src={leader.img}
           alt={leader.name}

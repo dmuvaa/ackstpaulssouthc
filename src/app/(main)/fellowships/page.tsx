@@ -150,6 +150,39 @@ export default function FellowshipsPage() {
         </div>
       </section>
 
+      {/* Our Fellowship Groups */}
+      <section className="bg-slate-50 py-24">
+        <div className="container mx-auto px-4">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <h2 className="text-4xl font-bold text-primary mb-4">Our Fellowship Groups</h2>
+            <p className="text-lg text-muted-foreground">
+              We have various fellowship groups meeting in different locations. Find one near you.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              "Karen/Langata/Dam Fellowship",
+              "South C Fellowship",
+              "Nairobi West",
+              "South B/Mombasa Road Fellowship",
+              "Kiambu Road Fellowship",
+              "Vicarage/Miller/Civil Servants Fellowship"
+            ].map((group, i) => (
+              <motion.div
+                key={i}
+                whileHover={{ y: -5 }}
+                className="bg-white p-6 rounded-2xl border shadow-sm flex items-center gap-4"
+              >
+                <div className="h-10 w-10 rounded-full bg-secondary/10 text-secondary flex items-center justify-center font-bold">
+                  {i + 1}
+                </div>
+                <span className="font-bold text-primary">{group}</span>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Find a Fellowship */}
       <section className="bg-primary py-24 text-white">
         <div className="container mx-auto px-4 text-center max-w-3xl">
