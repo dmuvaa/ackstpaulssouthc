@@ -117,7 +117,7 @@ export default function MenMinistryPage() {
           <Badge className="bg-secondary text-white px-4 py-1">Men's Ministry</Badge>
           <h2 className="text-3xl font-bold text-primary sm:text-4xl">Welcome to KAMA at St. Paul’s South C</h2>
           <p className="text-lg text-muted-foreground leading-relaxed">
-            KAMA is a vibrant fellowship dedicated to spiritual growth, leadership, and impactful service. We continue to transform lives and strengthen the church through faith, Christian family values, economic empowerment, and active community engagement.
+            KAMA is a vibrant fellowship dedicated to spiritual growth, leadership, and impactful service. It continues to transform lives and strengthen the church through faith, Christian family values, economic empowerment, and active community engagement.
           </p>
           <div className="bg-primary/5 p-8 rounded-3xl border border-primary/10">
             <h3 className="text-xl font-bold text-primary mb-4">Our Mission</h3>
