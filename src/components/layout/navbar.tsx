@@ -32,7 +32,7 @@ const navItems = [
       { name: "Fellowship Groups", href: "/fellowships" },
       { name: "Choir", href: "/ministries/choir" },
       { name: "Praise and Worship (Melodies of Christ Band)", href: "/ministries/praise" },
-      { name: "Media & Communication", href: "#" },
+      { name: "Media & Communication", href: "/ministries/media" },
     ]
   },
   { name: "Events", href: "/events" },
@@ -125,6 +125,16 @@ export function Navbar() {
             <Link href="https://www.tiktok.com/@ackstpaulsparishsouthc" target="_blank" rel="noopener noreferrer" className="text-[#000000] hover:opacity-80 transition-opacity" aria-label="TikTok">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="18" height="18" fill="currentColor">
                 <path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z"/>
+              </svg>
+            </Link>
+            <Link href="https://web.facebook.com/Ackstpaulssouthc" target="_blank" rel="noopener noreferrer" className="text-[#1877F2] hover:opacity-80 transition-opacity" aria-label="Facebook">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" width="18" height="18" fill="currentColor">
+                <path d="M80 299.3V512H196V299.3h86.5l12.8-100.3H196V133c0-29.1 13.9-43.6 42.1-43.6H296V0h-86.4C128.1 0 80 48 80 130.5v68.5H12.8v100.3H80z"/>
+              </svg>
+            </Link>
+            <Link href="https://www.youtube.com/@ackstpaulsparishsouthc" target="_blank" rel="noopener noreferrer" className="text-[#FF0000] hover:opacity-80 transition-opacity" aria-label="YouTube">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" width="18" height="18" fill="currentColor">
+                <path d="M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 42.152 48.284 48.474C117.22 448 288 448 288 448s170.781 0 213.371-11.486c23.497-6.321 42.003-24.823 48.284-48.474 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51 213.537V175.185l142.739 81.205-142.739 81.23z"/>
               </svg>
             </Link>
           </div>

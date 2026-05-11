@@ -35,6 +35,7 @@ const heroImages = [
 
 export default function HomePage() {
   const [currentHero, setCurrentHero] = useState(0);
+  const activeHero = currentHero >= heroImages.length ? 0 : currentHero;
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -49,7 +50,7 @@ export default function HomePage() {
         <div className="relative h-[70vh] md:h-[90vh] w-full overflow-hidden">
           <AnimatePresence initial={false}>
             <motion.div
-              key={currentHero}
+              key={activeHero}
               initial={{ opacity: 1 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -57,8 +58,8 @@ export default function HomePage() {
               className="absolute inset-0"
             >
               <Image
-                src={heroImages[currentHero].url}
-                alt={heroImages[currentHero].title}
+                src={heroImages[activeHero].url}
+                alt={heroImages[activeHero].title}
                 fill
                 className="object-cover object-top md:object-center"
                 priority
@@ -82,84 +83,56 @@ export default function HomePage() {
               <ChevronRight className="h-6 w-6" />
             </button>
           </div>
-        </div>
 
-        {/* Content Container - Grounded and Expanded */}
-        <div className="container mx-auto px-4 -mt-20 md:-mt-32 relative z-30 pb-12">
-          <motion.div 
-            key={currentHero}
-            initial={{ opacity: 1, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-white p-8 md:p-12 rounded-[2.5rem] shadow-2xl border border-slate-100 max-w-4xl"
-          >
-            <div className="space-y-6">
-              <Badge className="bg-secondary/10 text-secondary border-none px-4 py-1.5 text-xs md:text-sm uppercase tracking-widest font-bold">
-                ACK St Paul's South C Parish
-              </Badge>
-              <h1 className="text-3xl md:text-5xl lg:text-6xl font-black tracking-tight text-primary leading-[1.1]">
-                {heroImages[currentHero].title}
-              </h1>
-              <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-2xl font-medium">
-                {heroImages[currentHero].subtitle}
-              </p>
-              <div className="flex flex-wrap items-center gap-4 pt-2">
-                <Button asChild size="lg" variant="gold" className="h-14 px-10 text-lg font-bold shadow-lg shadow-accent/20">
-                  <Link href="/donate">Support Our Mission</Link>
-                </Button>
-                <Button asChild size="lg" variant="outline" className="h-14 px-10 text-lg font-bold border-primary/20 text-primary hover:bg-primary/5">
-                  <Link href="/about">Learn More</Link>
-                </Button>
-              </div>
+          {/* Content Overlaid on Image */}
+          <div className="absolute inset-0 z-10 flex items-center">
+            <div className="container mx-auto px-4">
+              <motion.div 
+                key={activeHero}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="max-w-4xl text-white space-y-6"
+              >
+                <Badge className="bg-secondary/20 text-white border-none px-4 py-1.5 text-xs md:text-sm uppercase tracking-widest font-bold backdrop-blur-md">
+                  ACK St Paul's South C Parish
+                </Badge>
+                <h1 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tight text-white leading-[1.1]">
+                  {heroImages[activeHero].title}
+                </h1>
+                <p className="text-lg md:text-2xl text-slate-200 leading-relaxed max-w-2xl font-medium">
+                  {heroImages[activeHero].subtitle}
+                </p>
+                <div className="flex flex-wrap items-center gap-4 pt-2">
+                  <Button asChild size="lg" variant="gold" className="h-14 px-10 text-lg font-bold shadow-lg shadow-accent/20">
+                    <Link href="/donate">Support Our Mission</Link>
+                  </Button>
+                  <Button asChild size="lg" variant="outline" className="h-14 px-10 text-lg font-bold border-white text-white bg-transparent hover:bg-black hover:text-white">
+                    <Link href="/about">Learn More</Link>
+                  </Button>
+                </div>
+                {/* Indicators inside the hero area */}
+                <div className="flex gap-2 mt-8 pt-8 border-t border-white/10">
+                  {heroImages.map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setCurrentHero(i)}
+                      className={cn(
+                        "h-1.5 rounded-full transition-all duration-500",
+                        activeHero === i ? "w-10 bg-accent" : "w-2 bg-white/30 hover:bg-white/50"
+                      )}
+                    />
+                  ))}
+                </div>
+              </motion.div>
             </div>
-            {/* Indicators inside the card */}
-            <div className="flex gap-2 mt-8 border-t pt-8 border-slate-50">
-              {heroImages.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setCurrentHero(i)}
-                  className={cn(
-                    "h-1.5 rounded-full transition-all duration-500",
-                    currentHero === i ? "w-10 bg-accent" : "w-2 bg-slate-200 hover:bg-slate-300"
-                  )}
-                />
-              ))}
-            </div>
-          </motion.div>
+          </div>
         </div>
-      </section>
-
-      {/* Quick Stats/Services */}
-      <section className="container mx-auto -mt-8 md:-mt-16 px-4 pb-20 relative z-20">
-        <motion.div
-          initial={{ opacity: 1, y: 0 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="grid grid-cols-1 gap-6 md:grid-cols-4"
-        >
-          {[
-            { icon: Users, title: "Our Community", desc: "Join our diverse family of believers." },
-            { icon: BookOpen, title: "Sermons", desc: "Be inspired by the word of God." },
-            { icon: Calendar, title: "Events", desc: "Stay updated with church activities." },
-            { icon: Heart, title: "Give Back", desc: "Make a difference through your tithe." },
-          ].map((item, i) => (
-            <motion.div key={i} initial={{ opacity: 1, y: 0 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}>
-              <Card className="glass-morphism h-full transition-all hover:shadow-xl hover:-translate-y-1 bg-white/95 backdrop-blur-md">
-                <CardContent className="flex flex-col items-center p-8 text-center">
-                  <div className="mb-4 rounded-full bg-primary/10 p-4 text-primary">
-                    <item.icon className="h-8 w-8" />
-                  </div>
-                  <h3 className="mb-2 text-xl font-bold">{item.title}</h3>
-                  <p className="text-sm text-muted-foreground">{item.desc}</p>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
-        </motion.div>
       </section>
 
       {/* Welcome from Vicar */}
-      <section className="container mx-auto px-4 py-16 md:py-24">
-        <div className="grid items-center gap-8 md:gap-16 lg:grid-cols-2">
+      <section className="container mx-auto px-4 py-8 md:py-12">
+        <div className="grid items-start gap-8 md:gap-16 lg:grid-cols-2">
           <motion.div
             initial={{ opacity: 1, x: 0 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -167,12 +140,11 @@ export default function HomePage() {
             className="relative h-[400px] md:h-[600px] overflow-hidden rounded-[2rem] md:rounded-[3rem] shadow-2xl"
           >
             <Image
-              src="/images/vicar.jpg"
+              src="/images/vicarcanon.jpeg"
               alt="Our Vicar"
               fill
               className="object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent" />
             <div className="absolute bottom-10 left-10 text-white">
               <p className="font-outfit text-2xl font-bold tracking-tight">The Venerable Vicar</p>
               <p className="text-slate-200">Parish Priest</p>
@@ -205,16 +177,16 @@ export default function HomePage() {
       </section>
 
       {/* New Here? What to Expect */}
-      <section className="bg-primary py-24 text-white overflow-hidden relative">
+      <section className="bg-primary py-8 md:py-16 text-white overflow-hidden relative">
         <div className="container mx-auto px-4 relative z-10">
-          <div className="mb-16 text-center">
+          <div className="mb-8 md:mb-16 text-center">
             <Badge className="mb-4 bg-accent text-primary px-4 py-1 font-bold">New Here?</Badge>
             <h2 className="text-4xl font-black tracking-tight sm:text-5xl">What to Expect</h2>
             <p className="mx-auto mt-4 max-w-2xl text-slate-300 text-lg">
               Visiting a new church can be intimidating. We want to make your first visit as welcoming and smooth as possible.
             </p>
           </div>
-          <div className="grid gap-8 md:grid-cols-3">
+          <div className="grid gap-4 md:gap-8 md:grid-cols-3">
             {[
               { icon: "🚗", title: "Ample Parking", desc: "Safe and secure parking is available within the church premises for all worshippers." },
               { icon: "🙌", title: "Vibrant Worship", desc: "Our services blend Anglican liturgy with contemporary praise, creating a powerful spiritual experience." },
@@ -229,7 +201,7 @@ export default function HomePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.05 }}
-                className="bg-white/5 backdrop-blur-sm border border-white/10 p-8 rounded-[2rem] hover:bg-white/10 transition-all"
+                className="bg-white/5 backdrop-blur-sm border border-white/10 p-6 md:p-8 rounded-[2rem] hover:bg-white/10 transition-all"
               >
                 <div className="text-4xl mb-4">{item.icon}</div>
                 <h3 className="text-xl font-bold mb-2 text-accent">{item.title}</h3>
@@ -243,7 +215,7 @@ export default function HomePage() {
       </section>
 
       {/* Featured Sermon */}
-      <section className="py-16 md:py-24">
+      <section className="py-8 md:py-12">
         <div className="container mx-auto px-4">
           <div className="bg-muted rounded-[2rem] md:rounded-[4rem] p-6 md:p-16">
             <div className="grid gap-12 lg:grid-cols-2 items-center">
@@ -254,26 +226,27 @@ export default function HomePage() {
                   Can't make it to the sanctuary? Catch up on our latest sermons and biblical teachings from the comfort of your home.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <Button size="lg" variant="gold" className="h-14 px-10 text-lg font-bold">
-                    Watch on YouTube
+                  <Button size="lg" variant="gold" className="h-14 px-10 text-lg font-bold" asChild>
+                    <Link href="https://www.youtube.com/@ackstpaulsparishsouthc" target="_blank" rel="noopener noreferrer">
+                      Watch on YouTube
+                    </Link>
                   </Button>
-                  <Button size="lg" variant="outline" className="h-14 px-10 text-lg font-bold">
-                    Browse All Sermons
+                  <Button size="lg" variant="outline" className="h-14 px-10 text-lg font-bold" asChild>
+                    <Link href="https://www.youtube.com/@AckStPaulsParishSouthC/streams" target="_blank" rel="noopener noreferrer">
+                      Browse All Sermons
+                    </Link>
                   </Button>
                 </div>
               </div>
-              <div className="relative aspect-video overflow-hidden rounded-[2.5rem] shadow-2xl group cursor-pointer">
-                <Image
-                  src="/images/congregation.jpg"
-                  alt="Latest Sermon Placeholder"
-                  fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-110"
+              <div className="relative aspect-video overflow-hidden rounded-[2.5rem] shadow-2xl">
+                <iframe
+                  src="https://www.youtube.com/embed/bUlV-KEt_Cc?si=meBk_ies9sSzr8e1&start=615"
+                  title="YouTube video player"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  allowFullScreen
+                  className="absolute inset-0 w-full h-full border-0"
                 />
-                <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                  <div className="h-20 w-20 bg-white rounded-full flex items-center justify-center shadow-2xl transition-transform group-hover:scale-110">
-                    <div className="w-0 h-0 border-t-[10px] border-t-transparent border-l-[18px] border-l-primary border-b-[10px] border-b-transparent ml-2" />
-                  </div>
-                </div>
               </div>
             </div>
           </div>
@@ -281,7 +254,7 @@ export default function HomePage() {
       </section>
 
       {/* Our Ministries Grid */}
-      <section className="py-24">
+      <section className="py-8 md:py-16">
         <div className="container mx-auto px-4">
           <div className="mb-16 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
             <div className="space-y-4">
@@ -297,12 +270,9 @@ export default function HomePage() {
           </div>
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {[
-              { title: "Men's Ministry (KAMA)", img: "/images/MU 2.jpeg", desc: "Empowering men in faith, family, and leadership.", href: "/ministries/men" },
-              { title: "Youth Ministry (SPYCE)", img: "/images/youth.jpg", desc: "A vibrant movement of young believers chosen for purpose.", href: "/ministries/youth" },
-              { title: "Sunday School", img: "/images/children 1.jpeg", desc: "Building a strong biblical foundation for our children.", href: "/ministries/sunday-school" },
+              { title: "Youth Ministry (SPYCE)", img: "/images/youths bible study hang out .jpeg", desc: "A vibrant movement of young believers chosen for purpose.", href: "/ministries/youth" },
               { title: "Women's Group (MU)", img: "/images/MU 2.jpeg", desc: "Nurturing women through prayer, fellowship, and service.", href: "/ministries/women" },
               { title: "Praise & Worship", img: "/images/band 1.jpg", desc: "Leading the congregation into heartfelt worship and praise.", href: "/ministries/praise" },
-              { title: "Missions & Outreach", img: "/images/missions.jpeg", desc: "Spreading the Gospel and extending Christ's love to all.", href: "/ministries/missions" },
             ].map((ministry, i) => (
               <motion.div
                 key={i}
@@ -315,10 +285,10 @@ export default function HomePage() {
                   fill
                   className="object-cover transition-transform duration-700 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/20 to-transparent" />
+                <div className="absolute inset-0 bg-black/20" />
                 <div className="absolute inset-0 p-10 flex flex-col justify-end text-white">
-                  <h3 className="text-2xl font-black mb-3">{ministry.title}</h3>
-                  <p className="text-slate-200 mb-6 line-clamp-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <h3 className="text-2xl font-black mb-3 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">{ministry.title}</h3>
+                  <p className="text-slate-200 mb-6 line-clamp-2 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
                     {ministry.desc}
                   </p>
                   <Button asChild variant="gold" size="sm" className="w-fit h-10 px-6 rounded-full font-bold">
@@ -332,7 +302,7 @@ export default function HomePage() {
       </section>
 
       {/* Impact & Stories */}
-      <section className="bg-muted/30 py-16 md:py-24">
+      <section className="bg-muted/30 py-8 md:py-12">
         <div className="container mx-auto px-4">
           <div className="grid gap-8 md:gap-16 lg:grid-cols-2 items-center">
             <div className="relative">
@@ -376,7 +346,7 @@ export default function HomePage() {
       </section>
 
       {/* Upcoming Events Preview */}
-      <section className="py-24">
+      <section className="py-8 md:py-16">
         <div className="container mx-auto px-4">
           <div className="mb-12 flex items-end justify-between">
             <div className="space-y-2">
@@ -414,7 +384,7 @@ export default function HomePage() {
       </section>
 
       {/* Vision & Mission Section */}
-      <section className="bg-primary py-24 text-white">
+      <section className="bg-primary py-8 md:py-16 text-white">
         <div className="container mx-auto px-4">
           <div className="grid gap-12 lg:grid-cols-3">
             <motion.div
@@ -457,16 +427,16 @@ export default function HomePage() {
       </section>
 
       {/* Church Schedule Section */}
-      <section className="bg-muted/30 py-24">
+      <section className="bg-muted/30 py-8 md:py-16">
         <div className="container mx-auto px-4">
-          <div className="mb-16 text-center">
+          <div className="mb-8 md:mb-16 text-center">
             <Badge className="mb-4 bg-secondary text-white px-4 py-1">Join Us</Badge>
             <h2 className="text-4xl font-bold text-primary">Church Schedule</h2>
             <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
               Experience transformative worship every Sunday and engage with our community throughout the week.
             </p>
           </div>
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 md:gap-8 md:grid-cols-2 lg:grid-cols-3">
             {[
               { time: "8:00 AM - 9:30 AM", title: "First English Service", desc: "A vibrant traditional-contemporary blend." },
               { time: "10:00 AM - 12:20 PM", title: "Second English Service", desc: "Our main congregational worship service." },
@@ -481,7 +451,7 @@ export default function HomePage() {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.05 }}
-                className="rounded-2xl bg-white p-8 shadow-sm border border-border/50 hover:shadow-md transition-all"
+                className="rounded-2xl bg-white p-5 md:p-8 shadow-sm border border-border/50 hover:shadow-md transition-all"
               >
                 <div className="mb-4 text-sm font-bold text-secondary uppercase tracking-widest">{slot.time}</div>
                 <h3 className="mb-2 text-xl font-bold text-primary">{slot.title}</h3>
@@ -492,8 +462,120 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Multipurpose Hall Section */}
+      <section className="py-12 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center max-w-3xl mx-auto mb-12">
+            <Badge className="mb-4 bg-secondary text-white px-4 py-1">Venue Hire</Badge>
+            <h2 className="text-4xl font-bold text-primary">Host Your Event with Us!</h2>
+            <p className="mt-4 text-lg text-muted-foreground">
+              Looking for the perfect venue for your next event? ACK St Paul's South C Multipurpose Hall offers a complete event solution with modern facilities, ample parking, and a serene environment.
+            </p>
+          </div>
+
+          <div className="grid gap-12 lg:grid-cols-3 items-start max-w-6xl mx-auto">
+            {/* Left Side: Marketing Message & Offer */}
+            <div className="lg:col-span-1 space-y-6">
+              <div className="bg-primary text-white p-8 rounded-[2rem] shadow-xl">
+                <h3 className="text-2xl font-bold mb-4">You have an event? We have the solution.</h3>
+                <p className="text-slate-300 text-sm leading-relaxed mb-6">
+                  Our state-of-the-art facility accommodates over 500-600 guests, with 4 additional intimate halls for smaller gatherings. Equipped with sophisticated audio-visual technology and flexible seating arrangements, we ensure a smooth experience for conferences, weddings, and parties.
+                </p>
+                <div className="flex items-center gap-2 text-accent font-bold">
+                  <span>Tents are overrated, anyway!</span>
+                </div>
+              </div>
+
+              <div className="bg-accent/10 border-2 border-accent p-6 rounded-[2rem] text-center">
+                <span className="text-xs font-bold uppercase tracking-widest text-primary">Special Offer</span>
+                <h4 className="text-2xl font-black text-primary mt-1 mb-2">20% Discount in August!</h4>
+                <p className="text-sm text-muted-foreground mb-4">Book with us today and enjoy a great deal in return.</p>
+                <Button size="sm" variant="gold" className="font-bold" asChild>
+                  <Link href="/contact">Inquire Now</Link>
+                </Button>
+              </div>
+            </div>
+
+            {/* Right Side: Rate Card Table */}
+            <div className="lg:col-span-2">
+              <div className="bg-white rounded-[2rem] border border-slate-100 shadow-sm overflow-hidden">
+                <div className="p-6 bg-primary text-white">
+                  <h3 className="text-xl font-bold">Hall Hire Rate Card</h3>
+                  <p className="text-xs text-slate-300">Rates are inclusive of 16% VAT</p>
+                </div>
+                {/* Desktop Table View */}
+                <div className="hidden md:block overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="bg-slate-50 text-left text-muted-foreground font-bold">
+                        <th className="p-4">Name of Hall</th>
+                        <th className="p-4">Location</th>
+                        <th className="p-4">Capacity</th>
+                        <th className="p-4">Day Rate</th>
+                        <th className="p-4">Evening Rate</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {[
+                        { name: "Victory Hall", loc: "Ground Floor", cap: "500 Guests", day: "Ksh 50,000", eve: "Ksh 15,000" },
+                        { name: "Wisdom Hall", loc: "1st Floor (Door 1)", cap: "30 Guests", day: "Ksh 10,000", eve: "Ksh 3,000" },
+                        { name: "Praise Hall", loc: "1st Floor (Door 2)", cap: "10 Guests", day: "Ksh 5,000", eve: "Ksh 2,000" },
+                        { name: "Exploits Hall", loc: "1st Floor (Door 3)", cap: "50 Guests", day: "Ksh 15,000", eve: "Ksh 4,000" },
+                        { name: "Exodus Hall", loc: "2nd Floor (Door 1)", cap: "30 Guests", day: "Ksh 10,000", eve: "Ksh 3,000" },
+                        { name: "Courage Hall", loc: "2nd Floor (Door 2)", cap: "70 Guests", day: "Ksh 20,000", eve: "Ksh 8,000" },
+                      ].map((row, i) => (
+                        <tr key={i} className="hover:bg-slate-50 transition-colors">
+                          <td className="p-4 font-bold text-primary">{row.name}</td>
+                          <td className="p-4 text-muted-foreground">{row.loc}</td>
+                          <td className="p-4 text-muted-foreground">{row.cap}</td>
+                          <td className="p-4 font-bold text-secondary">{row.day}</td>
+                          <td className="p-4 font-bold text-secondary">{row.eve}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Mobile Card View */}
+                <div className="block md:hidden divide-y divide-slate-100">
+                  {[
+                    { name: "Victory Hall", loc: "Ground Floor", cap: "500 Guests", day: "Ksh 50,000", eve: "Ksh 15,000" },
+                    { name: "Wisdom Hall", loc: "1st Floor (Door 1)", cap: "30 Guests", day: "Ksh 10,000", eve: "Ksh 3,000" },
+                    { name: "Praise Hall", loc: "1st Floor (Door 2)", cap: "10 Guests", day: "Ksh 5,000", eve: "Ksh 2,000" },
+                    { name: "Exploits Hall", loc: "1st Floor (Door 3)", cap: "50 Guests", day: "Ksh 15,000", eve: "Ksh 4,000" },
+                    { name: "Exodus Hall", loc: "2nd Floor (Door 1)", cap: "30 Guests", day: "Ksh 10,000", eve: "Ksh 3,000" },
+                    { name: "Courage Hall", loc: "2nd Floor (Door 2)", cap: "70 Guests", day: "Ksh 20,000", eve: "Ksh 8,000" },
+                  ].map((row, i) => (
+                    <div key={i} className="p-6 space-y-3">
+                      <div className="flex justify-between items-center">
+                        <h4 className="font-bold text-primary text-lg">{row.name}</h4>
+                        <span className="text-xs bg-secondary/10 text-secondary px-3 py-1 rounded-full font-bold">{row.cap}</span>
+                      </div>
+                      <p className="text-sm text-muted-foreground">{row.loc}</p>
+                      <div className="grid grid-cols-2 gap-4 pt-2">
+                        <div>
+                          <span className="text-xs text-muted-foreground block mb-1">Day Rate</span>
+                          <span className="font-bold text-secondary">{row.day}</span>
+                        </div>
+                        <div>
+                          <span className="text-xs text-muted-foreground block mb-1">Evening Rate</span>
+                          <span className="font-bold text-secondary">{row.eve}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="p-4 bg-slate-50 text-xs text-muted-foreground text-center border-t border-slate-100">
+                  Proximity to town CBD, off Lang'ata Road, near T-MALL. Paybill No: 308937 | Account: MPH
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
-      <section className="relative py-24 overflow-hidden hero-gradient">
+      <section className="relative py-8 md:py-16 overflow-hidden hero-gradient">
         <div className="container relative mx-auto px-4 text-center text-white">
           <h2 className="mb-6 text-4xl font-bold">Ready to take the next step?</h2>
           <p className="mb-10 text-xl text-slate-100 opacity-90 max-w-2xl mx-auto">

@@ -28,13 +28,13 @@ export default function ContactPage() {
       <div className="container mx-auto px-4 py-16">
         <div className="grid gap-12 lg:grid-cols-3">
           {/* Contact Info */}
-          <div className="space-y-8 lg:col-span-1">
+          <div className="space-y-8 lg:col-span-1 order-2 lg:order-1">
             <h2 className="text-2xl font-bold text-primary">Contact Information</h2>
             
             <div className="space-y-6">
               {[
-                { icon: MapPin, title: "Our Location", detail: "Mai Mahio Road, South C, Nairobi, Kenya (Opposite South C Shopping Centre)" },
-                { icon: Phone, title: "Phone Number", detail: "+254 717 401333" },
+                { icon: MapPin, title: "Our Location", detail: "Mai Mahiu RD, South C, Nairobi, Kenya (Opposite South C Shopping Centre)" },
+                { icon: Phone, title: "Phone Number", detail: "0708018067" },
                 { icon: Mail, title: "Email Address", detail: "info@ackstpaulssouthc.co.ke" },
                 { icon: MessageSquare, title: "Office Hours", detail: "Mon - Fri: 8:00 AM - 5:00 PM\nSun: 7:00 AM - 1:00 PM" },
               ].map((item, i) => (
@@ -59,7 +59,7 @@ export default function ContactPage() {
             {/* Social Links */}
             <div className="space-y-4">
               <h3 className="text-xl font-bold text-primary">Follow Us</h3>
-              <div className="flex gap-4">
+              <div className="flex flex-wrap gap-4">
                 <a 
                   href="https://www.instagram.com/ack_st_pauls_parish_southc" 
                   target="_blank" 
@@ -84,14 +84,42 @@ export default function ContactPage() {
                   </svg>
                   TikTok
                 </a>
+                <a 
+                  href="https://web.facebook.com/Ackstpaulssouthc" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-6 py-3 bg-white border rounded-2xl hover:shadow-md transition-all text-primary font-bold"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" width="18" height="18" fill="currentColor" className="text-secondary">
+                    <path d="M80 299.3V512H196V299.3h86.5l12.8-100.3H196V133c0-29.1 13.9-43.6 42.1-43.6H296V0h-86.4C128.1 0 80 48 80 130.5v68.5H12.8v100.3H80z"/>
+                  </svg>
+                  Facebook
+                </a>
+                <a 
+                  href="https://www.youtube.com/@ackstpaulsparishsouthc" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-6 py-3 bg-white border rounded-2xl hover:shadow-md transition-all text-primary font-bold"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" width="18" height="18" fill="currentColor" className="text-secondary">
+                    <path d="M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 42.152 48.284 48.474C117.22 448 288 448 288 448s170.781 0 213.371-11.486c23.497-6.321 42.003-24.823 48.284-48.474 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51 213.537V175.185l142.739 81.205-142.739 81.23z"/>
+                  </svg>
+                  YouTube
+                </a>
               </div>
             </div>
 
             {/* Map Placeholder */}
             <div className="h-64 w-full rounded-[2.5rem] bg-muted border-2 border-primary/5 overflow-hidden relative shadow-inner">
-              <div className="absolute inset-0 flex items-center justify-center text-muted-foreground text-sm font-medium">
-                South C, Nairobi, Kenya
-              </div>
+              <iframe
+                width="100%"
+                height="100%"
+                frameBorder="0"
+                scrolling="no"
+                marginHeight={0}
+                marginWidth={0}
+                src="https://maps.google.com/maps?q=ACK%20St.%20Paul's%20South%20C%20Nairobi&t=&z=15&ie=UTF8&iwloc=&output=embed"
+              ></iframe>
             </div>
           </div>
 
@@ -99,7 +127,7 @@ export default function ContactPage() {
           <motion.div 
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="lg:col-span-2"
+            className="lg:col-span-2 order-1 lg:order-2"
           >
             <Card className="shadow-xl">
               <CardHeader>

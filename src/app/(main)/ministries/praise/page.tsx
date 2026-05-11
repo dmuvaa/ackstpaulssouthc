@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { Music, Music2, Mic2, Users, Heart, Sparkles, CheckCircle2, Quote, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -30,88 +31,108 @@ const testimonials = [
 export default function PraisePage() {
   return (
     <div className="flex flex-col">
-      {/* Image Banner Section */}
-      <section className="bg-slate-50 pt-12">
-        <div className="container mx-auto px-4">
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="relative w-full aspect-video md:aspect-[21/9] rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white"
-          >
-            <Image
-              src="/images/praise-worship.jpg"
-              alt="Melodies of Christ Band"
-              fill
-              className="object-cover object-center"
-              priority
-            />
-          </motion.div>
+      {/* Hero Section — Split Layout */}
+      <section className="relative min-h-[calc(100vh-6rem)] flex flex-col md:flex-row">
+        {/* Left: Image */}
+        <div className="relative w-full md:w-[65%] h-[50vh] md:h-auto overflow-hidden">
+          <Image
+            src="/images/praise-worship.jpg"
+            alt="Melodies of Christ Band"
+            fill
+            className="object-cover object-center"
+            priority
+          />
         </div>
-      </section>
 
-      {/* Header Content Section */}
-      <section className="bg-slate-50 pb-20 pt-12">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="space-y-6"
-            >
-              <Badge className="bg-secondary/10 text-secondary border-none px-4 py-1.5 text-sm uppercase tracking-widest font-black">
-                Rooted in Psalm 150
-              </Badge>
-              <h1 className="text-4xl md:text-7xl font-black text-primary tracking-tight">
-                Melodies of <br/><span className="text-secondary">Christ Band</span>
-              </h1>
-              <p className="text-lg md:text-2xl text-muted-foreground font-medium leading-relaxed max-w-3xl mx-auto">
-                Magnifying the greatness of God through music and authentic worship, leading the congregation into His presence.
-              </p>
-            </motion.div>
+        {/* Right: Text Content */}
+        <div className="w-full md:w-[35%] bg-primary flex items-center relative overflow-hidden">
+          <div className="px-8 md:px-12 lg:px-16 py-12 md:py-0 space-y-6 text-white">
+            <Badge className="bg-secondary/10 text-secondary border-none px-4 py-1.5 text-sm uppercase tracking-widest font-black">
+              Rooted in Psalm 150
+            </Badge>
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight leading-[1.1]">
+              Melodies of <br/><span className="text-secondary">Christ Band</span>
+            </h1>
+            <p className="text-base md:text-lg text-slate-300 font-medium leading-relaxed">
+              Magnifying the greatness of God through music and authentic worship, leading the congregation into His presence.
+            </p>
+            <div className="flex gap-4 pt-4">
+              <Link href="/contact" className="bg-secondary text-primary px-6 py-3 rounded-full font-bold hover:bg-secondary/90 transition-all text-sm">
+                Contact Us
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Intro Section */}
-      <section className="container mx-auto px-4 py-24">
-        <div className="grid gap-16 lg:grid-cols-2 items-center">
+      {/* Intro & Objectives Section */}
+      <section className="container mx-auto px-4 py-12">
+        <div className="mb-6">
+          <Badge className="bg-secondary text-white px-4 py-1">Praise & Worship</Badge>
+        </div>
+        <div className="grid gap-16 lg:grid-cols-2 items-start">
+          {/* Left Side: Welcome & Values */}
           <div className="space-y-8">
-            <h2 className="text-4xl font-black text-primary">Lead Us Into His Presence</h2>
-            <p className="text-xl text-muted-foreground leading-relaxed">
-              The Melodies of Christ Band at ACK St. Paul’s Parish, South C, is a passionate team dedicated to leading the congregation into heartfelt praise and worship. We aim to foster spiritual transformation and a deep connection with God.
-            </p>
             <div className="space-y-4">
-              <h4 className="text-2xl font-bold text-primary">Core Objectives</h4>
-              <div className="grid gap-4">
-                {objectives.map((obj, i) => (
-                  <div key={i} className="flex items-center gap-3 bg-muted p-4 rounded-xl border border-primary/5">
-                    <CheckCircle2 className="h-5 w-5 text-secondary" />
-                    <span className="font-medium text-primary">{obj}</span>
-                  </div>
+              <h2 className="text-3xl font-bold text-primary sm:text-4xl">Lead Us Into His Presence</h2>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                The Melodies of Christ Band is a passionate team dedicated to leading the congregation into heartfelt praise and worship. We aim to foster spiritual transformation and a deep connection with God.
+              </p>
+            </div>
+            
+            <div className="space-y-4">
+              <h3 className="text-2xl font-bold text-primary">Our Core Values</h3>
+              <div className="space-y-4">
+                {values.map((item, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.1 }}
+                    className="flex gap-4 p-6 bg-white rounded-2xl border shadow-sm"
+                  >
+                    <div className="h-10 w-10 rounded-full bg-secondary/10 text-secondary flex items-center justify-center shrink-0 font-bold">
+                      {item.title[0]}
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-primary">{item.title}</h4>
+                      <p className="text-sm text-muted-foreground">{item.desc}</p>
+                    </div>
+                  </motion.div>
                 ))}
               </div>
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            {values.map((v, i) => (
-              <motion.div
-                key={i}
-                whileHover={{ y: -5 }}
-                className="bg-white p-8 rounded-3xl border shadow-sm text-center"
-              >
-                <div className="h-10 w-10 rounded-full bg-accent/10 text-accent flex items-center justify-center mx-auto mb-4 font-black">
-                  {v.title[0]}
-                </div>
-                <h4 className="font-bold text-primary mb-2">{v.title}</h4>
-                <p className="text-xs text-muted-foreground">{v.desc}</p>
-              </motion.div>
-            ))}
+
+          {/* Right Side: Objectives */}
+          <div className="space-y-6">
+            <h3 className="text-2xl font-bold text-primary">Core Objectives</h3>
+            <div className="space-y-4">
+              {objectives.map((item, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: 20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  className="flex gap-4 p-6 bg-white rounded-2xl border shadow-sm"
+                >
+                  <div className="h-10 w-10 rounded-full bg-accent/20 text-accent flex items-center justify-center shrink-0 font-bold">
+                    {i + 1}
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-primary">{item}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
       {/* Rehearsals Section */}
-      <section className="bg-primary py-24 text-white overflow-hidden relative">
+      <section className="bg-primary py-12 text-white overflow-hidden relative">
         <div className="container mx-auto px-4 relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-8">
@@ -135,7 +156,11 @@ export default function PraisePage() {
                 </ul>
               </div>
               <div className="flex items-center gap-4 pt-4">
-                <Button size="lg" variant="gold" className="h-14 px-10 text-lg font-bold">Contact Brian Chiuri</Button>
+                <Button size="lg" className="font-bold h-12 px-8" asChild>
+                  <Link href="/contact">
+                    Contact Us
+                  </Link>
+                </Button>
               </div>
             </div>
             <div className="relative h-[600px] rounded-[4rem] overflow-hidden shadow-2xl">
@@ -146,7 +171,7 @@ export default function PraisePage() {
       </section>
 
       {/* Testimonials */}
-      <section className="container mx-auto px-4 py-24">
+      <section className="container mx-auto px-4 py-12">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-black text-primary">Voices of Praise</h2>
           <p className="text-muted-foreground mt-4">Hear what our members and congregants say about the ministry.</p>

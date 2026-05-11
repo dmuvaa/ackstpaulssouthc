@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { BookOpen, Calendar, Users, Sparkles, CheckCircle2, Quote } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -22,51 +23,43 @@ const expectations = [
 export default function OmbiPage() {
   return (
     <div className="flex flex-col">
-      {/* Image Banner Section */}
-      <section className="bg-slate-50 pt-12">
-        <div className="container mx-auto px-4">
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="relative w-full aspect-[3/2] md:aspect-[16/7] rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white"
-          >
-            <Image
-              src="/images/ombi-new.jpg"
-              alt="OMBI Prayer Journey"
-              fill
-              className="object-cover object-top"
-              priority
-            />
-          </motion.div>
+      {/* Hero Section — Split Layout */}
+      <section className="relative min-h-[calc(100vh-6rem)] flex flex-col md:flex-row">
+        {/* Left: Image */}
+        <div className="relative w-full md:w-[65%] h-[50vh] md:h-auto overflow-hidden">
+          <Image
+            src="/images/ombi-new.jpg"
+            alt="OMBI Prayer Journey"
+            fill
+            className="object-cover object-top"
+            priority
+          />
         </div>
-      </section>
 
-      {/* Header Content Section */}
-      <section className="bg-slate-50 pb-20 pt-12">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="space-y-6"
-            >
-              <Badge className="bg-secondary/10 text-secondary border-none px-4 py-1.5 text-sm uppercase tracking-widest font-bold">
-                10-Week Prayer Adventure
-              </Badge>
-              <h1 className="text-4xl md:text-7xl font-black text-primary tracking-tight">
-                OMBI <span className="text-secondary">Prayer</span>
-              </h1>
-              <p className="text-lg md:text-2xl text-muted-foreground font-medium leading-relaxed max-w-3xl mx-auto italic">
-                “Call to me and I will answer you and tell you great and unsearchable things you do not know” — Jeremiah 33:3
-              </p>
-            </motion.div>
+        {/* Right: Text Content */}
+        <div className="w-full md:w-[35%] bg-primary flex items-center relative overflow-hidden">
+          <div className="px-8 md:px-12 lg:px-16 py-12 md:py-0 space-y-6 text-white">
+            <Badge className="bg-secondary/10 text-secondary border-none px-4 py-1.5 text-sm uppercase tracking-widest font-bold">
+              10-Week Prayer Adventure
+            </Badge>
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight leading-[1.1]">
+              OMBI <span className="text-secondary">Prayer</span>
+            </h1>
+            <p className="text-base md:text-lg text-slate-300 font-medium leading-relaxed italic">
+              “Call to me and I will answer you and tell you great and unsearchable things you do not know” — Jeremiah 33:3
+            </p>
+            <div className="flex gap-4 pt-4">
+              <Link href="/contact" className="bg-secondary text-primary px-6 py-3 rounded-full font-bold hover:bg-secondary/90 transition-all text-sm">
+                Contact Us
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Intro Section */}
-      <section className="container mx-auto px-4 py-24">
-        <div className="grid gap-16 lg:grid-cols-2 items-center">
+      <section className="container mx-auto px-4 py-12">
+        <div className="grid gap-16 lg:grid-cols-2 items-start">
           <div className="space-y-8">
             <h2 className="text-4xl font-bold text-primary">Deepen Your Prayer Life</h2>
             <div className="space-y-4 text-lg text-muted-foreground leading-relaxed">
@@ -77,13 +70,24 @@ export default function OmbiPage() {
                 Rooted in scripture, the program guides participants in applying biblical truths in daily prayer, fostering a powerful connection with God.
               </p>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
+            <div className="space-y-4 pt-4">
               {highlights.map((h, i) => (
-                <div key={i} className="text-center p-4 bg-muted rounded-xl">
-                  <h.icon className="h-8 w-8 text-secondary mx-auto mb-2" />
-                  <h4 className="font-bold text-sm text-primary">{h.title}</h4>
-                  <p className="text-[10px] text-muted-foreground mt-1">{h.desc}</p>
-                </div>
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  className="flex gap-4 p-6 bg-white rounded-2xl border shadow-sm"
+                >
+                  <div className="h-10 w-10 rounded-full bg-secondary/10 text-secondary flex items-center justify-center shrink-0">
+                    <h.icon className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-primary">{h.title}</h4>
+                    <p className="text-sm text-muted-foreground">{h.desc}</p>
+                  </div>
+                </motion.div>
               ))}
             </div>
           </div>
@@ -114,7 +118,7 @@ export default function OmbiPage() {
       </section>
 
       {/* Testimonial Section */}
-      <section className="bg-primary py-24 text-white overflow-hidden relative">
+      <section className="bg-primary py-12 text-white overflow-hidden relative">
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto">
             <div className="flex flex-col items-center text-center">
@@ -135,15 +139,17 @@ export default function OmbiPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="container mx-auto px-4 py-24 text-center">
+      <section className="container mx-auto px-4 py-12 text-center">
         <div className="max-w-2xl mx-auto space-y-8">
           <h2 className="text-4xl font-bold text-primary">Start Your Journey</h2>
           <p className="text-xl text-muted-foreground">
             Sign up for the next OMBI cohort at the church office or contact the Patron for more details. Join us on this incredible journey of prayer, reflection, and transformation!
           </p>
-          <Button size="lg" variant="gold" className="h-14 px-10 text-lg font-bold">
-            Sign Up for OMBI
-          </Button>
+            <Button size="lg" className="font-bold h-12 px-8" asChild>
+              <Link href="/contact">
+                Contact Us
+              </Link>
+            </Button>
         </div>
       </section>
     </div>
