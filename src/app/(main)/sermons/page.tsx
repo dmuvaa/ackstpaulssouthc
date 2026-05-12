@@ -8,7 +8,7 @@ const fallbackSermons = [
     date: "May 3, 2026",
     type: "Video",
     description: "Discover how to align your life with God's ultimate plan for you.",
-    duration: "45 mins"
+    duration: 45
   },
   {
     title: "The Power of Forgiveness",
@@ -16,7 +16,7 @@ const fallbackSermons = [
     date: "April 26, 2026",
     type: "Audio",
     description: "A deep exploration of how forgiveness sets the believer free.",
-    duration: "38 mins"
+    duration: 38
   },
   {
     title: "Youth: Salt and Light",
@@ -24,7 +24,7 @@ const fallbackSermons = [
     date: "April 19, 2026",
     type: "Video",
     description: "Encouraging the youth to be bold in their faith within their spheres of influence.",
-    duration: "52 mins"
+    duration: 52
   }
 ];
 
