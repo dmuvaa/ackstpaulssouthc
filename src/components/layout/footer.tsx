@@ -26,28 +26,28 @@ export function Footer() {
               To be an Empowered Church Transforming Humanity. Join us as we worship and serve our Lord Jesus Christ in faith, hope, and love.
             </p>
             <div className="flex space-x-5">
-              <Link href="https://www.instagram.com/ack_st_pauls_parish_southc" target="_blank" className="h-10 w-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-accent hover:text-primary transition-all duration-300">
+              <a href="https://www.instagram.com/ack_st_pauls_parish_southc" target="_blank" rel="noopener noreferrer" className="h-10 w-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-accent hover:text-primary transition-all duration-300">
                 <svg className="h-5 w-5 fill-none stroke-current stroke-2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round">
                   <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
                   <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
                   <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
                 </svg>
-              </Link>
-              <Link href="https://www.tiktok.com/@ackstpaulsparishsouthc" target="_blank" className="h-10 w-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-accent hover:text-primary transition-all duration-300">
+              </a>
+              <a href="https://www.tiktok.com/@ackstpaulsparishsouthc" target="_blank" rel="noopener noreferrer" className="h-10 w-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-accent hover:text-primary transition-all duration-300">
                 <svg className="h-5 w-5 fill-current" viewBox="0 0 24 24">
                   <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.9-.32-1.98-.23-2.81.33-.85.51-1.44 1.43-1.58 2.41-.16.71-.13 1.46.1 2.13.26.9 1.03 1.6 1.93 1.86.82.23 1.7.11 2.43-.3.91-.51 1.47-1.43 1.57-2.45.09-1.28.01-2.56.02-3.84 0-5.32-.01-10.64 0-15.96z"/>
                 </svg>
-              </Link>
-              <Link href="https://web.facebook.com/Ackstpaulssouthc" target="_blank" className="h-10 w-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-accent hover:text-primary transition-all duration-300" aria-label="Facebook">
+              </a>
+              <a href="https://web.facebook.com/Ackstpaulssouthc" target="_blank" rel="noopener noreferrer" className="h-10 w-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-accent hover:text-primary transition-all duration-300" aria-label="Facebook">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" width="18" height="18" fill="currentColor">
                   <path d="M80 299.3V512H196V299.3h86.5l12.8-100.3H196V133c0-29.1 13.9-43.6 42.1-43.6H296V0h-86.4C128.1 0 80 48 80 130.5v68.5H12.8v100.3H80z"/>
                 </svg>
-              </Link>
-              <Link href="https://www.youtube.com/@ackstpaulsparishsouthc" target="_blank" className="h-10 w-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-accent hover:text-primary transition-all duration-300" aria-label="YouTube">
+              </a>
+              <a href="https://www.youtube.com/@ackstpaulsparishsouthc" target="_blank" rel="noopener noreferrer" className="h-10 w-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-accent hover:text-primary transition-all duration-300" aria-label="YouTube">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" width="18" height="18" fill="currentColor">
                   <path d="M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 42.152 48.284 48.474C117.22 448 288 448 288 448s170.781 0 213.371-11.486c23.497-6.321 42.003-24.823 48.284-48.474 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51 213.537V175.185l142.739 81.205-142.739 81.23z"/>
                 </svg>
-              </Link>
+              </a>
             </div>
           </div>
           

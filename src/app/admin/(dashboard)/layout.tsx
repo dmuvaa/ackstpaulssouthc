@@ -11,7 +11,8 @@ import {
   FileText, 
   Calendar as CalendarIcon, 
   LogOut,
-  Target
+  Target,
+  Play
 } from "lucide-react";
 import { MobileNav } from "@/components/admin/mobile-nav";
 
@@ -36,6 +37,7 @@ export default async function AdminLayout({
     { name: "Magazines", href: "/admin/magazines", icon: FileText },
     { name: "Events", href: "/admin/events", icon: CalendarIcon },
     { name: "Blog Posts", href: "/admin/blog", icon: FileText },
+    { name: "Sermons", href: "/admin/sermons", icon: Play },
   ];
 
   return (

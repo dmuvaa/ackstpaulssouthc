@@ -1,18 +1,11 @@
-"use client";
+import BlogClient from "@/components/BlogClient";
+import { fetchSanity } from "@/lib/sanity";
 
-import Image from "next/image";
-import Link from "next/link";
-import { motion } from "framer-motion";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Calendar, User, ArrowRight, Tag } from "lucide-react";
-import { toast } from "sonner";
-
-const posts = [
+const fallbackPosts = [
   {
     id: "1",
+    slug: "celebrating-our-30th-anniversary",
     title: "Celebrating Our 30th Anniversary",
-    excerpt: "Reflecting on three decades of God's faithfulness in South C and our vision for the next chapter.",
     date: "April 15, 2026",
     author: "The Parish Council",
     category: "News",
@@ -20,8 +13,8 @@ const posts = [
   },
   {
     id: "2",
+    slug: "the-importance-of-youth-in-the-church",
     title: "The Importance of Youth in the Church",
-    excerpt: "How we are empowering the next generation to take leadership roles and deepen their faith.",
     date: "March 28, 2026",
     author: "Youth Ministry",
     category: "Insights",
@@ -29,8 +22,8 @@ const posts = [
   },
   {
     id: "3",
+    slug: "community-outreach-feeding-the-needy",
     title: "Community Outreach: Feeding the Needy",
-    excerpt: "A report on our recent mission to provide support to vulnerable families in the neighboring areas.",
     date: "March 10, 2026",
     author: "CSR Committee",
     category: "Mission",
@@ -38,81 +31,29 @@ const posts = [
   }
 ];
 
-export default function BlogPage() {
-  return (
-    <div className="min-h-screen bg-muted/30">
-      <section className="bg-primary py-16 text-white text-center">
-        <div className="container mx-auto px-4">
-          <h1 className="text-4xl font-bold mb-4">Blog & Parish News</h1>
-          <p className="text-lg text-slate-300 max-w-2xl mx-auto">
-            Stay informed with the latest updates, stories of impact, and spiritual reflections from our community.
-          </p>
-        </div>
-      </section>
+export default async function BlogPage() {
+  let posts = fallbackPosts;
 
-      <div className="container mx-auto px-4 py-16">
-        <div className="grid gap-12 lg:grid-cols-3">
-          {posts.map((post, i) => (
-            <motion.div
-              key={post.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
-            >
-              <Card className="h-full flex flex-col overflow-hidden group hover:shadow-2xl transition-all duration-300">
-                <div className="relative h-56 w-full overflow-hidden">
-                  <Image
-                    src={post.image}
-                    alt={post.title}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                  <div className="absolute top-4 left-4">
-                    <span className="bg-secondary text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
-                      {post.category}
-                    </span>
-                  </div>
-                </div>
-                <CardHeader>
-                  <div className="flex items-center gap-4 text-xs text-muted-foreground mb-3">
-                    <span className="flex items-center gap-1"><Calendar className="h-3 w-3" /> {post.date}</span>
-                    <span className="flex items-center gap-1"><User className="h-3 w-3" /> {post.author}</span>
-                  </div>
-                  <CardTitle className="text-xl group-hover:text-primary transition-colors">{post.title}</CardTitle>
-                </CardHeader>
-                <CardContent className="flex-1">
-                  <p className="text-muted-foreground line-clamp-3">{post.excerpt}</p>
-                </CardContent>
-                <CardFooter>
-                  <Button variant="link" className="p-0 text-primary font-bold gap-2 group/btn">
-                    Read More <ArrowRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
-                  </Button>
-                </CardFooter>
-              </Card>
-            </motion.div>
-          ))}
-        </div>
+  try {
+    const sanityPosts = await fetchSanity<any[]>(`*[_type == "blog"] | order(date desc) {
+      "id": _id,
+      title,
+      date,
+      author,
+      category,
+      "slug": slug.current,
+      "image": image.asset->url
+    }`);
 
-        {/* Newsletter Signup */}
-        <div className="mt-24 bg-primary rounded-3xl p-12 text-white relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
-          <div className="relative z-10 grid gap-8 md:grid-cols-2 items-center">
-            <div>
-              <h2 className="text-3xl font-bold mb-4">Join Our Newsletter</h2>
-              <p className="text-slate-300">Get weekly updates, sermon notes, and event reminders delivered straight to your inbox.</p>
-            </div>
-            <form className="flex flex-col sm:flex-row gap-4" onSubmit={(e) => { e.preventDefault(); toast.success("Subscribed!"); }}>
-              <input 
-                type="email" 
-                placeholder="Enter your email" 
-                className="flex-1 h-12 rounded-lg bg-white/10 border border-white/20 px-4 text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-secondary"
-                required
-              />
-              <Button variant="gold" className="h-12 px-8 font-bold">Subscribe</Button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+    if (sanityPosts) {
+      posts = sanityPosts.map((post: any) => ({
+        ...post,
+        image: post.image ? `${post.image}?w=800&auto=format` : post.image
+      }));
+    }
+  } catch (error) {
+    console.error("Failed to fetch blogs from Sanity:", error);
+  }
+
+  return <BlogClient posts={posts} />;
 }

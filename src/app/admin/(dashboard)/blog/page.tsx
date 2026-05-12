@@ -1,7 +1,9 @@
 "use client";
 
-import { FileText, Construction } from "lucide-react";
+import { FileText, ArrowRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function AdminBlogPage() {
   return (
@@ -17,14 +19,16 @@ export default function AdminBlogPage() {
             <FileText className="h-10 w-10" />
           </div>
           <div className="space-y-2">
-            <h3 className="text-xl font-bold flex items-center justify-center gap-2">
-              <Construction className="h-5 w-5 text-secondary" />
-              CMS Integration Coming Soon
-            </h3>
+            <h3 className="text-xl font-bold">Manage Blogs in Sanity CMS</h3>
             <p className="text-muted-foreground max-w-sm mx-auto">
-              Our powerful blog editor is under development. Soon you will be able to write and manage parish news directly from this dashboard.
+              Blog posts are now managed directly in Sanity CMS. Click the button below to open the studio.
             </p>
           </div>
+          <Button asChild className="mt-4">
+            <Link href="/studio" target="_blank" className="gap-2">
+              Open Sanity Studio <ArrowRight className="h-4 w-4" />
+            </Link>
+          </Button>
         </CardContent>
       </Card>
     </div>
