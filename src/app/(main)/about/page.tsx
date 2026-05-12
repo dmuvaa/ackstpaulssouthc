@@ -96,7 +96,7 @@ export default function AboutPage() {
             <h2 className="text-4xl font-black text-primary mb-6">Our Leadership</h2>
             <p className="text-lg text-muted-foreground">
               Meet the dedicated team of clergy, lay leaders, and parish officials committed to serving
-              God and our community at ACK St Paul's South C.
+              God and our community at ACK St Paul's South C Parish.
             </p>
           </div>
 
