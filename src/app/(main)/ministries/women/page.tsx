@@ -43,7 +43,7 @@ export default function WomenMinistryPage() {
       {/* Hero Section — Split Layout */}
       <section className="relative min-h-[calc(100vh-6rem)] flex flex-col md:flex-row">
         {/* Left: Image Slideshow */}
-        <div className="relative w-full md:w-[65%] h-[50vh] md:h-auto overflow-hidden">
+        <div className="relative w-full md:w-[65%] aspect-[4/3] md:aspect-auto md:h-auto overflow-hidden">
           <AnimatePresence mode="popLayout">
             <motion.div
               key={activeHero}
@@ -65,7 +65,7 @@ export default function WomenMinistryPage() {
         </div>
 
         {/* Right: Text Content — animates with slide */}
-        <div className="w-full md:w-[35%] bg-primary flex items-center relative overflow-hidden">
+        <div className="w-full md:w-[35%] bg-primary flex flex-col justify-center relative overflow-hidden py-10 md:py-0">
           <AnimatePresence mode="popLayout">
             <motion.div
               key={activeHero}
@@ -96,7 +96,7 @@ export default function WomenMinistryPage() {
           </AnimatePresence>
 
           {/* Pagination Dots */}
-          <div className="flex gap-2 px-8 md:px-12 lg:px-16 pb-8 md:pb-0 md:absolute md:bottom-12">
+          <div className="flex gap-2 px-8 md:px-12 lg:px-16 mt-6 md:mt-0 md:absolute md:bottom-12">
             {heroSlides.map((_, i) => (
               <button
                 key={i}
@@ -186,13 +186,23 @@ export default function WomenMinistryPage() {
           </div>
         </div>
 
-        {/* CTA */}
-        <div className="text-center pt-12">
-          <Button size="lg" className="font-bold h-12 px-8" asChild>
-            <Link href="/contact">
-              Contact Us to Join
-            </Link>
-          </Button>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-12 text-center">
+        <div className="container mx-auto px-4 max-w-2xl">
+          <h2 className="text-3xl font-bold text-primary mb-6">Join the Movement!</h2>
+          <p className="text-lg text-muted-foreground mb-8">
+            Mothers&apos; Union & Women&apos;s Group is a place for women seeking to grow in faith, support families, and serve the community. We invite you to join us on this transformative journey!
+          </p>
+          <div className="flex justify-center">
+            <Button size="lg" className="font-bold h-12 px-8" asChild>
+              <Link href="/contact">
+                Contact Us
+              </Link>
+            </Button>
+          </div>
+          <p className="mt-8 font-bold text-primary">ACK St. Paul’s South C – Women’s Ministry: Nurturing Families, Serving in Love!</p>
         </div>
       </section>
     </div>

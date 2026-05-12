@@ -22,7 +22,7 @@ export default function AboutPage() {
             {/* Who We Are */}
             <div className="space-y-4 bg-white p-8 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
               <span className="font-bold uppercase tracking-widest text-sm text-secondary">Who We Are</span>
-              <h1 className="text-3xl font-black text-primary">Anglican Church of Kenya St. Paul’s South C</h1>
+              <h1 className="text-3xl font-black text-primary">Anglican Church of Kenya St. Paul’s South C Parish</h1>
               <div className="space-y-4 text-base text-muted-foreground leading-relaxed">
                 <p>
                   The Anglican Church of Christ is a faith-based organization deeply rooted in the Christian tradition. We are part of the Anglican Communion, a global fellowship of churches that traces its heritage back to the Church of England. Our foundation is firmly established in the teachings and values of Jesus Christ as revealed in the Holy Scriptures. We believe that Jesus Christ is the source of salvation and the cornerstone of our faith.
@@ -33,13 +33,42 @@ export default function AboutPage() {
               </div>
             </div>
 
-            {/* Our Vision */}
+            {/* Our Vision & Core Values */}
             <div className="space-y-4 bg-white p-8 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
-              <span className="font-bold uppercase tracking-widest text-sm text-secondary">Our Vision</span>
-              <h2 className="text-2xl font-bold text-primary">To be an Empowered Church Transforming Humanity.</h2>
-              <p className="text-base text-muted-foreground leading-relaxed">
-                We strive to empower individuals for holistic service, inspired by God’s will. Our core values of unity, faith and practice, integrity, accountability, and service guide our actions and shape our identity as a community of believers.
-              </p>
+              <div>
+                <span className="font-bold uppercase tracking-widest text-sm text-secondary">Our Vision</span>
+                <h2 className="text-2xl font-bold text-primary mt-2 mb-4">To be an Empowered Church Transforming Humanity.</h2>
+                <p className="text-base text-muted-foreground leading-relaxed">
+                  We strive to empower individuals for holistic service, inspired by God’s will.
+                </p>
+              </div>
+              
+              <div className="pt-4 border-t border-slate-100">
+                <span className="font-bold uppercase tracking-widest text-sm text-secondary block mb-3">Core Values</span>
+                <p className="text-base text-muted-foreground mb-3">Our core values include:</p>
+                <div className="space-y-2 text-base text-muted-foreground font-medium">
+                  <p className="flex items-center gap-2">
+                    <span className="h-1.5 w-1.5 bg-black rounded-full" />
+                    Unity
+                  </p>
+                  <p className="flex items-center gap-2">
+                    <span className="h-1.5 w-1.5 bg-black rounded-full" />
+                    Faith and Practice
+                  </p>
+                  <p className="flex items-center gap-2">
+                    <span className="h-1.5 w-1.5 bg-black rounded-full" />
+                    Integrity
+                  </p>
+                  <p className="flex items-center gap-2">
+                    <span className="h-1.5 w-1.5 bg-black rounded-full" />
+                    Accountability
+                  </p>
+                  <p className="flex items-center gap-2">
+                    <span className="h-1.5 w-1.5 bg-black rounded-full" />
+                    Service
+                  </p>
+                </div>
+              </div>
             </div>
 
             {/* Our Commitment */}

@@ -14,7 +14,7 @@ export default function MediaTeamPage() {
       {/* Hero Section — Split Layout */}
       <section className="relative min-h-[calc(100vh-6rem)] flex flex-col md:flex-row">
         {/* Left: Image */}
-        <div className="relative w-full md:w-[65%] h-[50vh] md:h-auto overflow-hidden">
+        <div className="relative w-full md:w-[65%] aspect-[4/3] md:aspect-auto md:h-auto overflow-hidden">
           <Image
             src="/images/media-team.jpeg"
             alt="Media Team"
@@ -25,7 +25,7 @@ export default function MediaTeamPage() {
         </div>
 
         {/* Right: Text Content */}
-        <div className="w-full md:w-[35%] bg-primary flex items-center relative overflow-hidden">
+        <div className="w-full md:w-[35%] bg-primary flex flex-col justify-center relative overflow-hidden py-10 md:py-0">
           <div className="px-8 md:px-12 lg:px-16 py-12 md:py-0 space-y-6 text-white">
             <Badge className="bg-secondary/10 text-secondary border-none px-4 py-1.5 text-sm uppercase tracking-widest font-bold">
               Communication & Visibility
@@ -242,45 +242,21 @@ export default function MediaTeamPage() {
 
 
 
-      {/* Call to Action */}
-      <section className="bg-primary py-12 text-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center space-y-8">
-            <Badge className="bg-secondary text-primary">Get Involved</Badge>
-            <h2 className="text-3xl font-bold sm:text-4xl">Join the Communication Ministry</h2>
-            <p className="text-lg text-slate-300 max-w-2xl mx-auto">
-              We welcome support, collaboration, and participation from church members, professionals, volunteers, and partners who are passionate about communication, media, and storytelling.
-            </p>
-            
-            <div className="grid gap-4 sm:grid-cols-2 text-left bg-white/5 p-6 rounded-2xl border border-white/10 max-w-3xl mx-auto">
-              <div className="space-y-2">
-                <h4 className="font-bold text-secondary">Volunteer Roles:</h4>
-                <ul className="text-sm space-y-1 text-slate-300">
-                  <li>• Photography & Videography</li>
-                  <li>• Graphic Design & Branding</li>
-                  <li>• Livestreaming Operations</li>
-                  <li>• Content Creation & Writing</li>
-                </ul>
-              </div>
-              <div className="space-y-2">
-                <h4 className="font-bold text-secondary">Support Us:</h4>
-                <ul className="text-sm space-y-1 text-slate-300">
-                  <li>• Contribute articles for the magazine</li>
-                  <li>• Support website development</li>
-                  <li>• Partner in expanding equipment</li>
-                  <li>• Share digital evangelism ideas</li>
-                </ul>
-              </div>
-            </div>
-
-            <div className="pt-4">
-              <Button size="lg" className="font-bold h-12 px-8" asChild>
-                <Link href="/contact">
-                  Contact Us to Join
-                </Link>
-              </Button>
-            </div>
+      {/* CTA Section */}
+      <section className="py-12 text-center bg-white">
+        <div className="container mx-auto px-4 max-w-2xl">
+          <h2 className="text-3xl font-bold text-primary mb-6">Join the Movement!</h2>
+          <p className="text-lg text-muted-foreground mb-8">
+            We welcome support, collaboration, and participation from anyone passionate about communication, media, and storytelling. Join us in sharing the message of Christ!
+          </p>
+          <div className="flex justify-center">
+            <Button size="lg" variant="gold" className="font-bold h-12 px-8" asChild>
+              <Link href="/contact">
+                Contact Us
+              </Link>
+            </Button>
           </div>
+          <p className="mt-8 font-bold text-primary">ACK St. Paul’s South C – Media: Storytelling with Purpose!</p>
         </div>
       </section>
     </div>

@@ -104,7 +104,7 @@ export default function MenMinistryPage() {
       {/* Hero Section — Split Layout */}
       <section className="relative min-h-[calc(100vh-6rem)] flex flex-col md:flex-row">
         {/* Left: Image Slideshow */}
-        <div className="relative w-full md:w-[65%] h-[50vh] md:h-auto overflow-hidden">
+        <div className="relative w-full md:w-[65%] aspect-[4/3] md:aspect-auto md:h-auto overflow-hidden">
           <AnimatePresence mode="popLayout">
             <motion.div
               key={activeHero}
@@ -126,7 +126,7 @@ export default function MenMinistryPage() {
         </div>
 
         {/* Right: Text Content — animates with slide */}
-        <div className="w-full md:w-[35%] bg-primary flex items-center relative overflow-hidden">
+        <div className="w-full md:w-[35%] bg-primary flex flex-col justify-center relative overflow-hidden py-10 md:py-0">
           <AnimatePresence mode="popLayout">
             <motion.div
               key={activeHero}
@@ -157,7 +157,7 @@ export default function MenMinistryPage() {
           </AnimatePresence>
 
           {/* Pagination Dots */}
-          <div className="flex gap-2 px-8 md:px-12 lg:px-16 pb-8 md:pb-0 md:absolute md:bottom-12">
+          <div className="flex gap-2 px-8 md:px-12 lg:px-16 mt-6 md:mt-0 md:absolute md:bottom-12">
             {heroSlides.map((_, i) => (
               <button
                 key={i}

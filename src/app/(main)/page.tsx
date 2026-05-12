@@ -64,7 +64,7 @@ export default function HomePage() {
                 className="object-cover object-top md:object-center"
                 priority
               />
-              <div className="absolute inset-0 bg-black/20" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
             </motion.div>
           </AnimatePresence>
           
@@ -85,41 +85,49 @@ export default function HomePage() {
           </div>
 
           {/* Content Overlaid on Image */}
-          <div className="absolute inset-0 z-10 flex items-center">
+          <div className="absolute inset-0 z-10 flex items-end pb-[3px]">
             <div className="container mx-auto px-4">
               <motion.div 
                 key={activeHero}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="max-w-4xl text-white space-y-6"
+                /* REDUCED SPACING: space-y-3 for mobile, space-y-6 for desktop */
+                className="max-w-4xl text-white space-y-3 md:space-y-6"
               >
-                <Badge className="bg-secondary/20 text-white border-none px-4 py-1.5 text-xs md:text-sm uppercase tracking-widest font-bold backdrop-blur-md">
+                <Badge className="bg-secondary/20 text-white border-none px-3 py-1 text-[10px] md:text-sm uppercase tracking-widest font-bold backdrop-blur-md">
                   ACK St Paul's South C Parish
                 </Badge>
-                <h1 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tight text-white leading-[1.1]">
+
+                {/* REDUCED FONT: text-2xl for mobile, text-6xl for desktop */}
+                <h1 className="text-2xl md:text-6xl lg:text-7xl font-black tracking-tight text-white leading-tight">
                   {heroImages[activeHero].title}
                 </h1>
-                <p className="text-lg md:text-2xl text-slate-200 leading-relaxed max-w-2xl font-medium">
+
+                {/* REDUCED FONT: text-base for mobile, text-2xl for desktop */}
+                <p className="text-base md:text-2xl text-slate-200 leading-snug max-w-2xl font-medium">
                   {heroImages[activeHero].subtitle}
                 </p>
-                <div className="flex flex-wrap items-center gap-4 pt-2">
-                  <Button asChild size="lg" variant="gold" className="h-14 px-10 text-lg font-bold shadow-lg shadow-accent/20">
+
+                <div className="flex flex-wrap items-center gap-3 pt-2">
+                  {/* SMALLER BUTTONS: h-11 for mobile, h-14 for desktop */}
+                  <Button asChild size="lg" variant="gold" className="h-11 md:h-14 px-6 md:px-10 text-sm md:text-lg font-bold shadow-lg shadow-accent/20">
                     <Link href="/donate">Support Our Mission</Link>
                   </Button>
-                  <Button asChild size="lg" variant="outline" className="h-14 px-10 text-lg font-bold border-white text-white bg-transparent hover:bg-black hover:text-white">
+                  <Button asChild size="lg" variant="outline" className="h-11 md:h-14 px-6 md:px-10 text-sm md:text-lg font-bold border-white text-white bg-transparent hover:bg-black">
                     <Link href="/about">Learn More</Link>
                   </Button>
                 </div>
-                {/* Indicators inside the hero area */}
-                <div className="flex gap-2 mt-8 pt-8 border-t border-white/10">
+
+                {/* Indicators: Reduced margin/padding */}
+                <div className="flex gap-2 mt-4 pt-4 border-t border-white/10">
                   {heroImages.map((_, i) => (
                     <button
                       key={i}
                       onClick={() => setCurrentHero(i)}
                       className={cn(
-                        "h-1.5 rounded-full transition-all duration-500",
-                        activeHero === i ? "w-10 bg-accent" : "w-2 bg-white/30 hover:bg-white/50"
+                        "h-1 rounded-full transition-all duration-500",
+                        activeHero === i ? "w-8 bg-accent" : "w-1.5 bg-white/30 hover:bg-white/50"
                       )}
                     />
                   ))}
@@ -168,8 +176,8 @@ export default function HomePage() {
               </p>
             </div>
             <Button asChild size="lg" variant="gold" className="group h-14 px-10 text-lg font-bold">
-              <Link href="/about" className="flex items-center gap-2">
-                Our Full Leadership <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+              <Link href="/services" className="flex items-center gap-2">
+                View Church Services <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
               </Link>
             </Button>
           </motion.div>
@@ -286,12 +294,12 @@ export default function HomePage() {
                   className="object-cover transition-transform duration-700 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-black/20" />
-                <div className="absolute inset-0 p-10 flex flex-col justify-end text-white">
-                  <h3 className="text-2xl font-black mb-3 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">{ministry.title}</h3>
-                  <p className="text-slate-200 mb-6 line-clamp-2 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
+                <div className="absolute inset-0 p-4 md:p-6 flex flex-col justify-end text-white">
+                  <h3 className="text-lg md:text-2xl font-black mb-1 md:mb-2 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">{ministry.title}</h3>
+                  <p className="text-xs md:text-base text-slate-200 mb-3 md:mb-4 line-clamp-2 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
                     {ministry.desc}
                   </p>
-                  <Button asChild variant="gold" size="sm" className="w-fit h-10 px-6 rounded-full font-bold">
+                  <Button asChild variant="gold" size="sm" className="w-fit h-8 md:h-10 px-4 md:px-6 rounded-full font-bold text-xs md:text-sm">
                     <Link href={ministry.href}>Explore Ministry</Link>
                   </Button>
                 </div>
@@ -305,25 +313,33 @@ export default function HomePage() {
       <section className="bg-muted/30 py-8 md:py-12">
         <div className="container mx-auto px-4">
           <div className="grid gap-8 md:gap-16 lg:grid-cols-2 items-center">
-            <div className="relative">
-              <div className="relative h-[400px] md:h-[600px] w-full overflow-hidden rounded-[2rem] md:rounded-[3rem] shadow-2xl z-10">
+            <div className="relative order-2 lg:order-1 hidden lg:block">
+              <div className="relative aspect-[4/3] md:aspect-auto md:h-[600px] w-full overflow-hidden rounded-[2rem] md:rounded-[3rem] shadow-2xl z-10">
                 <Image
                   src="/images/sisters keeper .jpeg"
                   alt="Community Impact"
                   fill
-                  className="object-cover"
+                  className="object-cover object-right"
                 />
               </div>
               <div className="absolute -top-10 -left-10 w-40 h-40 bg-accent rounded-full -z-0 blur-2xl opacity-50" />
               <div className="absolute -bottom-10 -right-10 w-64 h-64 bg-primary rounded-full -z-0 blur-3xl opacity-10" />
             </div>
-            <div className="space-y-10">
+            <div className="space-y-10 order-1 lg:order-2">
               <div className="space-y-4">
                 <Badge className="bg-secondary text-white">Our Impact</Badge>
                 <h2 className="text-4xl font-black tracking-tight text-primary sm:text-5xl">Transforming Lives, Building Community</h2>
                 <p className="text-xl text-muted-foreground leading-relaxed">
                   Faith in action is at the heart of everything we do. Through our various outreaches and programs, we've seen God move in incredible ways within our community.
                 </p>
+                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[2rem] shadow-2xl z-10 block lg:hidden my-6">
+                  <Image
+                    src="/images/sisters keeper .jpeg"
+                    alt="Community Impact"
+                    fill
+                    className="object-cover object-right"
+                  />
+                </div>
               </div>
               <div className="grid gap-6">
                 {[
@@ -348,7 +364,7 @@ export default function HomePage() {
       {/* Upcoming Events Preview */}
       <section className="py-8 md:py-16">
         <div className="container mx-auto px-4">
-          <div className="mb-12 flex items-end justify-between">
+          <div className="mb-12 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
             <div className="space-y-2">
               <h2 className="text-4xl font-black text-primary">Upcoming Events</h2>
               <p className="text-muted-foreground">Join us in our upcoming activities and fellowship.</p>
@@ -463,7 +479,7 @@ export default function HomePage() {
       </section>
 
       {/* Multipurpose Hall Section */}
-      <section className="py-12 bg-white">
+      <section id="hall" className="py-12 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-3xl mx-auto mb-12">
             <Badge className="mb-4 bg-secondary text-white px-4 py-1">Venue Hire</Badge>
@@ -476,17 +492,15 @@ export default function HomePage() {
           <div className="grid gap-12 lg:grid-cols-3 items-start max-w-6xl mx-auto">
             {/* Left Side: Marketing Message & Offer */}
             <div className="lg:col-span-1 space-y-6">
-              <div className="bg-primary text-white p-8 rounded-[2rem] shadow-xl">
+              <div className="bg-gradient-to-br from-primary to-primary/90 text-white p-8 rounded-[2rem] shadow-xl">
                 <h3 className="text-2xl font-bold mb-4">You have an event? We have the solution.</h3>
                 <p className="text-slate-300 text-sm leading-relaxed mb-6">
                   Our state-of-the-art facility accommodates over 500-600 guests, with 4 additional intimate halls for smaller gatherings. Equipped with sophisticated audio-visual technology and flexible seating arrangements, we ensure a smooth experience for conferences, weddings, and parties.
                 </p>
-                <div className="flex items-center gap-2 text-accent font-bold">
-                  <span>Tents are overrated, anyway!</span>
-                </div>
+                <p className="text-accent font-bold italic">“Tents are overrated, anyway!”</p>
               </div>
 
-              <div className="bg-accent/10 border-2 border-accent p-6 rounded-[2rem] text-center">
+              <div className="bg-accent/5 border border-accent/20 p-6 rounded-[2rem] text-center shadow-sm">
                 <span className="text-xs font-bold uppercase tracking-widest text-primary">Special Offer</span>
                 <h4 className="text-2xl font-black text-primary mt-1 mb-2">20% Discount in August!</h4>
                 <p className="text-sm text-muted-foreground mb-4">Book with us today and enjoy a great deal in return.</p>
@@ -499,9 +513,9 @@ export default function HomePage() {
             {/* Right Side: Rate Card Table */}
             <div className="lg:col-span-2">
               <div className="bg-white rounded-[2rem] border border-slate-100 shadow-sm overflow-hidden">
-                <div className="p-6 bg-primary text-white">
-                  <h3 className="text-xl font-bold">Hall Hire Rate Card</h3>
-                  <p className="text-xs text-slate-300">Rates are inclusive of 16% VAT</p>
+                <div className="p-6 bg-white border-b border-slate-100">
+                  <h3 className="text-xl font-bold text-primary">Hall Hire Rate Card</h3>
+                  <p className="text-xs text-muted-foreground">Rates are inclusive of 16% VAT</p>
                 </div>
                 {/* Desktop Table View */}
                 <div className="hidden md:block overflow-x-auto">

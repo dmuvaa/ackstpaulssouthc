@@ -26,7 +26,7 @@ export default function OmbiPage() {
       {/* Hero Section — Split Layout */}
       <section className="relative min-h-[calc(100vh-6rem)] flex flex-col md:flex-row">
         {/* Left: Image */}
-        <div className="relative w-full md:w-[65%] h-[50vh] md:h-auto overflow-hidden">
+        <div className="relative w-full md:w-[65%] aspect-[4/3] md:aspect-auto md:h-auto overflow-hidden">
           <Image
             src="/images/ombi-new.jpg"
             alt="OMBI Prayer Journey"
@@ -37,7 +37,7 @@ export default function OmbiPage() {
         </div>
 
         {/* Right: Text Content */}
-        <div className="w-full md:w-[35%] bg-primary flex items-center relative overflow-hidden">
+        <div className="w-full md:w-[35%] bg-primary flex flex-col justify-center relative overflow-hidden py-10 md:py-0">
           <div className="px-8 md:px-12 lg:px-16 py-12 md:py-0 space-y-6 text-white">
             <Badge className="bg-secondary/10 text-secondary border-none px-4 py-1.5 text-sm uppercase tracking-widest font-bold">
               10-Week Prayer Adventure

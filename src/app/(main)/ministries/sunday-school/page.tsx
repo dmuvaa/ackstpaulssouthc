@@ -81,7 +81,7 @@ export default function SundaySchoolPage() {
       {/* Hero Section — Split Layout */}
       <section className="relative min-h-[calc(100vh-6rem)] flex flex-col md:flex-row">
         {/* Left: Image Slideshow */}
-        <div className="relative w-full md:w-[65%] h-[50vh] md:h-auto overflow-hidden">
+        <div className="relative w-full md:w-[65%] aspect-[4/3] md:aspect-auto md:h-auto overflow-hidden">
           <AnimatePresence mode="popLayout">
             <motion.div
               key={activeHero}
@@ -103,7 +103,7 @@ export default function SundaySchoolPage() {
         </div>
 
         {/* Right: Text Content — animates with slide */}
-        <div className="w-full md:w-[35%] bg-primary flex items-center relative overflow-hidden">
+        <div className="w-full md:w-[35%] bg-primary flex flex-col justify-center relative overflow-hidden py-10 md:py-0">
           <AnimatePresence mode="popLayout">
             <motion.div
               key={activeHero}
@@ -134,7 +134,7 @@ export default function SundaySchoolPage() {
           </AnimatePresence>
 
           {/* Pagination Dots */}
-          <div className="flex gap-2 px-8 md:px-12 lg:px-16 pb-8 md:pb-0 md:absolute md:bottom-12">
+          <div className="flex gap-2 px-8 md:px-12 lg:px-16 mt-6 md:mt-0 md:absolute md:bottom-12">
             {heroSlides.map((_, i) => (
               <button
                 key={i}
@@ -215,21 +215,7 @@ export default function SundaySchoolPage() {
         </div>
       </section>
 
-      {/* Leadership Section */}
-      <section className="container mx-auto px-4 py-12">
-        <div className="max-w-4xl mx-auto text-center space-y-6">
-          <h3 className="text-2xl font-bold text-primary">Leadership</h3>
-          <div className="flex items-center gap-4 p-6 bg-muted rounded-2xl max-w-md mx-auto">
-            <div className="h-16 w-16 overflow-hidden rounded-full border-4 border-white shadow-sm">
-              <Image src="/images/vicar.jpg" alt="Ann Dada" width={64} height={64} className="object-cover" />
-            </div>
-            <div className="text-left">
-              <h4 className="font-bold text-primary">Ann Dada</h4>
-              <p className="text-sm text-muted-foreground font-medium uppercase tracking-widest">Chairperson</p>
-            </div>
-          </div>
-        </div>
-      </section>
+
 
       {/* Get Involved */}
       <section className="container mx-auto px-4 py-12 text-center">

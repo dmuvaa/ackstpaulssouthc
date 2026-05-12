@@ -36,7 +36,14 @@ const navItems = [
     ]
   },
   { name: "Events", href: "/events" },
-  { name: "Shop", href: "/shop" },
+  { 
+    name: "Shop", 
+    href: "#",
+    children: [
+      { name: "Church Shop", href: "/shop" },
+      { name: "Hall Hire", href: "/shop/hall" },
+    ]
+  },
   { name: "Contact", href: "/contact" },
 ];
 

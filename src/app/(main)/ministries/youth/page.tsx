@@ -23,7 +23,7 @@ export default function YouthPage() {
   const [activeHero, setCurrentHero] = useState(0);
   const heroSlides = [
     {
-      image: "/images/dinner.jpeg",
+      image: "/images/youth-cover.jpeg",
       badge: "1 Peter 2:9 — Chosen & Set Apart",
       title: <>SPYCE <span className="text-secondary">Youth</span></>,
       desc: "Raising a Christ-centered generation chosen for light and purpose through spiritual enrichment and community impact.",
@@ -35,16 +35,16 @@ export default function YouthPage() {
       desc: "Expressing our faith and devotion through music and creative arts, filling the sanctuary with praise.",
     },
     {
-      image: "/images/youth-dinner.jpeg",
-      badge: "Fellowship",
-      title: <>Community & <span className="text-secondary">Connection</span></>,
-      desc: "Building meaningful relationships and a supportive community for young people to thrive together.",
-    },
-    {
       image: "/images/spyce-images/bf9d2af2-ed7e-4221-af85-e37498ceff5a.jpg",
       badge: "Mentorship",
       title: <>Growth & <span className="text-secondary">Guidance</span></>,
       desc: "Empowering youth through mentorship, skills development, and practical life teachings.",
+    },
+    {
+      image: "/images/dinner.jpeg",
+      badge: "Fellowship",
+      title: <>Community & <span className="text-secondary">Connection</span></>,
+      desc: "Building meaningful relationships and a supportive community for young people to thrive together.",
     }
   ];
 
@@ -60,7 +60,7 @@ export default function YouthPage() {
       {/* Hero Section — Split Layout */}
       <section className="relative min-h-[calc(100vh-6rem)] flex flex-col md:flex-row">
         {/* Left: Image Slideshow */}
-        <div className="relative w-full md:w-[65%] h-[50vh] md:h-auto overflow-hidden">
+        <div className="relative w-full md:w-[65%] aspect-[4/3] md:aspect-auto md:h-auto overflow-hidden">
           <AnimatePresence mode="popLayout">
             <motion.div
               key={activeHero}
@@ -82,7 +82,7 @@ export default function YouthPage() {
         </div>
 
         {/* Right: Text Content — animates with slide */}
-        <div className="w-full md:w-[35%] bg-primary flex items-center relative overflow-hidden">
+        <div className="w-full md:w-[35%] bg-primary flex flex-col justify-center relative overflow-hidden py-10 md:py-0">
           <AnimatePresence mode="popLayout">
             <motion.div
               key={activeHero}
@@ -113,7 +113,7 @@ export default function YouthPage() {
           </AnimatePresence>
 
           {/* Pagination Dots */}
-          <div className="flex gap-2 px-8 md:px-12 lg:px-16 pb-8 md:pb-0 md:absolute md:bottom-12">
+          <div className="flex gap-2 px-8 md:px-12 lg:px-16 mt-6 md:mt-0 md:absolute md:bottom-12">
             {heroSlides.map((_, i) => (
               <button
                 key={i}
@@ -254,22 +254,21 @@ export default function YouthPage() {
         </div>
       </section>
 
-      {/* Future Vision */}
-      <section className="container mx-auto px-4 py-24 text-center">
-        <div className="max-w-4xl mx-auto space-y-8">
-          <h2 className="text-4xl font-bold text-primary">Looking Ahead to 2026</h2>
-          <p className="text-xl text-muted-foreground">
-            Our focus is clear: deepen, expand, and impact. We are introducing career mentorship, financial stewardship programs, and revitalized youth initiatives.
+      {/* CTA Section */}
+      <section className="py-12 text-center">
+        <div className="container mx-auto px-4 max-w-2xl">
+          <h2 className="text-3xl font-bold text-primary mb-6">Join the Movement!</h2>
+          <p className="text-lg text-muted-foreground mb-8">
+            SPYCE is a place for youth seeking to grow in faith, connect with peers, and make an impact. We invite you to join us on this transformative journey!
           </p>
-          <div className="bg-secondary/5 p-12 rounded-[3rem] border-2 border-secondary/20">
-            <h3 className="text-2xl font-bold text-primary mb-4 italic">“A chosen people, God’s special possession.”</h3>
-            <p className="text-muted-foreground mb-8">Join SPYCE today and step into your call to be light in the world.</p>
+          <div className="flex justify-center">
             <Button size="lg" className="font-bold h-12 px-8" asChild>
               <Link href="/contact">
                 Contact Us
               </Link>
             </Button>
           </div>
+          <p className="mt-8 font-bold text-primary">ACK St. Paul’s South C – SPYCE: Chosen & Set Apart!</p>
         </div>
       </section>
     </div>
