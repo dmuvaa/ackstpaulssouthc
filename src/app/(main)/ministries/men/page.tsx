@@ -75,7 +75,7 @@ export default function MenMinistryPage() {
     {
       image: "/images/kama-men.jpg",
       badge: "Men’s Ministry",
-      title: <>Anglican Men <span className="text-secondary">Association (KAMA)</span></>,
+      title: <>Kenya Anglican Men <span className="text-secondary">Association (KAMA)</span></>,
       desc: "Growing in Faith, Serving in Love. A vibrant fellowship dedicated to spiritual growth, leadership, and impactful service.",
     },
     {

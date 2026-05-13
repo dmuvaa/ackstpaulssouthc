@@ -62,7 +62,7 @@ export function Navbar() {
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md">
-      <div className="container mx-auto flex h-24 items-center justify-between px-4 sm:px-6 lg:px-8">
+      <div className="container mx-auto flex h-24 items-center justify-between gap-x-8 px-4 sm:px-6 lg:px-4 xl:px-8">
         <div className="flex items-center gap-2">
           <Link href="/" className="flex items-center space-x-2 sm:space-x-3 group shrink-0">
             <div className="relative h-18 w-18 transition-transform group-hover:scale-105 text-primary">
@@ -78,14 +78,14 @@ export function Navbar() {
         </div>
 
         {/* Desktop Nav */}
-        <div className="hidden lg:flex lg:items-center lg:gap-6 xl:gap-10">
+        <div className="hidden lg:flex lg:items-center lg:gap-3 xl:gap-6 2xl:gap-10">
           {navItems.map((item) => (
             <div key={item.name} className="relative group">
               {item.children ? (
                 <button
                   type="button"
                   className={cn(
-                    "flex items-center gap-1 text-base font-bold transition-colors hover:text-primary",
+                    "flex items-center gap-1 text-sm xl:text-base font-bold transition-colors hover:text-primary",
                     item.children.some(child => pathname === child.href)
                       ? "text-primary"
                       : "text-muted-foreground"
@@ -98,7 +98,7 @@ export function Navbar() {
                 <Link
                   href={item.href}
                   className={cn(
-                    "text-base font-bold transition-colors hover:text-primary pb-1",
+                    "text-sm xl:text-base font-bold transition-colors hover:text-primary pb-1",
                     pathname === item.href
                       ? "text-primary border-b-2 border-primary"
                       : "text-muted-foreground"
@@ -131,7 +131,7 @@ export function Navbar() {
               Donate
             </Link>
           </Button>
-          <div className="flex items-center gap-3 ml-2">
+          <div className="hidden xl:flex items-center gap-3 ml-2">
             <a href="https://www.instagram.com/ack_st_pauls_parish_southc" target="_blank" rel="noopener noreferrer" className="text-[#E1306C] hover:opacity-80 transition-opacity" aria-label="Instagram">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="18" height="18" fill="currentColor">
                 <path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.8 9.9 67.6 36.1 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.9 0-184.9zm-41.7 246.5c-7.7 19.5-22.6 34.4-42.1 42.1-29.4 11.6-99.2 8.9-132.7 8.9s-103.3 2.6-132.7-8.9c-19.5-7.7-34.4-22.6-42.1-42.1-11.6-29.4-8.9-99.2-8.9-132.7s-2.6-103.3 8.9-132.7c7.7-19.5 22.6-34.4 42.1-42.1 29.4-11.6 99.2-8.9 132.7-8.9s103.3-2.6 132.7 8.9c19.5 7.7 34.4 22.6 42.1 42.1 11.6 29.4 8.9 99.2 8.9 132.7s2.7 103.3-8.9 132.7z"/>

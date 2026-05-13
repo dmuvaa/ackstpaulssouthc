@@ -62,7 +62,7 @@ export default function SundaySchoolPage() {
       desc: "Structured lessons that make the Bible come alive for young minds.",
     },
     {
-      image: "/images/children 3.jpeg",
+      image: "/images/sunday-kids.jpeg",
       badge: "Fellowship",
       title: <>Growing <span className="text-secondary">Together</span></>,
       desc: "Creating a space where children can build lasting Christian friendships.",

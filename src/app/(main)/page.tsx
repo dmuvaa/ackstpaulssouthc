@@ -85,31 +85,31 @@ export default function HomePage() {
           </div>
 
           {/* Content Overlaid on Image */}
-          <div className="absolute inset-0 z-10 flex items-end pb-[3px]">
+          <div className="absolute inset-0 z-10 flex items-end pb-2">
             <div className="container mx-auto px-4">
               <motion.div 
                 key={activeHero}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                /* REDUCED SPACING: space-y-3 for mobile, space-y-6 for desktop */
-                className="max-w-4xl text-white space-y-3 md:space-y-6"
+                /* REDUCED SPACING: space-y-2 for mobile, space-y-3 for desktop */
+                className="max-w-4xl text-white space-y-2 md:space-y-3"
               >
-                <Badge className="bg-secondary/20 text-white border-none px-3 py-1 text-[10px] md:text-sm uppercase tracking-widest font-bold backdrop-blur-md">
+                <Badge className="bg-secondary/20 text-white border-none px-3 py-1 text-[10px] md:text-xs uppercase tracking-widest font-bold backdrop-blur-md">
                   ACK St Paul's South C Parish
                 </Badge>
 
-                {/* REDUCED FONT: text-2xl for mobile, text-6xl for desktop */}
-                <h1 className="text-2xl md:text-6xl lg:text-7xl font-black tracking-tight text-white leading-tight">
+                {/* REDUCED FONT: text-xl for mobile, text-4xl for desktop */}
+                <h1 className="text-xl md:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight">
                   {heroImages[activeHero].title}
                 </h1>
 
-                {/* REDUCED FONT: text-base for mobile, text-2xl for desktop */}
-                <p className="text-base md:text-2xl text-slate-200 leading-snug max-w-2xl font-medium">
+                {/* REDUCED FONT: text-sm for mobile, text-lg for desktop */}
+                <p className="text-sm md:text-lg text-slate-200 leading-snug max-w-2xl font-medium">
                   {heroImages[activeHero].subtitle}
                 </p>
 
-                <div className="flex flex-wrap items-center gap-3 pt-2">
+                <div className="flex flex-wrap items-center gap-2 pt-1">
                   {/* SMALLER BUTTONS: h-11 for mobile, h-14 for desktop */}
                   <Button asChild size="lg" variant="gold" className="h-11 md:h-14 px-6 md:px-10 text-sm md:text-lg font-bold shadow-lg shadow-accent/20">
                     <Link href="/donate">Support Our Mission</Link>
@@ -154,8 +154,8 @@ export default function HomePage() {
               className="object-cover"
             />
             <div className="absolute bottom-10 left-10 text-white">
-              <p className="font-outfit text-2xl font-bold tracking-tight">The Venerable Vicar</p>
-              <p className="text-slate-200">Parish Priest</p>
+              <p className="font-outfit text-2xl font-bold tracking-tight">The Venerable Canon</p>
+              <p className="text-slate-200">Parish Vicar</p>
             </div>
           </motion.div>
           <motion.div
@@ -202,6 +202,7 @@ export default function HomePage() {
               { icon: "☕", title: "Fellowship", desc: "Stay after the service to connect with our members and clergy over refreshments." },
               { icon: "📖", title: "The Word", desc: "Bible-centered teaching that is relevant to your daily life and spiritual growth." },
               { icon: "🛡️", title: "Safe Environment", desc: "We adhere to all safety protocols to ensure a peaceful and secure worship environment." },
+              { icon: "🏢", title: "Multipurpose Hall (MPH)", desc: "Our modern facility is available for events, conferences, and community gatherings." },
             ].map((item, i) => (
               <motion.div
                 key={i}
@@ -279,7 +280,7 @@ export default function HomePage() {
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {[
               { title: "Youth Ministry (SPYCE)", img: "/images/youths bible study hang out .jpeg", desc: "A vibrant movement of young believers chosen for purpose.", href: "/ministries/youth" },
-              { title: "Women's Group (MU)", img: "/images/MU 2.jpeg", desc: "Nurturing women through prayer, fellowship, and service.", href: "/ministries/women" },
+              { title: "Mother's Union", img: "/images/MU 2.jpeg", desc: "Nurturing women through prayer, fellowship, and service.", href: "/ministries/women" },
               { title: "Praise & Worship", img: "/images/band 1.jpg", desc: "Leading the congregation into heartfelt worship and praise.", href: "/ministries/praise" },
             ].map((ministry, i) => (
               <motion.div
@@ -492,6 +493,14 @@ export default function HomePage() {
           <div className="grid gap-12 lg:grid-cols-3 items-start max-w-6xl mx-auto">
             {/* Left Side: Marketing Message & Offer */}
             <div className="lg:col-span-1 space-y-6">
+              <div className="relative h-64 rounded-[2rem] overflow-hidden shadow-lg">
+                <Image
+                  src="/images/mph-enhanced.jpg"
+                  alt="Multipurpose Hall"
+                  fill
+                  className="object-cover"
+                />
+              </div>
               <div className="bg-gradient-to-br from-primary to-primary/90 text-white p-8 rounded-[2rem] shadow-xl">
                 <h3 className="text-2xl font-bold mb-4">You have an event? We have the solution.</h3>
                 <p className="text-slate-300 text-sm leading-relaxed mb-6">

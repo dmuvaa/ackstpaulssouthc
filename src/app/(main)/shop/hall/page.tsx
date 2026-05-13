@@ -1,53 +1,115 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Clock, Users, ShieldCheck, Sparkles } from "lucide-react";
 
+const heroSlides = [
+  {
+    image: "/images/mph.jpeg",
+    badge: "Venue Hire",
+    title: <>Multipurpose <span className="text-secondary">Hall</span></>,
+    desc: "Host your next event in our state-of-the-art facility. Perfect for weddings, conferences, and community gatherings.",
+  },
+  {
+    image: "/images/mph-11.jpeg",
+    badge: "State-of-the-art",
+    title: <>Modern <span className="text-secondary">Facilities</span></>,
+    desc: "Equipped with sophisticated audio-visual technology and flexible seating arrangements.",
+  },
+  {
+    image: "/images/mph-dinner-enhanced.png",
+    badge: "Event Solutions",
+    title: <>Perfect for <span className="text-secondary">Celebrations</span></>,
+    desc: "Creating a smooth and memorable experience for your special occasions.",
+  },
+  {
+    image: "/images/mph-board.jpeg",
+    badge: "Board Meetings",
+    title: <>Professional <span className="text-secondary">Spaces</span></>,
+    desc: "Perfect for board meetings, conferences, and corporate gatherings.",
+  }
+];
+
 export default function HallHirePage() {
+  const [activeHero, setCurrentHero] = useState(0);
+  const currentSlide = heroSlides[activeHero] || heroSlides[0];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentHero((prev) => (prev + 1) % heroSlides.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <div className="flex flex-col">
-      {/* Image Banner Section */}
-      <section className="bg-slate-50 pt-12">
-        <div className="container mx-auto px-4">
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="relative w-full aspect-video rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white"
-          >
-            <Image
-              src="/images/church_hall.png"
-              alt="Multipurpose Hall"
-              fill
-              className="object-cover object-center"
-              priority
-            />
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Header Content Section */}
-      <section className="bg-slate-50 pb-20 pt-12">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
+      {/* Hero Section — Split Layout */}
+      <section className="relative min-h-[calc(100vh-6rem)] flex flex-col md:flex-row">
+        {/* Left: Image Slideshow */}
+        <div className="relative w-full md:w-[65%] aspect-[4/3] md:aspect-auto md:h-auto overflow-hidden">
+          <AnimatePresence mode="popLayout">
             <motion.div
+              key={activeHero}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1 }}
+              className="absolute inset-0"
+            >
+              <Image
+                src={currentSlide.image}
+                alt="Multipurpose Hall"
+                fill
+                className="object-cover object-center"
+                priority={activeHero === 0}
+              />
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* Right: Text Content — animates with slide */}
+        <div className="w-full md:w-[35%] bg-primary flex flex-col justify-center relative overflow-hidden py-10 md:py-0">
+          <AnimatePresence mode="popLayout">
+            <motion.div
+              key={activeHero}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="space-y-6"
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.6 }}
+              className="px-8 md:px-12 lg:px-16 py-12 md:py-0 space-y-6"
             >
               <Badge className="bg-secondary/10 text-secondary border-none px-4 py-1.5 text-sm uppercase tracking-widest font-bold">
-                Venue Hire
+                {currentSlide.badge}
               </Badge>
-              <h1 className="text-4xl md:text-7xl font-black text-primary tracking-tight">
-                Multipurpose <span className="text-secondary">Hall</span>
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight leading-[1.1] text-white">
+                {currentSlide.title}
               </h1>
-              <p className="text-lg md:text-2xl text-muted-foreground font-medium leading-relaxed max-w-3xl mx-auto">
-                Host your next event in our state-of-the-art facility. Perfect for weddings, conferences, and community gatherings.
+              <p className="text-base md:text-lg text-slate-300 font-medium leading-relaxed">
+                {currentSlide.desc}
               </p>
+              <div className="flex gap-4 pt-4">
+                <Button size="lg" variant="gold" className="font-bold h-12 px-8" asChild>
+                  <Link href="/contact">Inquire Now</Link>
+                </Button>
+              </div>
             </motion.div>
+          </AnimatePresence>
+
+          {/* Pagination Dots */}
+          <div className="flex gap-2 px-8 md:px-12 lg:px-16 mt-6 md:mt-0 md:absolute md:bottom-12">
+            {heroSlides.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setCurrentHero(i)}
+                className={`h-2 rounded-full transition-all duration-500 ${activeHero === i ? "w-10 bg-accent" : "w-2 bg-white/20 hover:bg-white/40"
+                  }`}
+              />
+            ))}
           </div>
         </div>
       </section>

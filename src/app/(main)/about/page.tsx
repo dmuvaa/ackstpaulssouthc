@@ -114,6 +114,13 @@ const fallbackLeaders = [
     bio: "A PR professional and entrepreneur, Victoria supports the church’s communication and outreach efforts with strategic expertise. She is committed to sharing the church’s message in a clear and engaging way, bridging faith and modern media to make a meaningful impact.",
     img: "/images/leadership/vicvic.webp",
     category: "chair"
+  },
+  {
+    name: "Vincent Odhiambo",
+    role: "Lay Reader",
+    bio: "An ICT professional with extensive experience, Vincent is a dedicated Lay Reader licensed in 2011 by Rt. Rev. Peter Njoka. He has served under seven vicars and currently represents lay readers on the Parish Church Council (PCC). He is passionate about creating a Christ-centered community.",
+    img: "/images/vincent.webp",
+    category: "clergy"
   }
 ];
 

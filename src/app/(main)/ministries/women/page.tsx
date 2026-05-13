@@ -8,28 +8,36 @@ import { Heart, Users, ShieldCheck, Flower2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
-export default function WomenMinistryPage() {
-  const [activeHero, setCurrentHero] = useState(0);
-  const heroSlides = [
+const heroSlides = [
     {
       image: "/images/women-group1.jpeg",
       badge: "Building Stronger Families",
-      title: <>Mothers&apos; Union & <br /><span className="text-secondary">Women&apos;s Group</span></>,
+      title: <>Mothers&apos; Union</>,
       desc: "Empowering women in faith, family, and service. A space for spiritual nourishment, fellowship, and empowerment.",
     },
     {
-      image: "/images/women-group-2.jpeg",
+      image: "/images/mother-union.jpeg",
       badge: "Spiritual Nourishment",
       title: <>Fellowship & <span className="text-secondary">Growth</span></>,
       desc: "Growing together in grace and love, supporting one another in our spiritual journey.",
     },
     {
-      image: "/images/mothers-union.jpeg",
+      image: "/images/mothers-union1.jpeg",
       badge: "Christian Family Life",
       title: <>Promoting <span className="text-secondary">Family Values</span></>,
       desc: "Upholding the institution of marriage and the promotion of family life according to Christian teachings.",
+      position: "object-top"
+    },
+    {
+      image: "/images/mothers-ack.jpeg",
+      badge: "United in Service",
+      title: <>Mothers of the <span className="text-secondary">Church</span></>,
+      desc: "Upholding Christian values and supporting the church's mission across the diocese.",
     }
   ];
+
+export default function WomenMinistryPage() {
+  const [activeHero, setCurrentHero] = useState(0);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -57,7 +65,7 @@ export default function WomenMinistryPage() {
                 src={heroSlides[activeHero].image}
                 alt="Women's Ministry"
                 fill
-                className="object-cover object-center"
+                className={`object-cover ${heroSlides[activeHero].position || "object-center"}`}
                 priority
               />
             </motion.div>
@@ -101,9 +109,8 @@ export default function WomenMinistryPage() {
               <button
                 key={i}
                 onClick={() => setCurrentHero(i)}
-                className={`h-2 rounded-full transition-all duration-500 ${
-                  activeHero === i ? "w-10 bg-accent" : "w-2 bg-white/20 hover:bg-white/40"
-                }`}
+                className={`h-2 rounded-full transition-all duration-500 ${activeHero === i ? "w-10 bg-accent" : "w-2 bg-white/20 hover:bg-white/40"
+                  }`}
               />
             ))}
           </div>
@@ -124,7 +131,7 @@ export default function WomenMinistryPage() {
                 Our Women's Ministry is dedicated to supporting the church's mission through various social and spiritual initiatives, with a special focus on the welfare of families and the community.
               </p>
             </div>
-            
+
             <div className="space-y-4">
               <h3 className="text-2xl font-bold text-primary">Core Values</h3>
               <div className="space-y-4">
@@ -193,7 +200,7 @@ export default function WomenMinistryPage() {
         <div className="container mx-auto px-4 max-w-2xl">
           <h2 className="text-3xl font-bold text-primary mb-6">Join the Movement!</h2>
           <p className="text-lg text-muted-foreground mb-8">
-            Mothers&apos; Union & Women&apos;s Group is a place for women seeking to grow in faith, support families, and serve the community. We invite you to join us on this transformative journey!
+            Mothers&apos; Union is a place for women seeking to grow in faith, support families, and serve the community. We invite you to join us on this transformative journey!
           </p>
           <div className="flex justify-center">
             <Button size="lg" className="font-bold h-12 px-8" asChild>
