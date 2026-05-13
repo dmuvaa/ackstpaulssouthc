@@ -106,7 +106,7 @@ export function Footer() {
                 <div className="h-10 w-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0 group-hover:bg-secondary transition-colors">
                   <MapPin className="h-5 w-5 text-accent group-hover:text-white" />
                 </div>
-                <span className="text-base text-slate-300 leading-relaxed">South C Mai Mahio Road, Nairobi, Kenya</span>
+                <span className="text-base text-slate-300 leading-relaxed">South C Mai Mahiu Road, Nairobi, Kenya</span>
               </div>
               <div className="flex items-center space-x-4 group cursor-pointer">
                 <div className="h-10 w-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0 group-hover:bg-secondary transition-colors">

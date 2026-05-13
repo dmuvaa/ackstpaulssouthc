@@ -482,45 +482,37 @@ export default function HomePage() {
       {/* Multipurpose Hall Section */}
       <section id="hall" className="py-12 bg-white">
         <div className="container mx-auto px-4">
-          <div className="text-center max-w-3xl mx-auto mb-12">
+          <div className="text-center max-w-4xl mx-auto mb-12">
             <Badge className="mb-4 bg-secondary text-white px-4 py-1">Venue Hire</Badge>
-            <h2 className="text-4xl font-bold text-primary">Host Your Event with Us!</h2>
-            <p className="mt-4 text-lg text-muted-foreground">
-              Looking for the perfect venue for your next event? ACK St Paul's South C Multipurpose Hall offers a complete event solution with modern facilities, ample parking, and a serene environment.
-            </p>
+            <h2 className="text-4xl font-bold text-primary mb-6">Host Your Event with Us!</h2>
+            <div className="space-y-4 text-lg text-muted-foreground leading-relaxed max-w-3xl mx-auto">
+              <p>
+                Looking for the perfect venue for your next event? ACK St Paul's South C Multipurpose Hall offers a complete event solution with modern facilities, ample parking, and a serene environment.
+              </p>
+              <p className="font-bold text-primary text-xl">
+                You have an event? We have the solution.
+              </p>
+              <p className="text-base">
+                Our state-of-the-art facility accommodates over 500-600 guests, with 4 additional intimate halls for smaller gatherings. Equipped with sophisticated audio-visual technology and flexible seating arrangements, we ensure a smooth experience for conferences, weddings, and parties.
+              </p>
+              <p className="text-accent font-bold italic text-base">“Tents are overrated, anyway!”</p>
+            </div>
           </div>
 
-          <div className="grid gap-12 lg:grid-cols-3 items-start max-w-6xl mx-auto">
-            {/* Left Side: Marketing Message & Offer */}
-            <div className="lg:col-span-1 space-y-6">
-              <div className="relative h-64 rounded-[2rem] overflow-hidden shadow-lg">
-                <Image
-                  src="/images/mph-enhanced.jpg"
-                  alt="Multipurpose Hall"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              <div className="bg-gradient-to-br from-primary to-primary/90 text-white p-8 rounded-[2rem] shadow-xl">
-                <h3 className="text-2xl font-bold mb-4">You have an event? We have the solution.</h3>
-                <p className="text-slate-300 text-sm leading-relaxed mb-6">
-                  Our state-of-the-art facility accommodates over 500-600 guests, with 4 additional intimate halls for smaller gatherings. Equipped with sophisticated audio-visual technology and flexible seating arrangements, we ensure a smooth experience for conferences, weddings, and parties.
-                </p>
-                <p className="text-accent font-bold italic">“Tents are overrated, anyway!”</p>
-              </div>
-
-              <div className="bg-accent/5 border border-accent/20 p-6 rounded-[2rem] text-center shadow-sm">
-                <span className="text-xs font-bold uppercase tracking-widest text-primary">Special Offer</span>
-                <h4 className="text-2xl font-black text-primary mt-1 mb-2">20% Discount in August!</h4>
-                <p className="text-sm text-muted-foreground mb-4">Book with us today and enjoy a great deal in return.</p>
-                <Button size="sm" variant="gold" className="font-bold" asChild>
-                  <Link href="/contact">Inquire Now</Link>
-                </Button>
-              </div>
+          <div className="grid gap-8 lg:grid-cols-2 items-start max-w-7xl mx-auto">
+            {/* Left Side: Large Image (No overlay) */}
+            <div className="relative aspect-[4/3] rounded-[2rem] overflow-hidden shadow-lg">
+              <Image
+                src="/images/mph-dinner-enhanced.png"
+                alt="Multipurpose Hall"
+                fill
+                className="object-cover"
+                priority
+              />
             </div>
 
-            {/* Right Side: Rate Card Table */}
-            <div className="lg:col-span-2">
+            {/* Right Side: Rate Card Table & Discount */}
+            <div className="space-y-6">
               <div className="bg-white rounded-[2rem] border border-slate-100 shadow-sm overflow-hidden">
                 <div className="p-6 bg-white border-b border-slate-100">
                   <h3 className="text-xl font-bold text-primary">Hall Hire Rate Card</h3>
@@ -591,6 +583,13 @@ export default function HomePage() {
                 <div className="p-4 bg-slate-50 text-xs text-muted-foreground text-center border-t border-slate-100">
                   Proximity to town CBD, off Lang'ata Road, near T-MALL. Paybill No: 308937 | Account: MPH
                 </div>
+              </div>
+
+              {/* Discount Text below the table */}
+              <div className="bg-accent/5 border border-accent/20 p-4 rounded-xl text-center">
+                <span className="text-xs font-bold uppercase tracking-widest text-primary">Special Offer</span>
+                <h4 className="text-lg font-black text-primary mt-1">20% Discount in August!</h4>
+                <p className="text-xs text-muted-foreground">Book with us today and enjoy a great deal in return.</p>
               </div>
             </div>
           </div>
