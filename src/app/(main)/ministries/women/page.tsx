@@ -117,86 +117,213 @@ export default function WomenMinistryPage() {
         </div>
       </section>
 
-      {/* Intro & Objectives Section */}
-      <section className="container mx-auto px-4 py-12">
-        <div className="mb-6">
-          <Badge className="bg-secondary text-white px-4 py-1">Women's Ministry</Badge>
-        </div>
-        <div className="grid gap-16 lg:grid-cols-2 items-start">
-          {/* Left Side: Welcome & Values */}
-          <div className="space-y-8">
-            <div className="space-y-4">
-              <h2 className="text-3xl font-bold text-primary sm:text-4xl">Strengthening the Christian Home</h2>
-              <p className="text-lg text-muted-foreground leading-relaxed">
-                Our Women's Ministry is dedicated to supporting the church's mission through various social and spiritual initiatives, with a special focus on the welfare of families and the community.
-              </p>
-            </div>
-
-            <div className="space-y-4">
-              <h3 className="text-2xl font-bold text-primary">Core Values</h3>
-              <div className="space-y-4">
-                {[
-                  { icon: Heart, title: "Compassion", desc: "Supporting the vulnerable and providing care for those in need." },
-                  { icon: Flower2, title: "Spiritual Growth", desc: "Nurturing deep faith and personal development through shared prayer." },
-                  { icon: Users, title: "Fellowship", desc: "Building strong bonds between women of all generations." },
-                  { icon: ShieldCheck, title: "Empowerment", desc: "Equipping women with the tools to lead and serve." },
-                ].map((item, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.1 }}
-                    className="flex gap-4 p-6 bg-white rounded-2xl border shadow-sm"
-                  >
-                    <div className="h-10 w-10 rounded-full bg-secondary/10 text-secondary flex items-center justify-center shrink-0">
-                      <item.icon className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-primary">{item.title}</h4>
-                      <p className="text-sm text-muted-foreground">{item.desc}</p>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
+      {/* Identity & Mission Section */}
+      <section className="bg-muted/30 py-16">
+        <div className="container mx-auto px-4 max-w-4xl text-center">
+          <Badge className="bg-secondary text-white px-4 py-1 mb-4">Our Identity & Mission</Badge>
+          <h2 className="text-3xl font-bold text-primary sm:text-4xl mb-6">Symbolized by Blue, White & Gold</h2>
+          <p className="text-lg text-muted-foreground leading-relaxed mb-8">
+            The Mothers&apos; Union is symbolized by its distinctive colors—**blue** for royalty, **white** for holiness, and **gold** for the heavenly and precious.
+          </p>
+          <div className="bg-primary text-white p-8 rounded-2xl shadow-xl max-w-2xl mx-auto">
+            <p className="text-xl font-medium italic mb-4">
+              &quot;I can do all things through Christ who strengthens me.&quot;
+            </p>
+            <p className="font-bold text-secondary">— Philippians 4:13</p>
           </div>
+        </div>
+      </section>
 
-          {/* Right Side: Focus Areas */}
-          <div className="space-y-6">
-            <h3 className="text-2xl font-bold text-primary">Our Core Focus</h3>
-            <div className="space-y-4">
-              {[
-                { title: "Nurturing Families", desc: "Upholding the institution of marriage and family life." },
-                { title: "Supporting Ministry", desc: "Assisting in church projects and spiritual initiatives." },
-                { title: "Community Outreach", desc: "Caring for the vulnerable and less fortunate in society." },
-                { title: "Leadership Development", desc: "Equipping women to lead and serve in church and society." }
-              ].map((item, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, x: 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
-                  className="flex gap-4 p-6 bg-white rounded-2xl border shadow-sm"
-                >
-                  <div className="h-10 w-10 rounded-full bg-accent/20 text-accent flex items-center justify-center shrink-0 font-bold">
-                    {i + 1}
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-primary">{item.title}</h4>
-                    <p className="text-sm text-muted-foreground">{item.desc}</p>
-                  </div>
-                </motion.div>
+      {/* Core Objectives Section */}
+      <section className="container mx-auto px-4 py-16">
+        <div className="text-center mb-12">
+          <Badge className="bg-secondary text-white px-4 py-1 mb-4">Focus</Badge>
+          <h2 className="text-3xl font-bold text-primary sm:text-4xl">Core Objectives</h2>
+          <p className="text-lg text-muted-foreground mt-4 max-w-2xl mx-auto">
+            The Mothers&apos; Union is built on principles that guide our service and fellowship.
+          </p>
+        </div>
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto">
+          {[
+            "To uphold Christ’s teaching on marriage and promote its deeper understanding.",
+            "To encourage parents to raise their children in the Christian faith.",
+            "To maintain a worldwide fellowship of Christians united in prayer and service.",
+            "To promote conditions that support stable family life and protect children.",
+            "To assist those facing challenges in family life through spiritual and material support."
+          ].map((objective, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
+              className="flex gap-4 p-6 bg-white rounded-2xl border shadow-sm hover:shadow-md transition-shadow"
+            >
+              <div className="h-8 w-8 rounded-full bg-accent/20 text-accent flex items-center justify-center shrink-0 font-bold">
+                {i + 1}
+              </div>
+              <p className="text-sm text-muted-foreground leading-relaxed">{objective}</p>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* Pillars Section */}
+      <section className="bg-muted/30 py-16">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <Badge className="bg-secondary text-white px-4 py-1 mb-4">Our Pillars</Badge>
+            <h2 className="text-3xl font-bold text-primary sm:text-4xl">Pillars of the Mothers&apos; Union</h2>
+            <p className="text-lg text-muted-foreground mt-4 max-w-2xl mx-auto">
+              The MU is built on five foundational pillars that shape its mission:
+            </p>
+            <div className="flex flex-wrap justify-center gap-4 mt-6">
+              {["Prayer", "Welfare", "Children", "Marriage", "Calamity"].map((pillar, i) => (
+                <div key={i} className="bg-white px-4 py-2 rounded-full shadow-sm border text-sm font-bold text-primary">
+                  {i + 1}. {pillar} Pillar
+                </div>
               ))}
             </div>
           </div>
-        </div>
 
+          <div className="grid gap-8 lg:grid-cols-2 max-w-6xl mx-auto">
+            {/* Pillar 1: Prayer */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="bg-white p-8 rounded-2xl border shadow-sm space-y-4"
+            >
+              <div className="flex items-center gap-4">
+                <div className="h-12 w-12 rounded-full bg-secondary/10 text-secondary flex items-center justify-center shrink-0">
+                  <Flower2 className="h-6 w-6" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-primary">1. Prayer Pillar</h3>
+                  <p className="text-sm text-muted-foreground">Nurturing Spiritual Growth</p>
+                </div>
+              </div>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Prayer is at the heart of the MU, fostering spiritual growth and a deep sense of fellowship.
+              </p>
+              <ul className="space-y-2 text-sm text-muted-foreground list-disc pl-5">
+                <li><strong>Weekly Online Prayer Meetings:</strong> Every Wednesday at 7:30 p.m., providing a platform for intercession and encouragement.</li>
+                <li><strong>World Day of Prayer:</strong> Held annually in March, bringing women together in prayer for the church and the world.</li>
+                <li><strong>Monthly Ladies’ Prayer Meeting:</strong> Every second Sunday at 8:00 a.m., strengthening a culture of corporate prayer within the church.</li>
+              </ul>
+            </motion.div>
+
+            {/* Pillar 2: Welfare */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="bg-white p-8 rounded-2xl border shadow-sm space-y-4"
+            >
+              <div className="flex items-center gap-4">
+                <div className="h-12 w-12 rounded-full bg-secondary/10 text-secondary flex items-center justify-center shrink-0">
+                  <Heart className="h-6 w-6" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-primary">2. Welfare Pillar</h3>
+                  <p className="text-sm text-muted-foreground">Extending Compassion and Care</p>
+                </div>
+              </div>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                The Welfare Pillar plays a crucial role in ensuring the well-being of members and addressing community needs.
+              </p>
+              <ul className="space-y-2 text-sm text-muted-foreground list-disc pl-5">
+                <li>Managing the church kitchen and mobilizing resources for upkeep.</li>
+                <li>Supporting the education of a bright but needy high school girl.</li>
+                <li>Organizing visits to prisons and the Borstal Institution during Talent Week, bringing hope and encouragement to those in need.</li>
+              </ul>
+            </motion.div>
+
+            {/* Pillar 3: Children */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="bg-white p-8 rounded-2xl border shadow-sm space-y-4"
+            >
+              <div className="flex items-center gap-4">
+                <div className="h-12 w-12 rounded-full bg-secondary/10 text-secondary flex items-center justify-center shrink-0">
+                  <Users className="h-6 w-6" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-primary">3. Children Pillar</h3>
+                  <p className="text-sm text-muted-foreground">Raising a Generation in Faith</p>
+                </div>
+              </div>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Dedicated to guiding children in their spiritual journey, the Children Pillar actively supports the ACK St. Paul’s South C Sunday School ministry.
+              </p>
+              <ul className="space-y-2 text-sm text-muted-foreground list-disc pl-5">
+                <li><strong>Sunday School Support:</strong> Volunteers assist teachers in handling young children, ensuring a conducive learning environment.</li>
+                <li><strong>40 Days of Prayer for Children:</strong> Mobilized parents via WhatsApp to support daily prayers for children from August 26th to October 4th, 2024.</li>
+                <li><strong>Outreach to KWETU Home of Peace:</strong> During Talent Week in October, MU members visited the home, sharing the Word of God and donating food and financial support.</li>
+                <li><strong>Education Scholarship Support:</strong> In partnership with the Welfare Pillar, MU has sponsored a bright but needy Form 4 student whose guardian is a church member. Funds are raised through monthly member contributions.</li>
+              </ul>
+            </motion.div>
+
+            {/* Pillar 4: Marriage */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="bg-white p-8 rounded-2xl border shadow-sm space-y-4"
+            >
+              <div className="flex items-center gap-4">
+                <div className="h-12 w-12 rounded-full bg-secondary/10 text-secondary flex items-center justify-center shrink-0">
+                  <Heart className="h-6 w-6" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-primary">4. Marriage Pillar</h3>
+                  <p className="text-sm text-muted-foreground">Strengthening Christian Homes</p>
+                </div>
+              </div>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Committed to upholding Christ’s teaching on marriage, the Marriage Pillar has in 2024 successfully:
+              </p>
+              <ul className="space-y-2 text-sm text-muted-foreground list-disc pl-5">
+                <li>Organized a family and marriage seminar featuring Father Kinyua.</li>
+                <li>Hosted a luncheon for clergy during Talent Week as a token of appreciation.</li>
+                <li>Recognized and appreciated church support staff for their dedication and service.</li>
+              </ul>
+            </motion.div>
+
+            {/* Pillar 5: Calamity */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="bg-white p-8 rounded-2xl border shadow-sm space-y-4 lg:col-span-2 max-w-3xl mx-auto w-full"
+            >
+              <div className="flex items-center gap-4">
+                <div className="h-12 w-12 rounded-full bg-secondary/10 text-secondary flex items-center justify-center shrink-0">
+                  <ShieldCheck className="h-6 w-6" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-primary">5. Calamity Pillar</h3>
+                  <p className="text-sm text-muted-foreground">Support in Times of Need</p>
+                </div>
+              </div>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Life comes with its challenges, and the MU ensures that no one faces them alone. The Calamity Pillar in 2024 successfully provided for:
+              </p>
+              <ul className="space-y-2 text-sm text-muted-foreground list-disc pl-5">
+                <li><strong>Bereavement care:</strong> Visiting and supporting grieving families.</li>
+                <li><strong>Community support:</strong> Providing clothing, meals, and gifts for Thursday Fellowship members.</li>
+                <li><strong>Elderly care:</strong> Regular visits to elderly members in need of comfort and assistance.</li>
+                <li><strong>Prison Ministry:</strong> Outreach to Borstal Institution, extending love and encouragement to young offenders.</li>
+              </ul>
+            </motion.div>
+          </div>
+        </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-12 text-center">
+      <section className="py-16 text-center">
         <div className="container mx-auto px-4 max-w-2xl">
           <h2 className="text-3xl font-bold text-primary mb-6">Join the Movement!</h2>
           <p className="text-lg text-muted-foreground mb-8">
@@ -209,7 +336,7 @@ export default function WomenMinistryPage() {
               </Link>
             </Button>
           </div>
-          <p className="mt-8 font-bold text-primary">ACK St. Paul’s South C – Women’s Ministry: Nurturing Families, Serving in Love!</p>
+          <p className="mt-8 font-bold text-primary">ACK St. Paul’s South C – Mothers&apos; Union: Nurturing Families, Serving in Love!</p>
         </div>
       </section>
     </div>
