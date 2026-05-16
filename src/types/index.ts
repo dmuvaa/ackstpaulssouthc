@@ -31,6 +31,17 @@ export interface Product {
   created_at: string;
 }
 
+export interface Merchandise {
+  id: string;
+  title: string;
+  description: string;
+  price: number;
+  image_path?: string;
+  category: string;
+  in_stock: boolean;
+  created_at: string;
+}
+
 export interface Order {
   id: string;
   product_id: string;

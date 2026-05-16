@@ -66,7 +66,14 @@ export function Navbar() {
         <div className="flex items-center gap-2">
           <Link href="/" className="flex items-center space-x-2 sm:space-x-3 group shrink-0">
             <div className="relative h-18 w-18 transition-transform group-hover:scale-105 text-primary">
-              <Image src="/ackimage.ico" alt="ACK Logo" fill className="object-contain" priority />
+              <Image 
+                src="/ackimage.ico" 
+                alt="ACK Logo" 
+                fill 
+                sizes="(max-width: 768px) 48px, 72px"
+                className="object-contain" 
+                priority 
+              />
             </div>
             <div className="flex flex-col leading-none">
               <span className="text-2xl font-black tracking-tighter text-primary sm:text-3xl">

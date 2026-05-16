@@ -35,6 +35,7 @@ export default async function AdminLayout({
     { name: "Donation Causes", href: "/admin/donations/causes", icon: Target },
     { name: "Orders", href: "/admin/orders", icon: ShoppingBag },
     { name: "Magazines", href: "/admin/magazines", icon: FileText },
+    { name: "Merchandise", href: "/admin/merchandise", icon: ShoppingBag },
     { name: "Events", href: "/admin/events", icon: CalendarIcon },
     { name: "Blog Posts", href: "/admin/blog", icon: FileText },
     { name: "Sermons", href: "/admin/sermons", icon: Play },

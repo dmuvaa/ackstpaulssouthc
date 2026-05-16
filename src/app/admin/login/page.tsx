@@ -74,6 +74,14 @@ export default function AdminLoginPage() {
             <Button type="submit" className="w-full h-11 font-bold" disabled={isPending}>
               {isPending ? "Logging in..." : "Login"}
             </Button>
+            <Button 
+              type="button" 
+              variant="outline" 
+              className="w-full h-11 mt-2 font-bold" 
+              onClick={() => router.push("/")}
+            >
+              Back to Home
+            </Button>
           </form>
         </CardContent>
       </Card>

@@ -1,13 +1,17 @@
 import { getMagazines } from "@/app/actions/magazines";
+import { getMerchandise } from "@/app/actions/merchandise";
 import { ShopClient } from "./shop-client";
-import { Product } from "@/types";
+import { Product, Merchandise } from "@/types";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
 
 export default async function ShopPage() {
-  const magazinesData = await getMagazines();
+  const [magazinesData, merchandiseData] = await Promise.all([
+    getMagazines(),
+    getMerchandise()
+  ]);
   
-  // Cast the data to ensure it matches the Product type exactly
-  const magazines: Product[] = magazinesData as Product[];
+  const magazines = magazinesData as Product[];
+  const merchandise = merchandiseData as Merchandise[];
   
   const adminClient = createAdminClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -21,14 +25,17 @@ export default async function ShopPage() {
     }
   );
 
-  const imagePaths = magazines.map(m => m.image_path).filter(Boolean) as string[];
+  // Combine image paths from both sources
+  const magazineImagePaths = magazines.map(m => m.image_path).filter(Boolean) as string[];
+  const merchImagePaths = merchandise.map(m => m.image_path).filter(Boolean) as string[];
+  const allImagePaths = [...magazineImagePaths, ...merchImagePaths];
   
   const urlMap: Record<string, string> = {};
   
-  if (imagePaths.length > 0) {
+  if (allImagePaths.length > 0) {
     const { data: signedUrls, error } = await adminClient.storage
       .from("magazines")
-      .createSignedUrls(imagePaths, 3600); // 1 hour expiry
+      .createSignedUrls(allImagePaths, 3600);
       
     if (!error && signedUrls) {
       signedUrls.forEach(item => {
@@ -39,5 +46,5 @@ export default async function ShopPage() {
     }
   }
 
-  return <ShopClient magazines={magazines} imageUrls={urlMap} />;
+  return <ShopClient magazines={magazines} merchandise={merchandise} imageUrls={urlMap} />;
 }

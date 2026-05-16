@@ -25,6 +25,7 @@ export function MobileNav({ userEmail }: { userEmail?: string }) {
     { name: "Donation Causes", href: "/admin/donations/causes", icon: Target },
     { name: "Orders", href: "/admin/orders", icon: ShoppingBag },
     { name: "Magazines", href: "/admin/magazines", icon: FileText },
+    { name: "Merchandise", href: "/admin/merchandise", icon: ShoppingBag },
     { name: "Events", href: "/admin/events", icon: Calendar },
     { name: "Blog Posts", href: "/admin/blog", icon: FileText },
   ];
