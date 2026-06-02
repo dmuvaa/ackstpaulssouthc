@@ -28,9 +28,6 @@ export default async function MagazineReadPage({
     <MagazineReaderLoader
       title={access.product.title}
       pdfUrl={`/api/read/${token}/pdf`}
-      downloadUrl={`/api/download/${token}`}
-      expiresAt={access.download.expires_at}
-      canDownload={!access.isExpired}
     />
   );
 }

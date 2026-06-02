@@ -21,9 +21,6 @@ const MagazineReader = dynamic(
 type MagazineReaderLoaderProps = {
   title: string;
   pdfUrl: string;
-  downloadUrl: string;
-  expiresAt: string;
-  canDownload: boolean;
 };
 
 export function MagazineReaderLoader(props: MagazineReaderLoaderProps) {

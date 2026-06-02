@@ -101,7 +101,7 @@ export async function sendMagazineDeliveryEmail({ payment, email, name }: Delive
     const { error: emailError } = await resend.emails.send({
       from: "ACK St Pauls <donotreply@ackstpaulssouthc.co.ke>",
       to: recipientEmail,
-      subject: `Your Magazine Download: ${product.title}`,
+      subject: `Your Magazine Reader: ${product.title}`,
       html: `
         <h1>Your magazine is ready</h1>
         <p>Hello ${recipientName},</p>
@@ -112,7 +112,7 @@ export async function sendMagazineDeliveryEmail({ payment, email, name }: Delive
             Read Magazine
           </a>
         </p>
-        <p>A PDF download option is available in the reader for ${DOWNLOAD_EXPIRY_DAYS} days. Please keep this purchase link private.</p>
+        <p>Please keep this purchase link private.</p>
         <p>M-Pesa Code: ${payment.mpesa_receipt || "Manual payment"}</p>
         <p>If you have any issues, please contact the church office.</p>
       `,

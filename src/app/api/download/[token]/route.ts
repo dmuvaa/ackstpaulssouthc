@@ -1,34 +1,11 @@
 import { NextResponse } from "next/server";
-import {
-  getMagazineAccess,
-  getMagazineAdminClient,
-  incrementMagazineReadCount,
-} from "@/lib/magazine-access";
 
 export async function GET(
   req: Request,
   { params }: { params: Promise<{ token: string }> }
 ) {
-  try {
-    const { token } = await params;
+  const { token } = await params;
+  const url = new URL(`/read/${token}`, req.url);
 
-    const access = await getMagazineAccess(token);
-    if (!access.success) {
-      return new Response(access.message, { status: access.status });
-    }
-
-    const supabase = getMagazineAdminClient();
-    const { data: signedUrlData, error: signedError } = await supabase.storage
-      .from("magazines")
-      .createSignedUrl(access.product.file_path, 3600);
-      
-    if (signedError) throw signedError;
-
-    await incrementMagazineReadCount(access.download.id, access.download.download_count);
-
-    return NextResponse.redirect(signedUrlData.signedUrl);
-  } catch (error: unknown) {
-    console.error("Download Error:", error);
-    return new Response("An error occurred during download", { status: 500 });
-  }
+  return NextResponse.redirect(url);
 }
