@@ -28,6 +28,13 @@ type CreateMagazineRecordInput = {
   imagePath: string;
 };
 
+type UpdateMagazineInput = {
+  title: string;
+  description: string;
+  price: number;
+  type: string;
+};
+
 async function removeMagazineFiles(filePath?: string, imagePath?: string) {
   const paths = [filePath, imagePath].filter(Boolean) as string[];
   if (paths.length === 0) return;
@@ -125,6 +132,44 @@ export async function discardMagazineUploads(filePath?: string, imagePath?: stri
     return { success: true };
   } catch (error: unknown) {
     console.error("Error discarding magazine uploads:", error);
+    return { success: false, error: getErrorMessage(error) };
+  }
+}
+
+export async function updateMagazine(id: string, input: UpdateMagazineInput) {
+  const cookieStore = await cookies();
+  const supabase = createClient(cookieStore);
+
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { success: false, error: "Unauthorized" };
+
+  const adminClient = getAdminClient();
+
+  try {
+    if (!input.title.trim()) {
+      throw new Error("Title is required");
+    }
+    if (!Number.isFinite(input.price)) {
+      throw new Error("A valid price is required");
+    }
+
+    const { error } = await adminClient
+      .from("products")
+      .update({
+        title: input.title.trim(),
+        description: input.description.trim(),
+        price: input.price,
+        type: input.type || "Digital",
+      })
+      .eq("id", id);
+
+    if (error) throw error;
+
+    revalidatePath("/admin/magazines");
+    revalidatePath("/shop");
+    return { success: true };
+  } catch (error: unknown) {
+    console.error("Error updating magazine:", error);
     return { success: false, error: getErrorMessage(error) };
   }
 }

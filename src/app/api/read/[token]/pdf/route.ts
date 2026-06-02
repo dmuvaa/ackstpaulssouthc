@@ -1,4 +1,3 @@
-import { NextResponse } from "next/server";
 import {
   getMagazineAccess,
   getMagazineAdminClient,
@@ -11,24 +10,29 @@ export async function GET(
 ) {
   try {
     const { token } = await params;
-
     const access = await getMagazineAccess(token);
+
     if (!access.success) {
       return new Response(access.message, { status: access.status });
     }
 
     const supabase = getMagazineAdminClient();
-    const { data: signedUrlData, error: signedError } = await supabase.storage
+    const { data, error } = await supabase.storage
       .from("magazines")
-      .createSignedUrl(access.product.file_path, 3600);
-      
-    if (signedError) throw signedError;
+      .download(access.product.file_path);
+
+    if (error) throw error;
 
     await incrementMagazineReadCount(access.download.id, access.download.download_count);
 
-    return NextResponse.redirect(signedUrlData.signedUrl);
+    return new Response(data, {
+      headers: {
+        "Content-Type": "application/pdf",
+        "Cache-Control": "private, no-store",
+      },
+    });
   } catch (error: unknown) {
-    console.error("Download Error:", error);
-    return new Response("An error occurred during download", { status: 500 });
+    console.error("Magazine reader PDF error:", error);
+    return new Response("Unable to load magazine", { status: 500 });
   }
 }

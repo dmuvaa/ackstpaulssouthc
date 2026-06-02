@@ -83,6 +83,10 @@ export default async function AdminMagazinesPage() {
                         id={magazine.id} 
                         filePath={magazine.file_path} 
                         imagePath={magazine.image_path} 
+                        title={magazine.title}
+                        description={magazine.description || ""}
+                        price={magazine.price}
+                        type={magazine.type}
                       />
                     </TableCell>
                   </TableRow>
