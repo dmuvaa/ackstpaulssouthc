@@ -19,6 +19,27 @@ function getAdminClient() {
   );
 }
 
+type CreateMagazineRecordInput = {
+  title: string;
+  description: string;
+  price: number;
+  type: string;
+  filePath: string;
+  imagePath: string;
+};
+
+async function removeMagazineFiles(filePath?: string, imagePath?: string) {
+  const paths = [filePath, imagePath].filter(Boolean) as string[];
+  if (paths.length === 0) return;
+
+  const adminClient = getAdminClient();
+  await adminClient.storage.from("magazines").remove(paths);
+}
+
+function getErrorMessage(error: unknown) {
+  return error instanceof Error ? error.message : "An unexpected error occurred";
+}
+
 export async function getMagazines() {
   const cookieStore = await cookies();
   const supabase = createClient(cookieStore);
@@ -50,6 +71,62 @@ export async function getMagazineById(id: string) {
     return null;
   }
   return data;
+}
+
+export async function createMagazineRecord(input: CreateMagazineRecordInput) {
+  const cookieStore = await cookies();
+  const supabase = createClient(cookieStore);
+
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { success: false, error: "Unauthorized" };
+
+  const adminClient = getAdminClient();
+
+  try {
+    if (!input.title.trim()) {
+      throw new Error("Title is required");
+    }
+    if (!Number.isFinite(input.price)) {
+      throw new Error("A valid price is required");
+    }
+    if (!input.filePath || !input.imagePath) {
+      throw new Error("Magazine PDF and cover image uploads are required");
+    }
+
+    const { error: dbError } = await adminClient.from("products").insert({
+      title: input.title.trim(),
+      description: input.description.trim(),
+      price: input.price,
+      type: input.type || "Digital",
+      file_path: input.filePath,
+      image_path: input.imagePath,
+    });
+
+    if (dbError) throw dbError;
+
+    revalidatePath("/admin/magazines");
+    return { success: true };
+  } catch (error: unknown) {
+    await removeMagazineFiles(input.filePath, input.imagePath);
+    console.error("Error creating magazine record:", error);
+    return { success: false, error: getErrorMessage(error) };
+  }
+}
+
+export async function discardMagazineUploads(filePath?: string, imagePath?: string) {
+  const cookieStore = await cookies();
+  const supabase = createClient(cookieStore);
+
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { success: false, error: "Unauthorized" };
+
+  try {
+    await removeMagazineFiles(filePath, imagePath);
+    return { success: true };
+  } catch (error: unknown) {
+    console.error("Error discarding magazine uploads:", error);
+    return { success: false, error: getErrorMessage(error) };
+  }
 }
 
 export async function createMagazine(formData: FormData) {
@@ -111,9 +188,9 @@ export async function createMagazine(formData: FormData) {
     
     revalidatePath("/admin/magazines");
     return { success: true };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error creating magazine:", error);
-    return { success: false, error: error.message };
+    return { success: false, error: getErrorMessage(error) };
   }
 }
 
@@ -141,8 +218,8 @@ export async function deleteMagazine(id: string, filePath: string, imagePath: st
     
     revalidatePath("/admin/magazines");
     return { success: true };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error deleting magazine:", error);
-    return { success: false, error: error.message };
+    return { success: false, error: getErrorMessage(error) };
   }
 }
