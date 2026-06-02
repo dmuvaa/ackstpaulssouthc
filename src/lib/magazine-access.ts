@@ -3,6 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 export type MagazineAccessResult =
   | {
       success: true;
+      isExpired: boolean;
       download: {
         id: string;
         token: string;
@@ -26,6 +27,10 @@ export type MagazineAccessResult =
       message: string;
     };
 
+type MagazineAccessOptions = {
+  allowExpired?: boolean;
+};
+
 function getAdminClient() {
   return createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -44,7 +49,10 @@ export function getMagazineAdminClient() {
   return getAdminClient();
 }
 
-export async function getMagazineAccess(token: string): Promise<MagazineAccessResult> {
+export async function getMagazineAccess(
+  token: string,
+  options: MagazineAccessOptions = {}
+): Promise<MagazineAccessResult> {
   const supabase = getAdminClient();
   const { data: download, error: tokenError } = await supabase
     .from("downloads")
@@ -62,7 +70,9 @@ export async function getMagazineAccess(token: string): Promise<MagazineAccessRe
     return { success: false, status: 404, message: "Invalid magazine link" };
   }
 
-  if (new Date(download.expires_at) < new Date()) {
+  const isExpired = new Date(download.expires_at) < new Date();
+
+  if (isExpired && !options.allowExpired) {
     return { success: false, status: 410, message: "This magazine link has expired" };
   }
 
@@ -88,6 +98,7 @@ export async function getMagazineAccess(token: string): Promise<MagazineAccessRe
 
   return {
     success: true,
+    isExpired,
     download,
     payment: {
       id: payment.id,

@@ -8,7 +8,7 @@ export default async function MagazineReadPage({
   params: Promise<{ token: string }>;
 }) {
   const { token } = await params;
-  const access = await getMagazineAccess(token);
+  const access = await getMagazineAccess(token, { allowExpired: true });
 
   if (!access.success) {
     return (
@@ -30,6 +30,7 @@ export default async function MagazineReadPage({
       pdfUrl={`/api/read/${token}/pdf`}
       downloadUrl={`/api/download/${token}`}
       expiresAt={access.download.expires_at}
+      canDownload={!access.isExpired}
     />
   );
 }

@@ -106,12 +106,13 @@ export async function sendMagazineDeliveryEmail({ payment, email, name }: Delive
         <h1>Your magazine is ready</h1>
         <p>Hello ${recipientName},</p>
         <p>Your payment has been confirmed for <strong>${product.title}</strong>.</p>
-        <p>Use the secure link below to read your magazine online. This link expires in ${DOWNLOAD_EXPIRY_DAYS} days.</p>
+        <p>Use the secure link below to read your magazine online. Your reader access remains available after purchase.</p>
         <p>
           <a href="${readerUrl}" style="display:inline-block; padding:12px 24px; background:#003366; color:#fff; text-decoration:none; border-radius:8px;">
             Read Magazine
           </a>
         </p>
+        <p>A PDF download option is available in the reader for ${DOWNLOAD_EXPIRY_DAYS} days. Please keep this purchase link private.</p>
         <p>M-Pesa Code: ${payment.mpesa_receipt || "Manual payment"}</p>
         <p>If you have any issues, please contact the church office.</p>
       `,

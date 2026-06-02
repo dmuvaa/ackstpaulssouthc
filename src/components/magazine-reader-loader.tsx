@@ -23,6 +23,7 @@ type MagazineReaderLoaderProps = {
   pdfUrl: string;
   downloadUrl: string;
   expiresAt: string;
+  canDownload: boolean;
 };
 
 export function MagazineReaderLoader(props: MagazineReaderLoaderProps) {

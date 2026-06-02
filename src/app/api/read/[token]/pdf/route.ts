@@ -10,7 +10,7 @@ export async function GET(
 ) {
   try {
     const { token } = await params;
-    const access = await getMagazineAccess(token);
+    const access = await getMagazineAccess(token, { allowExpired: true });
 
     if (!access.success) {
       return new Response(access.message, { status: access.status });
