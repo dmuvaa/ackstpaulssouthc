@@ -13,8 +13,8 @@ import {
   DropdownMenuSeparator, 
   DropdownMenuTrigger 
 } from "@/components/ui/dropdown-menu";
-import { MoreHorizontal, Trash2, Edit, Loader2 } from "lucide-react";
-import { deleteMagazine, updateMagazine } from "@/app/actions/magazines";
+import { MoreHorizontal, Trash2, Edit, Loader2, FileText, ImageIcon } from "lucide-react";
+import { deleteMagazine, discardMagazineUploads, updateMagazine } from "@/app/actions/magazines";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -34,6 +34,18 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
+type SignedUpload = {
+  signedUrl: string;
+  path: string;
+  token: string;
+};
+
+type UploadProgress = {
+  pdf: number;
+  image: number;
+  total: number;
+};
+
 interface MagazineActionsProps {
   id: string;
   filePath: string;
@@ -42,6 +54,45 @@ interface MagazineActionsProps {
   description: string;
   price: number;
   type: string;
+}
+
+function formatFileSize(size: number) {
+  if (size < 1024 * 1024) {
+    return `${Math.round(size / 1024)} KB`;
+  }
+
+  return `${(size / (1024 * 1024)).toFixed(1)} MB`;
+}
+
+function getErrorMessage(error: unknown) {
+  return error instanceof Error ? error.message : "Failed to update magazine";
+}
+
+function uploadToSignedUrl(file: File, upload: SignedUpload, onProgress: (progress: number) => void) {
+  return new Promise<void>((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    const body = new FormData();
+
+    body.append("cacheControl", "3600");
+    body.append("", file);
+
+    xhr.upload.onprogress = (event) => {
+      if (!event.lengthComputable) return;
+      onProgress(Math.round((event.loaded / event.total) * 100));
+    };
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        onProgress(100);
+        resolve();
+        return;
+      }
+
+      reject(new Error(xhr.responseText || `Upload failed with status ${xhr.status}`));
+    };
+    xhr.onerror = () => reject(new Error("Upload failed. Please check your connection and try again."));
+    xhr.open("PUT", upload.signedUrl);
+    xhr.send(body);
+  });
 }
 
 export function MagazineActions({
@@ -60,23 +111,140 @@ export function MagazineActions({
   const [editDescription, setEditDescription] = useState(description || "");
   const [editPrice, setEditPrice] = useState(String(price));
   const [editType, setEditType] = useState(type || "Digital");
+  const [status, setStatus] = useState("");
+  const [progress, setProgress] = useState<UploadProgress>({
+    pdf: 0,
+    image: 0,
+    total: 0,
+  });
+
+  function resetUploadState() {
+    setStatus("");
+    setProgress({ pdf: 0, image: 0, total: 0 });
+  }
 
   async function handleUpdate(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setLoading(true);
-    const result = await updateMagazine(id, {
-      title: editTitle,
-      description: editDescription,
-      price: parseFloat(editPrice),
-      type: editType,
-    });
-    setLoading(false);
+    if (loading) return;
 
-    if (result.success) {
+    const formData = new FormData(e.currentTarget);
+    const pdfFile = formData.get("pdf");
+    const imageFile = formData.get("image");
+    const selectedPdfFile = pdfFile instanceof File && pdfFile.size > 0 ? pdfFile : null;
+    const selectedImageFile = imageFile instanceof File && imageFile.size > 0 ? imageFile : null;
+
+    setLoading(true);
+    resetUploadState();
+
+    let pdfUploaded = false;
+    let imageUploaded = false;
+    let uploads: { pdf?: SignedUpload; image?: SignedUpload } | null = null;
+
+    const updateProgress = (key: "pdf" | "image", value: number) => {
+      setProgress((current) => {
+        const next = { ...current, [key]: value };
+        const pdfWeight = selectedPdfFile?.size || 0;
+        const imageWeight = selectedImageFile?.size || 0;
+        const totalSize = pdfWeight + imageWeight || 1;
+        const total = Math.round(
+          ((next.pdf * pdfWeight) + (next.image * imageWeight)) / totalSize
+        );
+
+        return { ...next, total };
+      });
+    };
+
+    try {
+      if (selectedPdfFile || selectedImageFile) {
+        setStatus("Preparing replacement upload...");
+        const uploadResponse = await fetch("/api/admin/magazines/upload-url", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            pdf: selectedPdfFile
+              ? {
+                  name: selectedPdfFile.name,
+                  size: selectedPdfFile.size,
+                  type: selectedPdfFile.type,
+                }
+              : null,
+            image: selectedImageFile
+              ? {
+                  name: selectedImageFile.name,
+                  size: selectedImageFile.size,
+                  type: selectedImageFile.type,
+                }
+              : null,
+          }),
+        });
+        const uploadPayload = await uploadResponse.json();
+
+        if (!uploadResponse.ok || !uploadPayload.success) {
+          throw new Error(uploadPayload.error || "Failed to prepare replacement upload");
+        }
+
+        uploads = uploadPayload.uploads as { pdf?: SignedUpload; image?: SignedUpload };
+        const totalUploadSize = (selectedPdfFile?.size || 0) + (selectedImageFile?.size || 0);
+        setStatus(`Uploading replacement files (${formatFileSize(totalUploadSize)})...`);
+
+        const uploadTasks: Promise<void>[] = [];
+        if (selectedPdfFile && uploads.pdf) {
+          uploadTasks.push(
+            uploadToSignedUrl(selectedPdfFile, uploads.pdf, (value) => updateProgress("pdf", value)).then(() => {
+              pdfUploaded = true;
+            })
+          );
+        }
+        if (selectedImageFile && uploads.image) {
+          uploadTasks.push(
+            uploadToSignedUrl(selectedImageFile, uploads.image, (value) => updateProgress("image", value)).then(() => {
+              imageUploaded = true;
+            })
+          );
+        }
+
+        const uploadResults = await Promise.allSettled(uploadTasks);
+        const failedUpload = uploadResults.find((result) => result.status === "rejected");
+
+        if (failedUpload?.status === "rejected") {
+          await discardMagazineUploads(
+            pdfUploaded ? uploads.pdf?.path : undefined,
+            imageUploaded ? uploads.image?.path : undefined
+          );
+          throw failedUpload.reason;
+        }
+      }
+
+      setStatus("Saving magazine changes...");
+      const result = await updateMagazine(id, {
+        title: editTitle,
+        description: editDescription,
+        price: parseFloat(editPrice),
+        type: editType,
+        filePath: uploads?.pdf?.path,
+        imagePath: uploads?.image?.path,
+        previousFilePath: filePath,
+        previousImagePath: imagePath,
+      });
+
+      if (!result.success) {
+        await discardMagazineUploads(uploads?.pdf?.path, uploads?.image?.path);
+        throw new Error(result.error || "Failed to update magazine");
+      }
+
       toast.success("Magazine updated successfully");
       setShowEditDialog(false);
-    } else {
-      toast.error(result.error || "Failed to update magazine");
+      resetUploadState();
+    } catch (error: unknown) {
+      if (uploads && (!pdfUploaded || !imageUploaded)) {
+        await discardMagazineUploads(
+          pdfUploaded ? uploads.pdf?.path : undefined,
+          imageUploaded ? uploads.image?.path : undefined
+        );
+      }
+      toast.error(getErrorMessage(error));
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -119,15 +287,15 @@ export function MagazineActions({
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
-        <DialogContent className="sm:max-w-[520px]">
+      <Dialog open={showEditDialog} onOpenChange={(open) => !loading && setShowEditDialog(open)}>
+        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-[760px]">
           <DialogHeader>
             <DialogTitle>Edit Magazine</DialogTitle>
             <DialogDescription>
               Update the magazine listing details.
             </DialogDescription>
           </DialogHeader>
-          <form onSubmit={handleUpdate} className="space-y-4 pt-4">
+          <form onSubmit={handleUpdate} className="space-y-5 pt-4">
             <div className="space-y-2">
               <Label htmlFor={`title-${id}`}>Title</Label>
               <Input
@@ -145,6 +313,7 @@ export function MagazineActions({
                 value={editDescription}
                 onChange={(e) => setEditDescription(e.target.value)}
                 disabled={loading}
+                className="min-h-[220px]"
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -175,6 +344,80 @@ export function MagazineActions({
                 </select>
               </div>
             </div>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="space-y-2 rounded-md border p-3">
+                <div className="flex items-center gap-2">
+                  <FileText className="h-4 w-4 text-blue-600" />
+                  <Label htmlFor={`pdf-${id}`}>Replace Magazine PDF</Label>
+                </div>
+                <Input
+                  id={`pdf-${id}`}
+                  name="pdf"
+                  type="file"
+                  accept=".pdf,application/pdf"
+                  disabled={loading}
+                />
+                <p className="break-all text-xs text-muted-foreground">
+                  Current: {filePath || "No PDF uploaded"}
+                </p>
+              </div>
+              <div className="space-y-2 rounded-md border p-3">
+                <div className="flex items-center gap-2">
+                  <ImageIcon className="h-4 w-4 text-green-600" />
+                  <Label htmlFor={`image-${id}`}>Replace Cover Image</Label>
+                </div>
+                <Input
+                  id={`image-${id}`}
+                  name="image"
+                  type="file"
+                  accept="image/*"
+                  disabled={loading}
+                />
+                <p className="break-all text-xs text-muted-foreground">
+                  Current: {imagePath || "No cover uploaded"}
+                </p>
+              </div>
+            </div>
+            {loading && (
+              <div className="space-y-3 rounded-md border bg-muted/30 p-3" aria-live="polite">
+                <div className="flex items-center justify-between gap-4 text-sm">
+                  <span className="font-medium">{status || "Saving magazine changes..."}</span>
+                  <span className="tabular-nums text-muted-foreground">{progress.total}%</span>
+                </div>
+                <div className="h-2 overflow-hidden rounded-full bg-muted">
+                  <div
+                    className="h-full rounded-full bg-primary transition-all"
+                    style={{ width: `${progress.total}%` }}
+                  />
+                </div>
+                <div className="grid gap-2 text-xs text-muted-foreground sm:grid-cols-2">
+                  <div className="space-y-1">
+                    <div className="flex justify-between gap-3">
+                      <span>PDF</span>
+                      <span className="tabular-nums">{progress.pdf}%</span>
+                    </div>
+                    <div className="h-1.5 overflow-hidden rounded-full bg-muted">
+                      <div
+                        className="h-full rounded-full bg-blue-500 transition-all"
+                        style={{ width: `${progress.pdf}%` }}
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-1">
+                    <div className="flex justify-between gap-3">
+                      <span>Cover</span>
+                      <span className="tabular-nums">{progress.image}%</span>
+                    </div>
+                    <div className="h-1.5 overflow-hidden rounded-full bg-muted">
+                      <div
+                        className="h-full rounded-full bg-green-500 transition-all"
+                        style={{ width: `${progress.image}%` }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? (
                 <>

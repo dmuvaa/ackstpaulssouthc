@@ -11,8 +11,8 @@ type UploadFileRequest = {
 };
 
 type UploadUrlRequest = {
-  pdf: UploadFileRequest;
-  image: UploadFileRequest;
+  pdf?: UploadFileRequest | null;
+  image?: UploadFileRequest | null;
 };
 
 const MAX_PDF_SIZE = 100 * 1024 * 1024;
@@ -92,23 +92,37 @@ export async function POST(req: Request) {
 
     const { pdf, image } = await req.json() as UploadUrlRequest;
 
-    validateFile(pdf, {
-      label: "Magazine PDF",
-      maxSize: MAX_PDF_SIZE,
-      isAllowedType: (file) => file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf"),
-    });
-    validateFile(image, {
-      label: "Cover image",
-      maxSize: MAX_IMAGE_SIZE,
-      isAllowedType: (file) => file.type.startsWith("image/"),
-    });
+    if (!pdf && !image) {
+      throw new Error("At least one file is required");
+    }
+
+    if (pdf) {
+      validateFile(pdf, {
+        label: "Magazine PDF",
+        maxSize: MAX_PDF_SIZE,
+        isAllowedType: (file) => file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf"),
+      });
+    }
+    if (image) {
+      validateFile(image, {
+        label: "Cover image",
+        maxSize: MAX_IMAGE_SIZE,
+        isAllowedType: (file) => file.type.startsWith("image/"),
+      });
+    }
 
     const uploadId = `${Date.now()}-${randomUUID()}`;
-    const pdfPath = `pdfs/${uploadId}-${cleanBaseName(pdf.name, "magazine")}.${cleanExtension(pdf.name, "pdf")}`;
-    const imagePath = `covers/${uploadId}-${cleanBaseName(image.name, "cover")}.${cleanExtension(image.name, "jpg")}`;
     const [pdfUpload, imageUpload] = await Promise.all([
-      createSignedUpload(pdfPath),
-      createSignedUpload(imagePath),
+      pdf
+        ? createSignedUpload(
+            `pdfs/${uploadId}-${cleanBaseName(pdf.name, "magazine")}.${cleanExtension(pdf.name, "pdf")}`
+          )
+        : Promise.resolve(null),
+      image
+        ? createSignedUpload(
+            `covers/${uploadId}-${cleanBaseName(image.name, "cover")}.${cleanExtension(image.name, "jpg")}`
+          )
+        : Promise.resolve(null),
     ]);
 
     return NextResponse.json({

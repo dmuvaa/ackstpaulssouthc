@@ -33,6 +33,10 @@ type UpdateMagazineInput = {
   description: string;
   price: number;
   type: string;
+  filePath?: string;
+  imagePath?: string;
+  previousFilePath?: string;
+  previousImagePath?: string;
 };
 
 async function removeMagazineFiles(filePath?: string, imagePath?: string) {
@@ -153,17 +157,38 @@ export async function updateMagazine(id: string, input: UpdateMagazineInput) {
       throw new Error("A valid price is required");
     }
 
+    const updatePayload: {
+      title: string;
+      description: string;
+      price: number;
+      type: string;
+      file_path?: string;
+      image_path?: string;
+    } = {
+      title: input.title.trim(),
+      description: input.description.trim(),
+      price: input.price,
+      type: input.type || "Digital",
+    };
+
+    if (input.filePath) {
+      updatePayload.file_path = input.filePath;
+    }
+    if (input.imagePath) {
+      updatePayload.image_path = input.imagePath;
+    }
+
     const { error } = await adminClient
       .from("products")
-      .update({
-        title: input.title.trim(),
-        description: input.description.trim(),
-        price: input.price,
-        type: input.type || "Digital",
-      })
+      .update(updatePayload)
       .eq("id", id);
 
     if (error) throw error;
+
+    await removeMagazineFiles(
+      input.filePath ? input.previousFilePath : undefined,
+      input.imagePath ? input.previousImagePath : undefined
+    );
 
     revalidatePath("/admin/magazines");
     revalidatePath("/shop");
