@@ -107,8 +107,20 @@ export function ProductClient({ magazine, imageUrl }: ProductClientProps) {
                     <Receipt className="w-5 h-5" />
                     Buy this Magazine
                   </h3>
-                  <div className="rounded-md border bg-muted/30 p-3 text-sm text-muted-foreground">
-                    Pay KES {magazine.price} to the church PayBill, then submit the M-Pesa confirmation code below.
+                  <div className="rounded-md border border-green-200 bg-green-50 p-4 text-sm text-green-950">
+                    <p className="font-semibold">
+                      Pay KES {magazine.price} to the church PayBill, then submit the M-Pesa confirmation code below.
+                    </p>
+                    <div className="mt-3 grid gap-2">
+                      <div className="flex items-center justify-between gap-4 rounded bg-white/70 px-3 py-2">
+                        <span className="font-medium text-green-800">PayBill No.</span>
+                        <span className="font-bold tracking-wide">308937</span>
+                      </div>
+                      <div className="flex items-center justify-between gap-4 rounded bg-white/70 px-3 py-2">
+                        <span className="font-medium text-green-800">Account Name</span>
+                        <span className="text-right font-bold">Your phone number</span>
+                      </div>
+                    </div>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="name">Full Name</Label>

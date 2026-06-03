@@ -1,5 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Heart, ShoppingBag, Users, TrendingUp, FileText } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { getMagazinePayments } from "@/app/actions/orders";
+import { formatCurrency } from "@/lib/utils";
+import { Heart, ShoppingBag, Clock, FileText, Mail } from "lucide-react";
 import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 import { Donation } from "@/types";
@@ -16,11 +19,12 @@ export default async function AdminDashboard() {
   
   const totalDonations = donationsData?.reduce((sum, d) => sum + Number(d.amount), 0) || 0;
 
-  // Fetch total orders (placeholder for now as orders table might be empty/not exist)
-  const { count: ordersCount } = await supabase
-    .from("payments")
-    .select("*", { count: 'exact', head: true })
-    .eq("type", "purchase");
+  const magazinePayments = await getMagazinePayments();
+  const paidMagazineRevenue = magazinePayments
+    .filter((payment) => payment.status === "success")
+    .reduce((sum, payment) => sum + Number(payment.amount), 0);
+  const pendingOrders = magazinePayments.filter((payment) => payment.status === "pending").length;
+  const deliveredOrders = magazinePayments.filter((payment) => payment.delivered_at).length;
 
   // Fetch recent donations
   const { data: recentDonations } = await supabase
@@ -36,9 +40,9 @@ export default async function AdminDashboard() {
 
   const stats = [
     { title: "Total Donations", value: `KES ${totalDonations.toLocaleString()}`, icon: Heart, color: "text-red-500" },
-    { title: "Magazine Orders", value: ordersCount?.toString() || "0", icon: ShoppingBag, color: "text-blue-500" },
+    { title: "Magazine Sales", value: formatCurrency(paidMagazineRevenue), icon: ShoppingBag, color: "text-blue-500" },
     { title: "Active Magazines", value: magazinesCount?.toString() || "0", icon: FileText, color: "text-green-500" },
-    { title: "Engagement", value: "0%", icon: TrendingUp, color: "text-secondary" }, // Placeholder
+    { title: "Pending Orders", value: pendingOrders.toLocaleString(), icon: Clock, color: "text-amber-500" },
   ];
 
   return (
@@ -97,9 +101,44 @@ export default async function AdminDashboard() {
             <CardTitle>Recent Orders</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4 text-center py-8">
-              <ShoppingBag className="h-12 w-12 text-muted-foreground/30 mx-auto mb-2" />
-              <p className="text-sm text-muted-foreground">E-shop integration coming soon.</p>
+            <div className="space-y-4">
+              {magazinePayments.length === 0 ? (
+                <div className="space-y-4 py-8 text-center">
+                  <ShoppingBag className="mx-auto mb-2 h-12 w-12 text-muted-foreground/30" />
+                  <p className="text-sm text-muted-foreground">No magazine orders yet.</p>
+                </div>
+              ) : (
+                magazinePayments.slice(0, 5).map((payment) => (
+                  <div key={payment.id} className="flex items-center justify-between border-b pb-4 last:border-0 last:pb-0">
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-medium">{payment.customer_name}</p>
+                      <p className="truncate text-xs text-muted-foreground">{payment.product_title}</p>
+                      <p className="text-xs text-muted-foreground">{payment.mpesa_receipt || "No M-Pesa code"}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-sm font-bold">{formatCurrency(payment.amount)}</p>
+                      <Badge variant={payment.delivered_at ? "default" : "secondary"} className="mt-1 gap-1">
+                        {payment.delivered_at ? (
+                          <>
+                            <Mail className="h-3 w-3" />
+                            Sent
+                          </>
+                        ) : (
+                          <>
+                            <Clock className="h-3 w-3" />
+                            Review
+                          </>
+                        )}
+                      </Badge>
+                    </div>
+                  </div>
+                ))
+              )}
+              {magazinePayments.length > 0 && (
+                <p className="text-xs text-muted-foreground">
+                  {deliveredOrders.toLocaleString()} of {magazinePayments.length.toLocaleString()} order emails sent.
+                </p>
+              )}
             </div>
           </CardContent>
         </Card>
