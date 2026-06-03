@@ -45,7 +45,7 @@ type FlipBookRef = {
 
 type MagazinePageProps = {
   children: ReactNode;
-  pageNumber: number;
+  pageLabel: string;
 };
 
 type DragState = {
@@ -59,16 +59,34 @@ type DragState = {
 const MIN_ZOOM = 0.85;
 const MAX_ZOOM = 2.25;
 const DEFAULT_ASPECT_RATIO = 1.414;
+const MOBILE_BREAKPOINT = 768;
+const LANDSCAPE_SPLIT_THRESHOLD = 1.1;
+
+type SourcePage = {
+  pageNumber: number;
+  aspectRatio: number;
+};
+
+type ReaderPageSegment = "full" | "left" | "right";
+
+type ReaderPage = {
+  id: string;
+  pageNumber: number;
+  segment: ReaderPageSegment;
+  aspectRatio: number;
+  sourceAspectRatio: number;
+  label: string;
+};
 
 const MagazinePage = forwardRef<HTMLDivElement, MagazinePageProps>(
-  ({ children, pageNumber }, ref) => (
+  ({ children, pageLabel }, ref) => (
     <div
       ref={ref}
       className="relative flex h-full w-full items-center justify-center overflow-hidden bg-white shadow-2xl ring-1 ring-black/15"
     >
       {children}
       <span className="absolute bottom-3 right-4 rounded bg-white/85 px-2 py-1 text-xs font-medium text-zinc-500 shadow-sm">
-        {pageNumber}
+        {pageLabel}
       </span>
     </div>
   )
@@ -90,10 +108,19 @@ function getViewportSize() {
   };
 }
 
-function getReaderSize(aspectRatio: number, zoom: number, viewport: { width: number; height: number }) {
-  const headerHeight = viewport.width >= 768 ? 118 : 156;
-  const footerHeight = 42;
-  const horizontalPadding = viewport.width >= 1024 ? 88 : 24;
+function isMobileViewport(viewport: { width: number; height: number }) {
+  return viewport.width < MOBILE_BREAKPOINT;
+}
+
+function getReaderSize(
+  aspectRatio: number,
+  zoom: number,
+  viewport: { width: number; height: number },
+  isMobileReader: boolean
+) {
+  const headerHeight = isMobileReader ? 58 : 118;
+  const footerHeight = isMobileReader ? 34 : 42;
+  const horizontalPadding = isMobileReader ? 0 : viewport.width >= 1024 ? 88 : 24;
   const availableWidth = Math.max(320, viewport.width - horizontalPadding);
   const availableHeight = Math.max(360, viewport.height - headerHeight - footerHeight);
   const baseWidth = Math.min(availableWidth, availableHeight * aspectRatio);
@@ -108,6 +135,89 @@ function formatPercent(value: number) {
   return `${Math.round(value * 100)}%`;
 }
 
+function buildReaderPages(sourcePages: SourcePage[], splitLandscapePages: boolean) {
+  return sourcePages.flatMap<ReaderPage>((sourcePage) => {
+    if (splitLandscapePages && sourcePage.aspectRatio > LANDSCAPE_SPLIT_THRESHOLD) {
+      const halfAspectRatio = clamp(sourcePage.aspectRatio / 2, 0.55, 0.9);
+
+      return [
+        {
+          id: `${sourcePage.pageNumber}-left`,
+          pageNumber: sourcePage.pageNumber,
+          segment: "left",
+          aspectRatio: halfAspectRatio,
+          sourceAspectRatio: sourcePage.aspectRatio,
+          label: `${sourcePage.pageNumber}L`,
+        },
+        {
+          id: `${sourcePage.pageNumber}-right`,
+          pageNumber: sourcePage.pageNumber,
+          segment: "right",
+          aspectRatio: halfAspectRatio,
+          sourceAspectRatio: sourcePage.aspectRatio,
+          label: `${sourcePage.pageNumber}R`,
+        },
+      ];
+    }
+
+    return [
+      {
+        id: `${sourcePage.pageNumber}-full`,
+        pageNumber: sourcePage.pageNumber,
+        segment: "full",
+        aspectRatio: clamp(sourcePage.aspectRatio, 0.55, 1.8),
+        sourceAspectRatio: sourcePage.aspectRatio,
+        label: String(sourcePage.pageNumber),
+      },
+    ];
+  });
+}
+
+function getReaderPageDescription(readerPage?: ReaderPage) {
+  if (!readerPage || readerPage.segment === "full") {
+    return null;
+  }
+
+  return readerPage.segment === "left" ? "left half" : "right half";
+}
+
+function ReaderPageContent({
+  readerPage,
+  readerSize,
+}: {
+  readerPage: ReaderPage;
+  readerSize: { width: number; height: number };
+}) {
+  const sourceWidth = Math.round(readerSize.height * readerPage.sourceAspectRatio);
+  const offsetX = readerPage.segment === "right" ? -sourceWidth / 2 : 0;
+  const left = readerPage.segment === "full" ? (readerSize.width - sourceWidth) / 2 : 0;
+
+  return (
+    <div className="relative h-full w-full overflow-hidden bg-white">
+      <div
+        className="absolute top-0 h-full"
+        style={{
+          left,
+          width: sourceWidth,
+          transform: `translateX(${offsetX}px)`,
+        }}
+      >
+        <Page
+          pageNumber={readerPage.pageNumber}
+          height={readerSize.height}
+          renderAnnotationLayer={false}
+          renderTextLayer={false}
+          loading={
+            <div className="flex h-full items-center justify-center text-sm text-zinc-500">
+              Rendering page {readerPage.label}...
+            </div>
+          }
+        />
+      </div>
+    </div>
+  );
+}
+
 export function MagazineReader({ title, pdfUrl }: MagazineReaderProps) {
   const bookRef = useRef<FlipBookRef>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
@@ -118,7 +228,7 @@ export function MagazineReader({ title, pdfUrl }: MagazineReaderProps) {
     scrollLeft: 0,
     scrollTop: 0,
   });
-  const [numPages, setNumPages] = useState(0);
+  const [sourcePages, setSourcePages] = useState<SourcePage[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [loadError, setLoadError] = useState(false);
   const [pdfObjectUrl, setPdfObjectUrl] = useState<string | null>(null);
@@ -129,16 +239,26 @@ export function MagazineReader({ title, pdfUrl }: MagazineReaderProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
-  const pages = useMemo(() => {
-    return Array.from({ length: numPages }, (_, index) => index + 1);
-  }, [numPages]);
+  const isMobileReader = isMobileViewport(viewportSize);
+  const readerPages = useMemo(
+    () => buildReaderPages(sourcePages, isMobileReader),
+    [sourcePages, isMobileReader]
+  );
+  const readerPageCount = readerPages.length;
+  const safeCurrentPage = readerPageCount > 0 ? clamp(currentPage, 0, readerPageCount - 1) : 0;
+  const activeReaderPage = readerPages[safeCurrentPage];
+  const activePageDescription = getReaderPageDescription(activeReaderPage);
+  const readerAspectRatio = isMobileReader
+    ? activeReaderPage?.aspectRatio ?? 1 / DEFAULT_ASPECT_RATIO
+    : aspectRatio;
+  const effectiveZoom = isMobileReader ? 1 : zoom;
 
   const readerSize = useMemo(
-    () => getReaderSize(aspectRatio, zoom, viewportSize),
-    [aspectRatio, zoom, viewportSize]
+    () => getReaderSize(readerAspectRatio, effectiveZoom, viewportSize, isMobileReader),
+    [readerAspectRatio, effectiveZoom, viewportSize, isMobileReader]
   );
-  const isPanEnabled = zoom > 1.05;
-  const bookKey = `${readerSize.width}x${readerSize.height}:${isPanEnabled ? "pan" : "flip"}`;
+  const isPanEnabled = !isMobileReader && effectiveZoom > 1.05;
+  const bookKey = `${isMobileReader ? "mobile" : "desktop"}:${readerPageCount}:${readerSize.width}x${readerSize.height}:${isPanEnabled ? "pan" : "flip"}`;
 
   useEffect(() => {
     const controller = new AbortController();
@@ -223,16 +343,33 @@ export function MagazineReader({ title, pdfUrl }: MagazineReaderProps) {
     }
   }
 
-  async function detectMagazineShape(pdf: {
+  async function loadSourcePages(pdf: {
     numPages: number;
     getPage: (pageNumber: number) => Promise<{
       getViewport: (options: { scale: number }) => { width: number; height: number };
     }>;
   }) {
-    const samplePageNumber = Math.min(2, pdf.numPages);
-    const page = await pdf.getPage(samplePageNumber);
-    const viewport = page.getViewport({ scale: 1 });
-    setAspectRatio(clamp(viewport.width / viewport.height, 0.7, 1.8));
+    const pageMetrics = await Promise.all(
+      Array.from({ length: pdf.numPages }, async (_, index) => {
+        const pageNumber = index + 1;
+        const page = await pdf.getPage(pageNumber);
+        const viewport = page.getViewport({ scale: 1 });
+
+        return {
+          pageNumber,
+          aspectRatio: viewport.width / viewport.height,
+        };
+      })
+    );
+
+    setSourcePages(pageMetrics);
+    setAspectRatio(
+      clamp(
+        pageMetrics[Math.min(1, pageMetrics.length - 1)]?.aspectRatio ?? DEFAULT_ASPECT_RATIO,
+        0.7,
+        1.8
+      )
+    );
   }
 
   function changeZoom(nextZoom: number) {
@@ -305,23 +442,23 @@ export function MagazineReader({ title, pdfUrl }: MagazineReaderProps) {
   return (
     <main className="min-h-screen bg-zinc-950 text-white">
       <div className="flex min-h-screen flex-col">
-        <header className="border-b border-white/10 bg-zinc-950/95 px-4 py-4 backdrop-blur md:px-8">
+        <header className="border-b border-white/10 bg-zinc-950/95 px-3 py-2 backdrop-blur md:px-8 md:py-4">
           <div className="mx-auto flex max-w-[1800px] flex-col gap-3 md:flex-row md:items-center md:justify-between">
-            <div>
+            <div className="hidden md:block">
               <h1 className="text-xl font-semibold md:text-2xl">{title}</h1>
               <p className="mt-1 text-sm text-white/55">
                 Swipe or use the arrows to turn pages. Zoom in to drag and pan.
               </p>
             </div>
 
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex w-full flex-wrap items-center gap-2 md:w-auto">
               <Button
                 type="button"
                 variant="secondary"
                 size="sm"
                 className="gap-2"
                 onClick={flipPreviousPage}
-                disabled={currentPage === 0}
+                disabled={safeCurrentPage === 0}
               >
                 <ChevronLeft className="h-4 w-4" />
                 Previous
@@ -332,7 +469,7 @@ export function MagazineReader({ title, pdfUrl }: MagazineReaderProps) {
                 size="sm"
                 className="gap-2"
                 onClick={flipNextPage}
-                disabled={numPages === 0 || currentPage >= numPages - 1}
+                disabled={readerPageCount === 0 || safeCurrentPage >= readerPageCount - 1}
               >
                 Next
                 <ChevronRight className="h-4 w-4" />
@@ -342,19 +479,21 @@ export function MagazineReader({ title, pdfUrl }: MagazineReaderProps) {
                 variant="secondary"
                 size="sm"
                 title="Zoom out"
-                onClick={() => changeZoom(zoom - 0.15)}
-                disabled={zoom <= MIN_ZOOM}
+                onClick={() => changeZoom(effectiveZoom - 0.15)}
+                disabled={effectiveZoom <= MIN_ZOOM}
+                className="hidden md:inline-flex"
               >
                 <ZoomOut className="h-4 w-4" />
               </Button>
-              <span className="min-w-12 text-center text-xs text-white/55">{formatPercent(zoom)}</span>
+              <span className="hidden min-w-12 text-center text-xs text-white/55 md:inline-block">{formatPercent(effectiveZoom)}</span>
               <Button
                 type="button"
                 variant="secondary"
                 size="sm"
                 title="Zoom in"
-                onClick={() => changeZoom(zoom + 0.15)}
-                disabled={zoom >= MAX_ZOOM}
+                onClick={() => changeZoom(effectiveZoom + 0.15)}
+                disabled={effectiveZoom >= MAX_ZOOM}
+                className="hidden md:inline-flex"
               >
                 <ZoomIn className="h-4 w-4" />
               </Button>
@@ -373,7 +512,7 @@ export function MagazineReader({ title, pdfUrl }: MagazineReaderProps) {
 
         <section
           ref={viewportRef}
-          className={`relative flex flex-1 overflow-auto bg-[radial-gradient(circle_at_center,#1d2028_0,#090a0d_62%)] p-4 md:p-6 ${
+          className={`relative flex flex-1 overflow-auto bg-[radial-gradient(circle_at_center,#1d2028_0,#090a0d_62%)] p-0 md:p-6 ${
             isPanEnabled ? (isDragging ? "cursor-grabbing" : "cursor-grab") : ""
           }`}
           onPointerDown={handlePointerDown}
@@ -410,12 +549,11 @@ export function MagazineReader({ title, pdfUrl }: MagazineReaderProps) {
                   </div>
                 }
                 onLoadSuccess={(pdf) => {
-                  setNumPages(pdf.numPages);
-                  detectMagazineShape(pdf);
+                  void loadSourcePages(pdf);
                 }}
                 onLoadError={() => setLoadError(true)}
               >
-                {numPages > 0 && (
+                {readerPageCount > 0 ? (
                   <div
                     className="mx-auto"
                     style={{
@@ -432,7 +570,7 @@ export function MagazineReader({ title, pdfUrl }: MagazineReaderProps) {
                         maxWidth: readerSize.width,
                         height: readerSize.height,
                       }}
-                      startPage={currentPage}
+                      startPage={safeCurrentPage}
                       size="fixed"
                       width={readerSize.width}
                       height={readerSize.height}
@@ -469,22 +607,20 @@ export function MagazineReader({ title, pdfUrl }: MagazineReaderProps) {
                         }
                       }}
                     >
-                      {pages.map((pageNumber) => (
-                        <MagazinePage key={pageNumber} pageNumber={pageNumber}>
-                          <Page
-                            pageNumber={pageNumber}
-                            height={readerSize.height}
-                            renderAnnotationLayer={false}
-                            renderTextLayer={false}
-                            loading={
-                              <div className="flex h-full items-center justify-center text-sm text-zinc-500">
-                                Rendering page {pageNumber}...
-                              </div>
-                            }
+                      {readerPages.map((readerPage) => (
+                        <MagazinePage key={readerPage.id} pageLabel={readerPage.label}>
+                          <ReaderPageContent
+                            readerPage={readerPage}
+                            readerSize={readerSize}
                           />
                         </MagazinePage>
                       ))}
                     </HTMLFlipBook>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-3 text-sm text-white/70">
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                    Preparing magazine pages...
                   </div>
                 )}
               </Document>
@@ -499,7 +635,8 @@ export function MagazineReader({ title, pdfUrl }: MagazineReaderProps) {
         </section>
 
         <footer className="border-t border-white/10 bg-zinc-950 px-4 py-2 text-center text-sm text-white/50">
-          Page {Math.min(currentPage + 1, numPages || 1)} of {numPages || "..."}
+          Page {Math.min(safeCurrentPage + 1, readerPageCount || 1)} of {readerPageCount || "..."}
+          {activePageDescription ? ` - PDF page ${activeReaderPage?.pageNumber}, ${activePageDescription}` : ""}
         </footer>
       </div>
     </main>
