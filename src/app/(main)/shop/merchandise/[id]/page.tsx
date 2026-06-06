@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { getMerchandiseById } from "@/app/actions/merchandise";
-import { MerchClient } from "./merch-client";
+import { MerchCheckoutHub } from "./merch-checkout-hub";
 import { Merchandise } from "@/types";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
 
@@ -38,5 +38,5 @@ export default async function MerchDetailPage(props: { params: Promise<{ id: str
     }
   }
 
-  return <MerchClient merch={merch} imageUrl={imageUrl} />;
+  return <MerchCheckoutHub merch={merch} imageUrl={imageUrl} />;
 }

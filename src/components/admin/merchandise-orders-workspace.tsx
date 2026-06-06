@@ -1,27 +1,34 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import type { PurchasePaymentRow } from "@/app/actions/orders";
-import { OrderActions } from "@/components/admin/order-actions";
+import type { FulfillmentStatus, PurchasePaymentRow } from "@/app/actions/orders";
+import { MerchandiseOrderActions } from "@/components/admin/merchandise-order-actions";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { formatCurrency } from "@/lib/utils";
 import {
-  CheckCircle2,
   ChevronDown,
   Clock,
-  Mail,
+  MapPin,
+  Package,
   Phone,
   Receipt,
   Search,
+  Truck,
   User,
 } from "lucide-react";
 
-type OrderFilter = "all" | "pending" | "success" | "manual" | "delivered" | "failed";
+type OrderFilter =
+  | "all"
+  | "pending"
+  | "confirmed"
+  | "fulfillment"
+  | "delivered"
+  | "failed";
 
-type OrdersWorkspaceProps = {
+type MerchandiseOrdersWorkspaceProps = {
   payments: PurchasePaymentRow[];
 };
 
@@ -31,8 +38,15 @@ function statusVariant(status: string) {
   return "secondary";
 }
 
+function fulfillmentVariant(status: FulfillmentStatus) {
+  if (status === "delivered") return "default";
+  if (status === "cancelled") return "destructive";
+  if (status === "pending") return "secondary";
+  return "outline";
+}
+
 function formatDate(value: string | null) {
-  if (!value) return "Not sent";
+  if (!value) return "—";
 
   return new Intl.DateTimeFormat("en-KE", {
     dateStyle: "medium",
@@ -49,15 +63,35 @@ function getInitials(name: string) {
     .toUpperCase() || "CU";
 }
 
+const fulfillmentLabels: Record<FulfillmentStatus, string> = {
+  pending: "Awaiting confirmation",
+  confirmed: "Confirmed",
+  ready_for_pickup: "Ready for pickup",
+  shipped: "Shipped",
+  delivered: "Delivered",
+  cancelled: "Cancelled",
+};
+
 function matchesFilter(payment: PurchasePaymentRow, filter: OrderFilter) {
   if (filter === "all") return true;
-  if (filter === "manual") return payment.is_manual;
-  if (filter === "delivered") return Boolean(payment.delivered_at);
+  if (filter === "pending") return payment.status === "pending";
+  if (filter === "confirmed") {
+    return (
+      payment.status === "success" &&
+      ["confirmed", "ready_for_pickup", "shipped"].includes(payment.fulfillment_status)
+    );
+  }
+  if (filter === "fulfillment") {
+    return ["ready_for_pickup", "shipped"].includes(payment.fulfillment_status);
+  }
+  if (filter === "delivered") return payment.fulfillment_status === "delivered";
   if (filter === "failed") return payment.status === "failed";
-  return payment.status === filter;
+  return true;
 }
 
-export function OrdersWorkspace({ payments }: OrdersWorkspaceProps) {
+export function MerchandiseOrdersWorkspace({
+  payments,
+}: MerchandiseOrdersWorkspaceProps) {
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<OrderFilter>("all");
   const [expandedId, setExpandedId] = useState<string | null>(payments[0]?.id ?? null);
@@ -66,9 +100,19 @@ export function OrdersWorkspace({ payments }: OrdersWorkspaceProps) {
     return {
       all: payments.length,
       pending: payments.filter((payment) => payment.status === "pending").length,
-      success: payments.filter((payment) => payment.status === "success").length,
-      manual: payments.filter((payment) => payment.is_manual).length,
-      delivered: payments.filter((payment) => payment.delivered_at).length,
+      confirmed: payments.filter(
+        (payment) =>
+          payment.status === "success" &&
+          ["confirmed", "ready_for_pickup", "shipped"].includes(
+            payment.fulfillment_status
+          )
+      ).length,
+      fulfillment: payments.filter((payment) =>
+        ["ready_for_pickup", "shipped"].includes(payment.fulfillment_status)
+      ).length,
+      delivered: payments.filter(
+        (payment) => payment.fulfillment_status === "delivered"
+      ).length,
       failed: payments.filter((payment) => payment.status === "failed").length,
     };
   }, [payments]);
@@ -82,6 +126,7 @@ export function OrdersWorkspace({ payments }: OrdersWorkspaceProps) {
         payment.customer_email,
         payment.phone,
         payment.product_title,
+        payment.delivery_address,
         payment.mpesa_receipt,
         payment.checkout_request_id,
       ]
@@ -96,19 +141,20 @@ export function OrdersWorkspace({ payments }: OrdersWorkspaceProps) {
   const filters: Array<{ label: string; value: OrderFilter; count: number }> = [
     { label: "All", value: "all", count: counts.all },
     { label: "Pending", value: "pending", count: counts.pending },
-    { label: "Paid", value: "success", count: counts.success },
-    { label: "Manual", value: "manual", count: counts.manual },
-    { label: "Email sent", value: "delivered", count: counts.delivered },
+    { label: "To fulfill", value: "confirmed", count: counts.confirmed },
+    { label: "In transit", value: "fulfillment", count: counts.fulfillment },
+    { label: "Delivered", value: "delivered", count: counts.delivered },
     { label: "Rejected", value: "failed", count: counts.failed },
   ];
 
   return (
     <div className="space-y-4">
       <p className="text-sm text-muted-foreground leading-relaxed">
-        Magazine orders are digital. After verifying the buyer&apos;s M-Pesa PayBill payment,
-        confirm the order to email them a secure reader link. Use{" "}
-        <span className="font-medium text-foreground">Other Actions</span> when a code
-        cannot be confirmed, the buyer needs follow-up, or you need to resend the email.
+        Merchandise orders require physical handover. Confirm the M-Pesa payment first,
+        then track whether the item is ready for parish pickup, out for delivery, or
+        completed. Use{" "}
+        <span className="font-medium text-foreground">Other Actions</span> to reject
+        invalid payments, correct M-Pesa codes, or note collection arrangements.
       </p>
 
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
@@ -117,7 +163,7 @@ export function OrdersWorkspace({ payments }: OrdersWorkspaceProps) {
           <Input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Search name, email, phone, M-Pesa code, or magazine title"
+            placeholder="Search buyer, item, address, phone, or M-Pesa code"
             className="pl-9"
           />
         </div>
@@ -141,18 +187,18 @@ export function OrdersWorkspace({ payments }: OrdersWorkspaceProps) {
       </div>
 
       <div className="rounded-md border">
-        <div className="hidden grid-cols-[1.35fr_1fr_0.85fr_0.8fr_0.8fr_auto] gap-4 border-b bg-muted/40 px-4 py-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground lg:grid">
+        <div className="hidden grid-cols-[1.2fr_1fr_0.85fr_0.75fr_0.9fr_auto] gap-4 border-b bg-muted/40 px-4 py-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground lg:grid">
           <span>Customer</span>
-          <span>Magazine</span>
+          <span>Item</span>
           <span>Payment</span>
           <span>Status</span>
-          <span>Delivery</span>
+          <span>Fulfillment</span>
           <span className="text-right">Details</span>
         </div>
 
         {filteredPayments.length === 0 ? (
           <div className="py-12 text-center text-sm text-muted-foreground">
-            No magazine orders match this view.
+            No merchandise orders match this view.
           </div>
         ) : (
           filteredPayments.map((payment) => {
@@ -163,21 +209,26 @@ export function OrdersWorkspace({ payments }: OrdersWorkspaceProps) {
                 <button
                   type="button"
                   onClick={() => setExpandedId(isExpanded ? null : payment.id)}
-                  className="grid w-full gap-4 px-4 py-4 text-left transition hover:bg-muted/30 lg:grid-cols-[1.35fr_1fr_0.85fr_0.8fr_0.8fr_auto] lg:items-center"
+                  className="grid w-full gap-4 px-4 py-4 text-left transition hover:bg-muted/30 lg:grid-cols-[1.2fr_1fr_0.85fr_0.75fr_0.9fr_auto] lg:items-center"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-secondary/20 text-sm font-bold text-secondary-foreground">
                       {getInitials(payment.customer_name)}
                     </div>
                     <div className="min-w-0">
                       <div className="truncate font-medium">{payment.customer_name}</div>
-                      <div className="truncate text-xs text-muted-foreground">{payment.customer_email || "No email"}</div>
-                      <div className="text-xs text-muted-foreground">{payment.phone || "No phone"}</div>
+                      <div className="truncate text-xs text-muted-foreground">{payment.phone || "No phone"}</div>
                     </div>
                   </div>
                   <div>
                     <div className="font-medium">{payment.product_title}</div>
-                    <div className="text-xs text-muted-foreground">{formatDate(payment.created_at)}</div>
+                    <div className="text-xs text-muted-foreground">
+                      {payment.delivery_preference === "pickup"
+                        ? "Parish pickup"
+                        : payment.delivery_preference === "delivery"
+                          ? "Delivery"
+                          : "Preference not set"}
+                    </div>
                   </div>
                   <div>
                     <div className="font-semibold">{formatCurrency(payment.amount)}</div>
@@ -186,25 +237,18 @@ export function OrdersWorkspace({ payments }: OrdersWorkspaceProps) {
                       {payment.mpesa_receipt || "No code"}
                     </div>
                   </div>
-                  <div className="flex flex-wrap gap-2">
+                  <div>
                     <Badge variant={statusVariant(payment.status)}>{payment.status}</Badge>
-                    {payment.is_manual && <Badge variant="secondary">Manual</Badge>}
                   </div>
                   <div>
-                    {payment.delivered_at ? (
-                      <div className="flex items-center gap-2 text-sm text-green-600">
-                        <CheckCircle2 className="h-4 w-4" />
-                        Sent
-                      </div>
-                    ) : (
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <Clock className="h-4 w-4" />
-                        Waiting
-                      </div>
-                    )}
+                    <Badge variant={fulfillmentVariant(payment.fulfillment_status)}>
+                      {fulfillmentLabels[payment.fulfillment_status]}
+                    </Badge>
                   </div>
                   <div className="flex items-center justify-between gap-2 lg:justify-end">
-                    <ChevronDown className={`h-4 w-4 text-muted-foreground transition ${isExpanded ? "rotate-180" : ""}`} />
+                    <ChevronDown
+                      className={`h-4 w-4 text-muted-foreground transition ${isExpanded ? "rotate-180" : ""}`}
+                    />
                   </div>
                 </button>
 
@@ -215,21 +259,27 @@ export function OrdersWorkspace({ payments }: OrdersWorkspaceProps) {
                         <CardContent className="space-y-3 p-4">
                           <div className="flex items-center gap-2 text-sm font-semibold">
                             <User className="h-4 w-4" />
-                            Buyer Details
+                            Buyer &amp; Delivery
                           </div>
                           <div className="grid gap-2 text-sm">
-                            <div className="flex items-center gap-2 text-muted-foreground">
-                              <Mail className="h-4 w-4" />
-                              <span>{payment.customer_email || "No email captured"}</span>
-                            </div>
                             <div className="flex items-center gap-2 text-muted-foreground">
                               <Phone className="h-4 w-4" />
                               <span>{payment.phone || "No phone captured"}</span>
                             </div>
+                            <div className="flex items-start gap-2 text-muted-foreground">
+                              <MapPin className="mt-0.5 h-4 w-4 shrink-0" />
+                              <span>
+                                {payment.delivery_address ||
+                                  (payment.delivery_preference === "pickup"
+                                    ? "Parish pickup — contact buyer to arrange time"
+                                    : "No delivery address provided")}
+                              </span>
+                            </div>
                           </div>
                           <p className="text-xs leading-relaxed text-muted-foreground">
-                            The reader email goes to the address above. If it is wrong,
-                            use Other Actions to flag follow-up before confirming.
+                            Contact the buyer by phone after confirming payment to
+                            coordinate collection at the parish or delivery within
+                            South C and surrounding areas.
                           </p>
                         </CardContent>
                       </Card>
@@ -237,32 +287,36 @@ export function OrdersWorkspace({ payments }: OrdersWorkspaceProps) {
                       <Card>
                         <CardContent className="space-y-3 p-4">
                           <div className="flex items-center gap-2 text-sm font-semibold">
-                            <Receipt className="h-4 w-4" />
-                            Payment Trail
+                            <Package className="h-4 w-4" />
+                            Order Timeline
                           </div>
                           <dl className="grid gap-2 text-sm">
+                            <div className="flex justify-between gap-4">
+                              <dt className="text-muted-foreground">Ordered</dt>
+                              <dd>{formatDate(payment.created_at)}</dd>
+                            </div>
                             <div className="flex justify-between gap-4">
                               <dt className="text-muted-foreground">M-Pesa code</dt>
                               <dd className="font-medium">{payment.mpesa_receipt || "Not provided"}</dd>
                             </div>
                             <div className="flex justify-between gap-4">
-                              <dt className="text-muted-foreground">Checkout ref</dt>
-                              <dd className="max-w-[220px] truncate font-mono text-xs">{payment.checkout_request_id}</dd>
-                            </div>
-                            <div className="flex justify-between gap-4">
-                              <dt className="text-muted-foreground">Reader email sent</dt>
-                              <dd className="text-right">{formatDate(payment.delivered_at)}</dd>
+                              <dt className="text-muted-foreground">Fulfillment</dt>
+                              <dd>{fulfillmentLabels[payment.fulfillment_status]}</dd>
                             </div>
                           </dl>
-                          <p className="text-xs leading-relaxed text-muted-foreground">
-                            Cross-check the M-Pesa code and amount in your PayBill statement
-                            (308937) before clicking Confirm &amp; send.
-                          </p>
+                          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                            <Truck className="h-3.5 w-3.5" />
+                            <Clock className="h-3.5 w-3.5" />
+                            <span>
+                              Update fulfillment as the order moves from confirmed →
+                              ready → shipped → delivered.
+                            </span>
+                          </div>
                         </CardContent>
                       </Card>
 
                       <div className="xl:col-span-2">
-                        <OrderActions payment={payment} />
+                        <MerchandiseOrderActions payment={payment} />
                       </div>
                     </div>
                   </div>

@@ -6,18 +6,22 @@ import {
   sendOrderPlacedEmails,
 } from "@/lib/order-emails";
 
-type ManualPaymentRequest = {
-  product_id: string;
+type ManualMerchandisePaymentRequest = {
+  merchandise_id: string;
   name: string;
   email: string;
   phone: string;
   mpesa_code: string;
+  delivery_preference: "pickup" | "delivery";
+  delivery_address?: string;
 };
 
-type ProductRecord = {
+type MerchandiseRecord = {
   id: string;
   title: string;
   price: number;
+  category: string;
+  in_stock: boolean;
 };
 
 function getAdminClient() {
@@ -52,14 +56,16 @@ function isValidEmail(email: string) {
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json() as ManualPaymentRequest;
+    const body = (await req.json()) as ManualMerchandisePaymentRequest;
     const name = body.name?.trim();
     const email = body.email?.trim().toLowerCase();
     const phone = normalizePhone(body.phone || "");
     const mpesaCode = normalizeMpesaCode(body.mpesa_code || "");
+    const deliveryPreference = body.delivery_preference;
+    const deliveryAddress = body.delivery_address?.trim() || "";
 
-    if (!body.product_id) {
-      throw new Error("Magazine is required");
+    if (!body.merchandise_id) {
+      throw new Error("Merchandise item is required");
     }
     if (!name) {
       throw new Error("Name is required");
@@ -73,36 +79,52 @@ export async function POST(req: Request) {
     if (!mpesaCode) {
       throw new Error("M-Pesa code is required");
     }
-
-    const supabase = getAdminClient();
-    const { data: product, error: productError } = await supabase
-      .from("products")
-      .select("id,title,price")
-      .eq("id", body.product_id)
-      .single<ProductRecord>();
-
-    if (productError) throw productError;
-    if (!product) {
-      throw new Error("Magazine not found");
+    if (deliveryPreference !== "pickup" && deliveryPreference !== "delivery") {
+      throw new Error("Please choose pickup or delivery");
+    }
+    if (deliveryPreference === "delivery" && !deliveryAddress) {
+      throw new Error("Delivery address is required for home delivery");
     }
 
-    const checkoutRequestId = `manual-${randomUUID()}`;
+    const supabase = getAdminClient();
+    const { data: merchandise, error: merchandiseError } = await supabase
+      .from("merchandise")
+      .select("id,title,price,category,in_stock")
+      .eq("id", body.merchandise_id)
+      .single<MerchandiseRecord>();
+
+    if (merchandiseError) throw merchandiseError;
+    if (!merchandise) {
+      throw new Error("Merchandise item not found");
+    }
+    if (!merchandise.in_stock) {
+      throw new Error("This item is currently out of stock");
+    }
+
+    const checkoutRequestId = `manual-merch-${randomUUID()}`;
     const { data: payment, error: paymentError } = await supabase
       .from("payments")
       .insert({
         type: "purchase",
-        amount: product.price,
+        amount: merchandise.price,
         phone,
         status: "pending",
         checkout_request_id: checkoutRequestId,
         mpesa_receipt: mpesaCode,
-        product_id: product.id,
+        product_id: merchandise.id,
         metadata: {
           manual: true,
-          product_kind: "magazine",
+          product_kind: "merchandise",
           name,
           email,
-          title: product.title,
+          title: merchandise.title,
+          category: merchandise.category,
+          delivery_preference: deliveryPreference,
+          delivery_address:
+            deliveryPreference === "delivery" ? deliveryAddress : "",
+          fulfillment: {
+            status: "pending",
+          },
           submitted_at: new Date().toISOString(),
         },
       })
@@ -115,30 +137,33 @@ export async function POST(req: Request) {
       buildOrderEmailContext(
         {
           id: payment.id,
-          amount: product.price,
+          amount: merchandise.price,
           phone,
           mpesa_receipt: mpesaCode,
           metadata: {
             email,
             name,
-            title: product.title,
-            product_kind: "magazine",
+            title: merchandise.title,
+            product_kind: "merchandise",
+            delivery_preference: deliveryPreference,
+            delivery_address:
+              deliveryPreference === "delivery" ? deliveryAddress : "",
           },
         },
-        "magazine",
-        product.title
+        "merchandise",
+        merchandise.title
       )
     ).catch((error) => {
-      console.error("Magazine order placed email error:", error);
+      console.error("Merchandise order placed email error:", error);
     });
 
     return NextResponse.json({
       success: true,
       payment_id: payment.id,
-      message: "Payment submitted for manual confirmation",
+      message: "Order submitted for manual confirmation",
     });
   } catch (error: unknown) {
-    console.error("Manual payment error:", error);
+    console.error("Manual merchandise payment error:", error);
     return NextResponse.json(
       { success: false, error: getErrorMessage(error) },
       { status: 400 }

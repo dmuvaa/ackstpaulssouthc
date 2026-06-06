@@ -19,14 +19,16 @@ interface MerchClientProps {
 }
 
 export function MerchClient({ merch, imageUrl }: MerchClientProps) {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [checkoutId, setCheckoutId] = useState<string | null>(null);
 
   const handleCheckout = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!phone) {
-      toast.error("Please enter your M-Pesa phone number");
+    if (!name || !email || !phone) {
+      toast.error("Please enter your name, email, and M-Pesa phone number");
       return;
     }
 
@@ -41,8 +43,14 @@ export function MerchClient({ merch, imageUrl }: MerchClientProps) {
           type: "purchase",
           product_id: merch.id,
           metadata: {
+            product_kind: "merchandise",
+            name,
+            email,
             title: merch.title,
-            category: merch.category
+            category: merch.category,
+            fulfillment: {
+              status: "pending",
+            },
           }
         }),
       });
@@ -130,7 +138,7 @@ export function MerchClient({ merch, imageUrl }: MerchClientProps) {
                   </p>
                   <div className="bg-white/50 p-4 rounded-2xl border border-white">
                     <p className="text-sm text-muted-foreground font-medium">
-                      Once payment is confirmed, we will contact you on the phone number provided for collection/delivery arrangements.
+                      Once payment is confirmed, we will email you at {email} and contact you on {phone} to arrange collection or delivery.
                     </p>
                   </div>
                 </div>
@@ -143,6 +151,32 @@ export function MerchClient({ merch, imageUrl }: MerchClientProps) {
                     <h3 className="font-black text-xl uppercase tracking-tight text-primary">Purchase Item</h3>
                   </div>
                   <div className="space-y-3">
+                    <Label htmlFor="stk-name" className="text-sm font-bold uppercase tracking-widest text-muted-foreground">Full Name</Label>
+                    <Input
+                      id="stk-name"
+                      type="text"
+                      placeholder="Your name"
+                      className="h-12 rounded-2xl border-none shadow-inner bg-white focus-visible:ring-primary"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      disabled={isProcessing || !merch.in_stock}
+                      required
+                    />
+                  </div>
+                  <div className="space-y-3">
+                    <Label htmlFor="stk-email" className="text-sm font-bold uppercase tracking-widest text-muted-foreground">Email Address</Label>
+                    <Input
+                      id="stk-email"
+                      type="email"
+                      placeholder="you@example.com"
+                      className="h-12 rounded-2xl border-none shadow-inner bg-white focus-visible:ring-primary"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      disabled={isProcessing || !merch.in_stock}
+                      required
+                    />
+                  </div>
+                  <div className="space-y-3">
                     <Label htmlFor="phone" className="text-sm font-bold uppercase tracking-widest text-muted-foreground">M-Pesa Phone Number</Label>
                     <Input
                       id="phone"
@@ -152,9 +186,10 @@ export function MerchClient({ merch, imageUrl }: MerchClientProps) {
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
                       disabled={isProcessing || !merch.in_stock}
+                      required
                     />
                     <p className="text-xs text-muted-foreground font-medium">
-                      An STK push will be sent to this number for payment.
+                      An STK push will be sent to this number. Order updates will be emailed to you.
                     </p>
                   </div>
                   <Button 

@@ -24,29 +24,30 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {
   addPaymentAdminNote,
-  confirmPaymentAndSendMagazine,
-  markPaymentSuccessfulWithoutDelivery,
+  confirmMerchandisePayment,
   rejectPayment,
   requestCustomerFollowUp,
-  resendMagazineEmail,
   resetPaymentToPending,
+  updateMerchandiseFulfillment,
   updatePaymentMpesaCode,
 } from "@/app/actions/orders";
-import type { PurchasePaymentRow } from "@/app/actions/orders";
+import type { FulfillmentStatus, PurchasePaymentRow } from "@/app/actions/orders";
 import {
   AlertTriangle,
   CheckCircle2,
   Loader2,
-  Mail,
+  MapPin,
   MoreHorizontal,
+  Package,
+  PackageCheck,
   RefreshCw,
-  Send,
   StickyNote,
+  Truck,
   XCircle,
 } from "lucide-react";
 import { toast } from "sonner";
 
-type OrderActionsProps = {
+type MerchandiseOrderActionsProps = {
   payment: PurchasePaymentRow;
 };
 
@@ -62,41 +63,50 @@ const dialogCopy: Record<
   { title: string; description: string; submitLabel: string }
 > = {
   reject: {
-    title: "Reject this payment",
+    title: "Reject this merchandise order",
     description:
-      "Use this when the M-Pesa code cannot be verified, the amount is wrong, or the buyer submitted incorrect details. The order will be marked failed and will not receive a magazine link. Record a clear reason so other admins understand what happened.",
-    submitLabel: "Reject payment",
+      "Use this when payment cannot be verified, the item is out of stock, or the order should not be fulfilled. The buyer will need to be contacted separately if they already paid. Record a clear reason for parish records.",
+    submitLabel: "Reject order",
   },
   "update-mpesa": {
     title: "Correct the M-Pesa code",
     description:
-      "If the buyer sent the wrong confirmation code or you found the correct one in your PayBill statement, update it here before confirming. Always cross-check the code, amount, and payer phone against your M-Pesa records.",
+      "Update the confirmation code if the buyer submitted the wrong one or you located the correct entry in your PayBill statement. Verify amount and phone before confirming the order.",
     submitLabel: "Save M-Pesa code",
   },
   "add-note": {
     title: "Add an internal admin note",
     description:
-      "Notes are visible only to admins. Use them to record phone calls, parish office conversations, partial payments, duplicate submissions, or anything the next person reviewing this order should know.",
+      "Record collection arrangements, delivery instructions, stock checks, or phone conversations. These notes help the parish office team coordinate physical handover.",
     submitLabel: "Save note",
   },
   "follow-up": {
     title: "Flag for customer follow-up",
     description:
-      "Use this when you need more information from the buyer before you can confirm — for example a missing email, unclear M-Pesa code, wrong amount paid, or a duplicate purchase. Contact them by phone or email using the details in this order, then add what you asked for here.",
+      "Use when you need the buyer's delivery address, preferred pickup time, size confirmation, or corrected contact details before fulfilling the order.",
     submitLabel: "Flag follow-up",
   },
 };
 
-export function OrderActions({ payment }: OrderActionsProps) {
+const fulfillmentLabels: Record<FulfillmentStatus, string> = {
+  pending: "Awaiting payment confirmation",
+  confirmed: "Payment confirmed — arrange delivery",
+  ready_for_pickup: "Ready for parish pickup",
+  shipped: "Out for delivery",
+  delivered: "Delivered to buyer",
+  cancelled: "Order cancelled",
+};
+
+export function MerchandiseOrderActions({ payment }: MerchandiseOrderActionsProps) {
   const router = useRouter();
   const [loadingAction, setLoadingAction] = useState<string | null>(null);
   const [dialogAction, setDialogAction] = useState<DialogAction>(null);
   const [dialogValue, setDialogValue] = useState("");
 
-  const isDelivered = Boolean(payment.delivered_at);
   const isFailed = payment.status === "failed";
-  const isPending = payment.status === "pending";
-  const canConfirm = !isDelivered && !isFailed;
+  const isDelivered = payment.fulfillment_status === "delivered";
+  const canConfirm =
+    payment.status === "pending" && payment.fulfillment_status !== "cancelled";
 
   async function runAction(
     actionKey: string,
@@ -114,8 +124,14 @@ export function OrderActions({ payment }: OrderActionsProps) {
     }
   }
 
-  async function handleConfirmAndSend() {
-    await runAction("confirm", () => confirmPaymentAndSendMagazine(payment.id));
+  async function handleConfirmPayment() {
+    await runAction("confirm", () => confirmMerchandisePayment(payment.id));
+  }
+
+  async function handleFulfillment(status: FulfillmentStatus) {
+    await runAction(status, () =>
+      updateMerchandiseFulfillment(payment.id, status)
+    );
   }
 
   async function handleDialogSubmit() {
@@ -150,19 +166,29 @@ export function OrderActions({ payment }: OrderActionsProps) {
     setDialogValue(initialValue);
   }
 
-  const statusGuidance = isFailed
-    ? "This payment failed or was rejected. You can reset it to pending if the buyer provides corrected details, or add a note explaining the outcome."
-    : isPending
-      ? "This payment is waiting for admin review. Verify the M-Pesa code against your PayBill statement, confirm the amount matches the magazine price, then confirm and send the reader email."
-      : isDelivered
-        ? "The magazine link was emailed. You can resend the reader email if the buyer did not receive it or lost the link."
-        : "Payment is marked successful but the reader email has not been sent yet. Confirm & send, or use Other Actions if you need to handle this manually.";
+  const deliveryInfo =
+    payment.delivery_preference === "pickup"
+      ? "Buyer requested parish pickup. Contact them to arrange a collection time at ACK St Paul's."
+      : payment.delivery_preference === "delivery"
+        ? payment.delivery_address
+          ? `Deliver to: ${payment.delivery_address}`
+          : "Buyer requested delivery but no address was captured — follow up before shipping."
+        : "No delivery preference recorded. Confirm how the buyer wants to receive the item.";
 
   return (
     <div className="flex w-full flex-col gap-4">
-      <div className="rounded-lg border border-amber-200 bg-amber-50/80 p-4 text-sm text-amber-950">
-        <p className="font-semibold">What should I do with this order?</p>
-        <p className="mt-2 leading-relaxed">{statusGuidance}</p>
+      <div className="rounded-lg border border-blue-200 bg-blue-50/80 p-4 text-sm text-blue-950">
+        <p className="font-semibold">Physical merchandise fulfillment</p>
+        <p className="mt-2 leading-relaxed">
+          Merchandise must be handed over in person or delivered. First confirm the
+          M-Pesa payment, then update fulfillment status as you prepare, ship, or
+          complete pickup. Current status:{" "}
+          <span className="font-semibold">
+            {fulfillmentLabels[payment.fulfillment_status]}
+          </span>
+          .
+        </p>
+        <p className="mt-2 leading-relaxed">{deliveryInfo}</p>
         {payment.rejection_reason && (
           <p className="mt-2 font-medium text-destructive">
             Rejection reason: {payment.rejection_reason}
@@ -175,15 +201,63 @@ export function OrderActions({ payment }: OrderActionsProps) {
           type="button"
           size="sm"
           className="gap-2"
-          onClick={handleConfirmAndSend}
+          onClick={handleConfirmPayment}
           disabled={!canConfirm || loadingAction === "confirm"}
         >
           {loadingAction === "confirm" ? (
             <Loader2 className="h-4 w-4 animate-spin" />
           ) : (
-            <Send className="h-4 w-4" />
+            <CheckCircle2 className="h-4 w-4" />
           )}
-          {isDelivered ? "Already sent" : "Confirm & send"}
+          {payment.status === "success" ? "Payment confirmed" : "Confirm payment"}
+        </Button>
+
+        <Button
+          type="button"
+          size="sm"
+          variant="outline"
+          className="gap-2"
+          disabled={
+            payment.status !== "success" ||
+            isDelivered ||
+            loadingAction === "ready_for_pickup"
+          }
+          onClick={() => handleFulfillment("ready_for_pickup")}
+        >
+          <Package className="h-4 w-4" />
+          Ready for pickup
+        </Button>
+
+        <Button
+          type="button"
+          size="sm"
+          variant="outline"
+          className="gap-2"
+          disabled={
+            payment.status !== "success" ||
+            isDelivered ||
+            loadingAction === "shipped"
+          }
+          onClick={() => handleFulfillment("shipped")}
+        >
+          <Truck className="h-4 w-4" />
+          Mark shipped
+        </Button>
+
+        <Button
+          type="button"
+          size="sm"
+          variant="outline"
+          className="gap-2"
+          disabled={
+            payment.status !== "success" ||
+            isDelivered ||
+            loadingAction === "delivered"
+          }
+          onClick={() => handleFulfillment("delivered")}
+        >
+          <PackageCheck className="h-4 w-4" />
+          Mark delivered
         </Button>
 
         <DropdownMenu>
@@ -194,40 +268,8 @@ export function OrderActions({ payment }: OrderActionsProps) {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-72">
-            <DropdownMenuLabel>Magazine order actions</DropdownMenuLabel>
+            <DropdownMenuLabel>Merchandise order actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
-
-            <DropdownMenuItem
-              disabled={!isPending || loadingAction !== null}
-              onClick={() =>
-                runAction("mark-success", () =>
-                  markPaymentSuccessfulWithoutDelivery(payment.id)
-                )
-              }
-            >
-              <CheckCircle2 className="h-4 w-4" />
-              <div>
-                <p className="font-medium">Mark paid (no email yet)</p>
-                <p className="text-xs text-muted-foreground">
-                  Confirm M-Pesa without sending the reader link
-                </p>
-              </div>
-            </DropdownMenuItem>
-
-            <DropdownMenuItem
-              disabled={payment.status !== "success" || loadingAction !== null}
-              onClick={() =>
-                runAction("resend", () => resendMagazineEmail(payment.id))
-              }
-            >
-              <Mail className="h-4 w-4" />
-              <div>
-                <p className="font-medium">Resend reader email</p>
-                <p className="text-xs text-muted-foreground">
-                  Send a fresh secure link to the buyer
-                </p>
-              </div>
-            </DropdownMenuItem>
 
             <DropdownMenuItem
               disabled={loadingAction !== null}
@@ -239,7 +281,7 @@ export function OrderActions({ payment }: OrderActionsProps) {
               <div>
                 <p className="font-medium">Update M-Pesa code</p>
                 <p className="text-xs text-muted-foreground">
-                  Correct a wrong or missing confirmation code
+                  Correct payment reference before confirming
                 </p>
               </div>
             </DropdownMenuItem>
@@ -250,9 +292,9 @@ export function OrderActions({ payment }: OrderActionsProps) {
             >
               <XCircle className="h-4 w-4" />
               <div>
-                <p className="font-medium">Reject payment</p>
+                <p className="font-medium">Reject order</p>
                 <p className="text-xs text-muted-foreground">
-                  Code invalid, wrong amount, or duplicate order
+                  Invalid payment or cannot fulfill
                 </p>
               </div>
             </DropdownMenuItem>
@@ -267,7 +309,7 @@ export function OrderActions({ payment }: OrderActionsProps) {
               <div>
                 <p className="font-medium">Reset to pending</p>
                 <p className="text-xs text-muted-foreground">
-                  Re-open a rejected order for another review
+                  Re-review after buyer provides new details
                 </p>
               </div>
             </DropdownMenuItem>
@@ -282,7 +324,7 @@ export function OrderActions({ payment }: OrderActionsProps) {
               <div>
                 <p className="font-medium">Request buyer follow-up</p>
                 <p className="text-xs text-muted-foreground">
-                  Need more details before you can confirm
+                  Missing address, size, or contact details
                 </p>
               </div>
             </DropdownMenuItem>
@@ -295,7 +337,35 @@ export function OrderActions({ payment }: OrderActionsProps) {
               <div>
                 <p className="font-medium">Add admin note</p>
                 <p className="text-xs text-muted-foreground">
-                  Record internal context for other admins
+                  Record pickup times or delivery coordination
+                </p>
+              </div>
+            </DropdownMenuItem>
+
+            <DropdownMenuItem
+              disabled={loadingAction !== null}
+              onClick={() => {
+                const details = [
+                  `Item: ${payment.product_title}`,
+                  `Buyer: ${payment.customer_name}`,
+                  `Phone: ${payment.phone}`,
+                  `Email: ${payment.customer_email || "not provided"}`,
+                  payment.delivery_address
+                    ? `Address: ${payment.delivery_address}`
+                    : null,
+                  `M-Pesa: ${payment.mpesa_receipt || "not provided"}`,
+                ]
+                  .filter(Boolean)
+                  .join("\n");
+                navigator.clipboard.writeText(details);
+                toast.success("Order details copied to clipboard");
+              }}
+            >
+              <MapPin className="h-4 w-4" />
+              <div>
+                <p className="font-medium">Copy order details</p>
+                <p className="text-xs text-muted-foreground">
+                  Paste into SMS, WhatsApp, or parish records
                 </p>
               </div>
             </DropdownMenuItem>
@@ -369,10 +439,10 @@ export function OrderActions({ payment }: OrderActionsProps) {
                       onChange={(event) => setDialogValue(event.target.value)}
                       placeholder={
                         dialogAction === "reject"
-                          ? "e.g. M-Pesa code not found in PayBill statement for this amount"
+                          ? "e.g. Item out of stock — refund arranged at parish office"
                           : dialogAction === "follow-up"
-                            ? "e.g. Called buyer — waiting for correct email address"
-                            : "e.g. Verified with parish office, payment received on 4 June"
+                            ? "e.g. Need delivery address for South C area"
+                            : "e.g. Buyer collecting Sunday after 10am service"
                       }
                     />
                   </>

@@ -1,5 +1,10 @@
 import { NextResponse } from "next/server";
 import { getMpesaToken, getMpesaPassword } from "@/lib/mpesa";
+import {
+  buildOrderEmailContext,
+  sendOrderPlacedEmails,
+  sendStkOrderInitiatedAdminEmail,
+} from "@/lib/order-emails";
 import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 
@@ -55,18 +60,41 @@ export async function POST(req: Request) {
       const cookieStore = await cookies();
       const supabase = createClient(cookieStore);
       
-      const { error } = await supabase.from("payments").insert({
-        type,
-        amount,
-        phone: formattedPhone,
-        status: "pending",
-        checkout_request_id: stkData.CheckoutRequestID,
-        product_id: product_id || null,
-        metadata: metadata || {},
-      });
-      
+      const paymentMetadata = metadata || {};
+      const { data: payment, error } = await supabase
+        .from("payments")
+        .insert({
+          type,
+          amount,
+          phone: formattedPhone,
+          status: "pending",
+          checkout_request_id: stkData.CheckoutRequestID,
+          product_id: product_id || null,
+          metadata: paymentMetadata,
+        })
+        .select("id,amount,phone,metadata")
+        .single();
+
       if (error) throw error;
-      
+
+      if (type === "purchase" && paymentMetadata.product_kind === "merchandise") {
+        const emailContext = buildOrderEmailContext(
+          payment,
+          "merchandise",
+          paymentMetadata.title
+        );
+
+        if (paymentMetadata.email) {
+          void sendOrderPlacedEmails(emailContext).catch((err) => {
+            console.error("STK merchandise order placed email error:", err);
+          });
+        } else {
+          void sendStkOrderInitiatedAdminEmail(emailContext).catch((err) => {
+            console.error("STK admin notification email error:", err);
+          });
+        }
+      }
+
       return NextResponse.json({ success: true, checkout_request_id: stkData.CheckoutRequestID });
     } else {
       return NextResponse.json({ success: false, error: stkData.CustomerMessage || "STK Push failed" }, { status: 400 });

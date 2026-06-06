@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { sendMagazineDeliveryEmail } from "@/lib/magazine-delivery";
+import {
+  buildOrderEmailContext,
+  sendMerchandisePaymentConfirmedEmail,
+} from "@/lib/order-emails";
 import { Resend } from "resend";
 
 type CallbackMetadataItem = {
@@ -57,8 +61,16 @@ export async function POST(req: Request) {
         
       if (updateError) throw updateError;
       
-      // 2. If it was a purchase, handle Magazine Delivery
-      if (payment.type === "purchase" && payment.product_id) {
+      // 2. If it was a magazine purchase, send the reader email.
+      // Merchandise STK payments are fulfilled manually by admins.
+      const isMerchandisePurchase =
+        payment.metadata?.product_kind === "merchandise";
+
+      if (
+        payment.type === "purchase" &&
+        payment.product_id &&
+        !isMerchandisePurchase
+      ) {
         const delivery = await sendMagazineDeliveryEmail({
           payment,
           email: payment.metadata?.email,
@@ -66,6 +78,33 @@ export async function POST(req: Request) {
         });
 
         if (!delivery.success) throw new Error(delivery.error);
+      } else if (payment.type === "purchase" && isMerchandisePurchase) {
+        const confirmedMetadata = {
+          ...payment.metadata,
+          fulfillment: {
+            ...payment.metadata?.fulfillment,
+            status: "confirmed",
+            confirmed_at: new Date().toISOString(),
+          },
+        };
+
+        await supabase
+          .from("payments")
+          .update({ metadata: confirmedMetadata })
+          .eq("id", payment.id);
+
+        void sendMerchandisePaymentConfirmedEmail(
+          buildOrderEmailContext(
+            {
+              ...payment,
+              mpesa_receipt: String(receipt),
+              metadata: confirmedMetadata,
+            },
+            "merchandise"
+          )
+        ).catch((error) => {
+          console.error("STK merchandise confirmed email error:", error);
+        });
       } else if (payment.type === "donation") {
         // 3. Update Donation status to 'confirmed'
         if (payment.metadata?.donation_id) {
