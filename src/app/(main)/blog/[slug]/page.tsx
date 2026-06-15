@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { fetchSanity } from "@/lib/sanity";
 import { PortableText } from "@portabletext/react";
 import Image from "next/image";

@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import BlogClient from "@/components/BlogClient";
 import { fetchSanity } from "@/lib/sanity";
 

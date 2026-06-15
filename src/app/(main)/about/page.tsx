@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import AboutClient from "@/components/AboutClient";
 import { fetchSanity } from "@/lib/sanity";
 

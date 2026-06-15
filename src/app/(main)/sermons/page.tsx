@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { fetchSanity } from "@/lib/sanity";
 import SermonsClient from "@/components/SermonsClient";
 
