@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Mail, Phone, MapPin, Globe, ChevronRight } from "lucide-react";
+import { Mail, Phone, MapPin, ChevronRight } from "lucide-react";
 
 export function Footer() {
   return (
@@ -18,7 +18,7 @@ export function Footer() {
                 <Image src="/ackimage.ico" alt="ACK Logo" fill className="object-contain" />
               </div>
               <div className="flex flex-col">
-                <span className="text-xl font-black tracking-tight leading-none text-white">ACK St Paul's</span>
+                <span className="text-xl font-black tracking-tight leading-none text-white">ACK St Paul&apos;s</span>
                 <span className="text-sm font-bold text-accent tracking-widest uppercase">South C Parish</span>
               </div>
             </Link>
@@ -112,7 +112,7 @@ export function Footer() {
                 <div className="h-10 w-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0 group-hover:bg-secondary transition-colors">
                   <Phone className="h-5 w-5 text-accent group-hover:text-white" />
                 </div>
-                <span className="text-base text-slate-300">+254 717 401333</span>
+                <span className="text-base text-slate-300">+254 792127407</span>
               </div>
               <div className="flex items-center space-x-4 group cursor-pointer">
                 <div className="h-10 w-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0 group-hover:bg-secondary transition-colors">
@@ -130,19 +130,33 @@ export function Footer() {
           </div>
         </div>
         
-        {/* Bottom Bar */}
-        <div className="mt-20 border-t border-white/10 pt-10 flex flex-col md:flex-row items-center justify-between gap-6 text-slate-400">
-          <div className="flex items-center gap-4">
-            <div className="relative h-8 w-8">
-              <Image src="/ackimage.ico" alt="ACK Logo" fill className="object-contain grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all" />
+        <div className="mt-20 border-t border-white/10 pt-10 flex flex-col gap-6 text-slate-400">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6 w-full">
+            <div className="flex items-center gap-4">
+              <div className="relative h-8 w-8">
+                <Image src="/ackimage.ico" alt="ACK Logo" fill className="object-contain grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all" />
+              </div>
+              <p className="text-base">
+                © {new Date().getFullYear()} <span className="text-white font-bold">ACK St Paul&apos;s Parish South C</span>. All rights reserved.
+              </p>
             </div>
-            <p className="text-base">
-              © {new Date().getFullYear()} <span className="text-white font-bold">ACK St Paul's Parish South C</span>. All rights reserved.
-            </p>
+            <div className="flex items-center gap-8 text-sm font-bold uppercase tracking-widest">
+              <Link href="/legal/privacy" className="hover:text-accent transition-colors">Privacy Policy</Link>
+              <Link href="/legal/terms" className="hover:text-accent transition-colors">Terms of Service</Link>
+            </div>
           </div>
-          <div className="flex items-center gap-8 text-sm font-bold uppercase tracking-widest">
-            <Link href="/legal/privacy" className="hover:text-accent transition-colors">Privacy Policy</Link>
-            <Link href="/legal/terms" className="hover:text-accent transition-colors">Terms of Service</Link>
+          <div className="text-center text-sm w-full border-t border-white/5 pt-6">
+            <p>
+              Designed and Built by{" "}
+              <a
+                href="https://webprismio.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-slate-300 hover:text-accent transition-colors underline underline-offset-4"
+              >
+                Webprismio
+              </a>
+            </p>
           </div>
         </div>
       </div>

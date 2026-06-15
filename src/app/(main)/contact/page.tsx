@@ -34,7 +34,7 @@ export default function ContactPage() {
             <div className="space-y-6">
               {[
                 { icon: MapPin, title: "Our Location", detail: "Mai Mahiu RD, South C, Nairobi, Kenya (Opposite South C Shopping Centre)" },
-                { icon: Phone, title: "Phone Number", detail: "0708018067" },
+                { icon: Phone, title: "Phone Number", detail: "+254 792127407" },
                 { icon: Mail, title: "Email Address", detail: "info@ackstpaulssouthc.co.ke" },
                 { icon: MessageSquare, title: "Office Hours", detail: "Mon - Fri: 8:00 AM - 5:00 PM\nSun: 7:00 AM - 1:00 PM" },
               ].map((item, i) => (

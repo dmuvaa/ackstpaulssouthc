@@ -73,7 +73,7 @@ export default function PrivacyPolicyPage() {
               If you have any questions about this Privacy Policy, please contact us at:<br/>
               <strong>ACK St Paul's South C Parish</strong><br/>
               Email: info@ackstpaulssouthc.co.ke<br/>
-              Phone: +254 717 401333
+              Phone: +254 792127407
             </p>
           </div>
         </div>
